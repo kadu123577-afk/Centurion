@@ -8,97 +8,129 @@
   <style>
     html, body { overflow: hidden; height: 100%; }
     .app-shell { display:flex; flex-direction:column; height:100vh; }
-    .topbar { height:52px; min-height:52px; display:flex; align-items:center; gap:16px; padding:0 16px; background:var(--s1); border-bottom:1px solid var(--border); z-index:10; }
+
+    /* ── Topbar ── */
+    .topbar { height:52px; min-height:52px; display:flex; align-items:center; gap:16px; padding:0 16px; background:var(--s1); border-bottom:1px solid var(--border); z-index:10; flex-shrink:0; }
     .topbar-sep { width:1px; height:20px; background:var(--border2); }
     .topbar-mun { font-size:12px; color:var(--text2); }
     .topbar-spacer { flex:1; }
     .topbar-user { display:flex; align-items:center; gap:10px; }
     .user-avatar { width:30px; height:30px; border-radius:50%; background:var(--s3); border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--green); font-family:var(--font-display); }
-    .user-info { line-height:1.3; }
-    .user-nome  { font-size:12px; font-weight:600; }
-    .user-perfil{ font-size:11px; color:var(--text2); }
-    .app-body { display:flex; flex:1; overflow:hidden; }
-    .sidebar { width:300px; min-width:300px; display:flex; flex-direction:column; background:var(--s1); border-right:1px solid var(--border); overflow:hidden; }
+    .user-nome   { font-size:12px; font-weight:600; }
+    .user-perfil { font-size:11px; color:var(--text2); }
+
+    /* ══════════════════════════════════════
+       TELA 1 — LISTA DE PROCESSOS
+    ══════════════════════════════════════ */
+    #tela-lista { display:flex; flex:1; overflow:hidden; }
+
+    .sidebar { width:300px; min-width:300px; display:flex; flex-direction:column; background:var(--s1); border-right:1px solid var(--border); overflow:hidden; transition:width .25s ease; }
     .sidebar-head { padding:14px; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:10px; }
     .sidebar-label { font-size:10px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:.08em; }
     .sidebar-search { position:relative; }
-    .sidebar-search input { padding-left:30px; background:var(--s2); }
-    .sidebar-search-icon { position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--muted); pointer-events:none; }
-    .sidebar-filters { display:flex; gap:6px; flex-wrap:wrap; }
+    .sidebar-search input { padding-left:28px; background:var(--s2); }
+    .sidebar-search-icon { position:absolute; left:9px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--muted); pointer-events:none; }
+    .sidebar-filters { display:flex; gap:5px; flex-wrap:wrap; }
     .filter-chip { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; cursor:pointer; border:1px solid var(--border2); background:transparent; color:var(--text2); font-family:var(--font-body); transition:all .15s; }
     .filter-chip.on { background:var(--green-l); border-color:rgba(65,243,106,.3); color:var(--green); }
     .sidebar-list { flex:1; overflow-y:auto; padding:8px; }
-    .proc-card { padding:12px; border-radius:var(--r); cursor:pointer; border:1px solid transparent; margin-bottom:4px; transition:all .15s; }
+
+    .proc-card { padding:12px; border-radius:var(--r); cursor:pointer; border:1px solid transparent; margin-bottom:4px; transition:all .15s; position:relative; }
     .proc-card:hover { background:var(--s2); border-color:var(--border); }
     .proc-card.ativo { background:var(--s2); border-color:rgba(65,243,106,.25); }
-    .proc-card-num { font-size:10px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+    .proc-card-num { font-size:10px; font-weight:700; color:var(--text2); margin-bottom:3px; }
     .proc-card-obj { font-size:12px; font-weight:500; color:var(--text); line-height:1.4; margin-bottom:8px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
     .proc-card-footer { display:flex; align-items:center; justify-content:space-between; }
     .proc-dots { display:flex; gap:3px; }
     .proc-dot { width:6px; height:6px; border-radius:50%; background:var(--s3); }
     .proc-dot.done { background:var(--green); }
     .proc-dot.cur  { background:var(--teal); }
-    .main { flex:1; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); }
-    .empty-state { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--muted); }
-    .empty-state-icon  { font-size:48px; opacity:.3; }
-    .empty-state-title { font-size:15px; font-weight:600; color:var(--text2); }
-    .empty-state-sub   { font-size:13px; text-align:center; max-width:260px; line-height:1.6; }
-    #proc-view { display:none; flex-direction:column; flex:1; overflow:hidden; }
-    #proc-view.on { display:flex; }
-    .proc-header { padding:12px 20px; background:var(--s1); border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-shrink:0; }
-    .proc-header-meta { flex:1; min-width:0; }
-    .proc-header-num  { font-size:11px; color:var(--text2); font-weight:600; letter-spacing:.04em; margin-bottom:3px; }
-    .proc-header-obj  { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
-    .proc-header-info { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-    .proc-header-tipo { font-size:11px; color:var(--text2); }
-    .proc-header-acts { display:flex; gap:8px; flex-shrink:0; align-items:center; }
+    .proc-aguardando { position:absolute; top:10px; right:10px; width:8px; height:8px; border-radius:50%; background:var(--green); animation:pulse-dot 1.5s ease-in-out infinite; }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+
+    .main-vazia { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--muted); }
+    .main-vazia-icon  { font-size:48px; opacity:.25; }
+    .main-vazia-title { font-size:15px; font-weight:600; color:var(--text2); }
+    .main-vazia-sub   { font-size:13px; text-align:center; max-width:260px; line-height:1.6; }
+
+    /* ══════════════════════════════════════
+       TELA 2 — PROCESSO ABERTO
+    ══════════════════════════════════════ */
+    #tela-processo { display:none; flex:1; flex-direction:column; overflow:hidden; }
+    #tela-processo.on { display:flex; }
+
+    /* Header do processo */
+    .proc-topbar { height:52px; min-height:52px; display:flex; align-items:center; gap:12px; padding:0 20px; background:var(--s1); border-bottom:1px solid var(--border); flex-shrink:0; }
+    .proc-topbar-meta { flex:1; min-width:0; display:flex; align-items:center; gap:12px; }
+    .proc-topbar-num { font-size:11px; font-weight:700; color:var(--text2); background:var(--s2); padding:3px 8px; border-radius:var(--r-sm); white-space:nowrap; }
+    .proc-topbar-obj { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:500px; }
+    .proc-topbar-acts { display:flex; gap:8px; flex-shrink:0; align-items:center; }
+
+    /* Layout interno do processo */
     .proc-body { flex:1; display:flex; overflow:hidden; }
-    .etapas-nav { width:200px; min-width:200px; background:var(--s1); border-right:1px solid var(--border); overflow-y:auto; padding:12px 0; }
-    .etapas-nav-label { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; padding:0 14px; margin-bottom:8px; }
-    .etapa-item { display:flex; align-items:flex-start; gap:8px; padding:8px 14px; cursor:pointer; transition:background .1s; }
-    .etapa-item:hover:not(.bloqueada) { background:var(--s2); }
-    .etapa-item.ativa { background:var(--s2); }
-    .etapa-item.bloqueada { opacity:.4; cursor:default; }
-    .etapa-num { width:22px; height:22px; min-width:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; background:var(--s3); color:var(--text2); flex-shrink:0; }
-    .etapa-item.concluida .etapa-num { background:var(--green-l); color:var(--green); }
-    .etapa-item.ativa .etapa-num { background:var(--green); color:#000; }
-    .etapa-info { flex:1; min-width:0; }
-    .etapa-nome { font-size:11px; font-weight:500; color:var(--text2); line-height:1.3; }
-    .etapa-item.ativa .etapa-nome { color:var(--text); font-weight:600; }
-    .etapa-resp { font-size:10px; color:var(--muted); margin-top:2px; }
-    .etapa-data { font-size:10px; color:var(--green); margin-top:2px; }
-    .etapa-content { flex:1; display:flex; overflow:hidden; }
-    .form-panel { flex:1; overflow-y:auto; padding:20px 24px; }
-    .form-panel-head { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; gap:12px; }
-    .form-panel-title { font-size:15px; font-weight:700; color:var(--text); }
-    .form-panel-sub   { font-size:12px; color:var(--text2); margin-top:3px; }
-    .view-toggle { display:flex; border:1px solid var(--border2); border-radius:var(--r-sm); overflow:hidden; flex-shrink:0; }
-    .view-btn { padding:5px 10px; font-size:11px; font-weight:500; font-family:var(--font-body); border:none; background:transparent; color:var(--text2); cursor:pointer; transition:all .1s; }
-    .view-btn + .view-btn { border-left:1px solid var(--border2); }
-    .view-btn.on { background:var(--green); color:#000; font-weight:600; }
-    .view-btn:not(.on):hover { background:var(--s2); color:var(--text); }
-    .etapa-bloqueada-msg { text-align:center; padding:60px 24px; color:var(--text2); }
-    .etapa-bloqueada-msg .icon { font-size:36px; margin-bottom:12px; opacity:.4; }
-    .etapa-bloqueada-msg p { font-size:13px; margin-bottom:4px; }
-    .etapa-bloqueada-msg small { font-size:11px; color:var(--muted); }
-    .etapa-concluida-banner { display:flex; align-items:center; gap:8px; padding:8px 14px; background:var(--green-l); border:1px solid rgba(65,243,106,.2); border-radius:var(--r-sm); font-size:12px; color:var(--green); margin-bottom:16px; }
-    .form-actions { display:flex; justify-content:flex-end; gap:8px; padding-top:16px; border-top:1px solid var(--border); margin-top:20px; }
-    .preview-panel { width:44%; min-width:280px; background:#F0EDE8; border-left:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
-    .preview-panel.hidden { display:none; }
-    .preview-toolbar { padding:8px 14px; background:var(--s1); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
-    .preview-label { font-size:11px; color:var(--text2); }
+
+    /* Stepper vertical — só admin vê */
+    .stepper { width:52px; min-width:52px; background:var(--s1); border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; padding:12px 0; gap:4px; overflow-y:auto; }
+    .stepper.oculto { display:none; }
+    .step-item { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer; transition:all .15s; background:var(--s3); color:var(--text2); position:relative; flex-shrink:0; }
+    .step-item:hover { background:var(--s2); color:var(--text); }
+    .step-item.ativo { background:var(--green); color:#000; }
+    .step-item.concluido { background:var(--green-l); color:var(--green); }
+    .step-item[title]:hover::after { content:attr(title); position:absolute; left:44px; top:50%; transform:translateY(-50%); background:var(--s1); border:1px solid var(--border2); color:var(--text); font-size:11px; font-weight:500; white-space:nowrap; padding:4px 10px; border-radius:var(--r-sm); z-index:100; pointer-events:none; box-shadow:var(--shadow); }
+
+    /* Split: formulário + preview */
+    .split { flex:1; display:grid; grid-template-columns:1fr 1fr; overflow:hidden; }
+
+    /* Painel formulário */
+    .form-panel { display:flex; flex-direction:column; overflow:hidden; border-right:1px solid var(--border); }
+    .form-panel-head { padding:14px 20px; border-bottom:1px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:space-between; }
+    .form-panel-title { font-size:14px; font-weight:700; }
+    .form-panel-sub   { font-size:11px; color:var(--text2); margin-top:2px; }
+    .form-panel-body  { flex:1; overflow-y:auto; padding:20px; }
+    .form-panel-foot  { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; flex-shrink:0; background:var(--s1); }
+
+    /* Indicador não salvo */
+    .unsaved { display:none; align-items:center; gap:6px; font-size:11px; color:var(--orange); }
+    .unsaved.on { display:flex; }
+    .unsaved-dot { width:6px; height:6px; border-radius:50%; background:var(--orange); animation:pulse-dot 1.2s ease-in-out infinite; }
+
+    /* Painel preview */
+    .preview-panel { display:flex; flex-direction:column; overflow:hidden; background:#EDEAE4; }
+    .preview-head { padding:8px 16px; background:var(--s1); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+    .preview-head-label { font-size:11px; color:var(--text2); }
     .preview-body { flex:1; overflow-y:auto; padding:16px; }
-    .pdf-doc { background:#fff; border-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,.12),0 8px 32px rgba(0,0,0,.08); padding:36px 32px; min-height:500px; font-family:'Times New Roman',Times,serif; font-size:11.5px; line-height:1.65; color:#111; }
-    .pdf-cabecalho { text-align:center; border-bottom:2px solid #000; padding-bottom:14px; margin-bottom:18px; }
-    .pdf-brasao { font-size:28px; margin-bottom:4px; }
-    .pdf-pref   { font-size:12px; font-weight:700; text-transform:uppercase; }
-    .pdf-subtit { font-size:10px; color:#666; margin-top:2px; }
-    .pdf-titulo { margin-top:10px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; }
-    .pdf-protocolo { font-size:10px; color:#888; margin-top:3px; }
-    .pdf-body p { margin-bottom:8px; }
-    .pdf-field-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#555; }
-    .pdf-footer { margin-top:28px; padding-top:10px; border-top:1px solid #ddd; display:flex; justify-content:space-between; align-items:flex-end; font-size:9px; color:#aaa; }
+    .pdf-doc { background:#fff; border-radius:4px; box-shadow:0 2px 12px rgba(0,0,0,.15); padding:40px 36px; min-height:600px; font-family:'Times New Roman',Times,serif; font-size:11.5px; line-height:1.7; color:#111; }
+    .pdf-header { text-align:center; border-bottom:2.5px solid #000; padding-bottom:16px; margin-bottom:20px; }
+    .pdf-brasao { font-size:30px; margin-bottom:6px; }
+    .pdf-pref   { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
+    .pdf-cnpj   { font-size:10px; color:#666; margin-top:2px; }
+    .pdf-titulo { margin-top:12px; font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; }
+    .pdf-num    { font-size:10px; color:#888; margin-top:4px; }
+    .pdf-section { margin-bottom:14px; }
+    .pdf-section-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#555; margin-bottom:6px; border-bottom:1px solid #eee; padding-bottom:4px; }
+    .pdf-field  { margin-bottom:6px; line-height:1.6; }
+    .pdf-field-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#666; }
+    .pdf-justificativa { text-align:justify; text-indent:1.25cm; margin-top:8px; }
+    .pdf-footer { margin-top:40px; padding-top:12px; border-top:1px solid #ddd; display:flex; justify-content:space-between; font-size:9px; color:#aaa; }
     .pdf-hash { font-family:monospace; font-size:8px; word-break:break-all; max-width:55%; text-align:right; }
+    .pdf-assinatura { margin-top:48px; text-align:center; }
+    .pdf-assinatura-linha { border-top:1px solid #000; display:inline-block; width:280px; padding-top:6px; }
+    .pdf-assinatura-nome  { font-weight:700; font-size:12px; }
+    .pdf-assinatura-cargo { font-size:10px; color:#555; }
+
+    /* Etapa concluída */
+    .etapa-concluida { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; padding:40px; }
+    .etapa-concluida-icon  { font-size:48px; }
+    .etapa-concluida-title { font-size:18px; font-weight:700; color:var(--green); font-family:var(--font-display); }
+    .etapa-concluida-sub   { font-size:14px; color:var(--text2); line-height:1.6; max-width:380px; }
+
+    /* Etapa bloqueada */
+    .etapa-bloqueada { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; padding:40px; }
+    .etapa-bloqueada-icon  { font-size:40px; opacity:.4; }
+    .etapa-bloqueada-title { font-size:15px; font-weight:600; color:var(--text2); }
+    .etapa-bloqueada-sub   { font-size:13px; color:var(--muted); line-height:1.6; max-width:320px; }
+
+    /* Skeleton */
     .sk { background:var(--s2); border-radius:var(--r-sm); animation:sk-pulse 1.4s ease-in-out infinite; margin-bottom:8px; }
     .sk-card { height:72px; }
     @keyframes sk-pulse { 0%,100%{opacity:.4} 50%{opacity:.8} }
@@ -106,22 +138,27 @@
 </head>
 <body>
 <div class="app-shell">
+
+  <!-- Topbar global -->
   <header class="topbar">
     <div class="brand-icon" style="width:28px;height:28px;font-size:12px">C</div>
     <div><div class="brand-name" style="font-size:14px">Centurion</div></div>
     <div class="topbar-sep"></div>
-    <div class="topbar-mun">Município: <strong id="tb-municipio">—</strong></div>
+    <span class="topbar-mun">Município: <strong id="tb-municipio">—</strong></span>
     <div class="topbar-spacer"></div>
     <div class="topbar-user">
       <div class="user-avatar" id="tb-avatar">—</div>
-      <div class="user-info">
+      <div>
         <div class="user-nome"   id="tb-nome">Carregando...</div>
         <div class="user-perfil" id="tb-perfil">—</div>
       </div>
+      <button class="btn btn-ghost btn-sm" id="btn-admin" style="display:none">⚙ Admin</button>
       <button class="btn btn-ghost btn-sm" id="btn-logout">Sair</button>
     </div>
   </header>
-  <div class="app-body">
+
+  <!-- ══ TELA 1: LISTA ══ -->
+  <div id="tela-lista">
     <aside class="sidebar">
       <div class="sidebar-head">
         <div class="sidebar-label">Processos Licitatórios</div>
@@ -132,67 +169,82 @@
         </div>
         <div class="sidebar-filters">
           <button class="filter-chip on" data-filtro="todos">Todos</button>
-          <button class="filter-chip" data-filtro="andamento">Em andamento</button>
+          <button class="filter-chip" data-filtro="andamento">Andamento</button>
           <button class="filter-chip" data-filtro="concluido">Concluídos</button>
+          <button class="filter-chip" data-filtro="rascunho">Rascunho</button>
         </div>
       </div>
       <div class="sidebar-list" id="sb-lista"></div>
     </aside>
-    <main class="main">
-      <div class="empty-state" id="empty-state">
-        <div class="empty-state-icon">📋</div>
-        <div class="empty-state-title">Selecione um processo</div>
-        <div class="empty-state-sub">Escolha um processo licitatório na lista ao lado para ver suas etapas e documentos.</div>
-      </div>
-      <div id="proc-view">
-        <div class="proc-header">
-          <div class="proc-header-meta">
-            <div class="proc-header-num" id="pv-num">—</div>
-            <div class="proc-header-obj" id="pv-obj">—</div>
-            <div class="proc-header-info">
-              <span class="proc-header-tipo" id="pv-tipo">—</span>
-              <span id="pv-badge"></span>
-            </div>
-          </div>
-          <div class="proc-header-acts">
-            <button class="btn btn-ghost btn-sm" id="btn-dossie">📄 Dossiê</button>
-          </div>
-        </div>
-        <div class="proc-body">
-          <nav class="etapas-nav" id="etapas-nav">
-            <div class="etapas-nav-label">Etapas</div>
-          </nav>
-          <div class="etapa-content">
-            <div class="form-panel" id="form-panel">
-              <div class="form-panel-head">
-                <div>
-                  <div class="form-panel-title" id="fp-titulo">—</div>
-                  <div class="form-panel-sub"   id="fp-sub">—</div>
-                </div>
-                <div class="view-toggle">
-                  <button class="view-btn on" id="vbtn-form">✎ Form</button>
-                  <button class="view-btn"    id="vbtn-split">⊟ Split</button>
-                  <button class="view-btn"    id="vbtn-prev">📄 Preview</button>
-                </div>
-              </div>
-              <div id="form-ct"></div>
-            </div>
-            <div class="preview-panel hidden" id="preview-panel">
-              <div class="preview-toolbar">
-                <span class="preview-label" id="prev-label">Pré-visualização</span>
-                <button class="btn btn-ghost btn-sm" id="btn-pdf">⬇ PDF</button>
-              </div>
-              <div class="preview-body">
-                <div class="pdf-doc" id="pdf-doc"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+
+    <div class="main-vazia">
+      <div class="main-vazia-icon">📋</div>
+      <div class="main-vazia-title">Selecione um processo</div>
+      <div class="main-vazia-sub">Escolha um processo licitatório na lista ao lado para começar.</div>
+    </div>
   </div>
+
+  <!-- ══ TELA 2: PROCESSO ABERTO ══ -->
+  <div id="tela-processo">
+
+    <!-- Header do processo -->
+    <div class="proc-topbar">
+      <button class="btn btn-ghost btn-sm" id="btn-voltar">← Voltar</button>
+      <div class="topbar-sep"></div>
+      <div class="proc-topbar-meta">
+        <span class="proc-topbar-num" id="pv-num">—</span>
+        <span class="proc-topbar-obj" id="pv-obj">—</span>
+        <span id="pv-badge"></span>
+      </div>
+      <div class="proc-topbar-acts">
+        <div class="unsaved" id="unsaved-indicator">
+          <div class="unsaved-dot"></div>
+          <span>Não salvo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proc-body">
+
+      <!-- Stepper (só admin) -->
+      <div class="stepper oculto" id="stepper"></div>
+
+      <!-- Split -->
+      <div class="split">
+
+        <!-- Formulário -->
+        <div class="form-panel">
+          <div class="form-panel-head">
+            <div>
+              <div class="form-panel-title" id="fp-titulo">—</div>
+              <div class="form-panel-sub"   id="fp-sub">—</div>
+            </div>
+          </div>
+          <div class="form-panel-body" id="form-ct"></div>
+          <div class="form-panel-foot" id="form-foot" style="display:none">
+            <button class="btn btn-ghost btn-sm" id="btn-rascunho">💾 Salvar rascunho</button>
+            <button class="btn btn-primary"      id="btn-concluir">✅ Concluir etapa</button>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-panel">
+          <div class="preview-head">
+            <span class="preview-head-label">Pré-visualização do documento</span>
+            <button class="btn btn-ghost btn-sm" id="btn-pdf">⬇ PDF</button>
+          </div>
+          <div class="preview-body">
+            <div class="pdf-doc" id="pdf-doc"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </div>
 
+<!-- Modal: Novo Processo -->
 <div class="modal-overlay" id="modal-novo" style="display:none">
   <div class="modal">
     <div class="modal-header">
@@ -212,19 +264,19 @@
           <label class="label required">Tipo de contratação</label>
           <select class="select" id="np-tipo">
             <option value="">Selecione...</option>
-            <option value="aquisicao_bens">Aquisição de Bens</option>
-            <option value="servicos_comuns">Serviços Comuns</option>
-            <option value="obras_engenharia">Obras e Engenharia</option>
-            <option value="locacao_maquinas">Locação de Máquinas</option>
-            <option value="dispensa">Dispensa de Licitação</option>
-            <option value="inexigibilidade">Inexigibilidade</option>
+            <option value="Aquisição de Bens">Aquisição de Bens</option>
+            <option value="Serviços Comuns">Serviços Comuns</option>
+            <option value="Obras e Engenharia">Obras e Engenharia</option>
+            <option value="Locação">Locação</option>
+            <option value="Dispensa de Licitação">Dispensa de Licitação</option>
+            <option value="Inexigibilidade">Inexigibilidade</option>
           </select>
         </div>
         <div class="field">
           <label class="label required">Setor requisitante</label>
           <input class="input" type="text" id="np-setor" placeholder="Ex: Secretaria Municipal de Saúde">
         </div>
-        <div class="field">
+        <div class="field col-full">
           <label class="label">Valor estimado (R$)</label>
           <input class="input" type="text" id="np-valor" placeholder="0,00">
         </div>
@@ -241,13 +293,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script type="module">
-import { sb }                              from '../src/services/supabase.js';
-import { iniciarSessao, logout }           from '../src/services/auth.js';
-import { state, setState }                 from '../src/services/state.js';
-import { toast, confirmar }                from '../src/utils/ui.js';
-import { esc, data }                       from '../src/utils/format.js';
 
+<script type="module">
+import { sb }                          from '../src/services/supabase.js';
+import { iniciarSessao, logout, isAdmin } from '../src/services/auth.js';
+import { state, setState }             from '../src/services/state.js';
+import { toast, confirmar }            from '../src/utils/ui.js';
+import { esc, data, dataExtenso, moeda } from '../src/utils/format.js';
+
+/* ════════════════════════════════════════
+   CONFIGURAÇÃO
+════════════════════════════════════════ */
 const ETAPAS = [
   { n:1,  id:'DFD',        nome:'DFD',               label:'Documento de Formalização de Demanda',      perfil:'requisitante'  },
   { n:2,  id:'Protocolo',  nome:'Protocolo',          label:'Registro e Protocolo',                      perfil:'protocolo'     },
@@ -255,239 +311,755 @@ const ETAPAS = [
   { n:4,  id:'PP',         nome:'Pesquisa de Preços', label:'Pesquisa de Preços de Mercado',             perfil:'compras'       },
   { n:5,  id:'Dotacao',    nome:'Dotação Orç.',       label:'Dotação Orçamentária',                      perfil:'contabilidade' },
   { n:6,  id:'Autorizacao',nome:'Autorização',        label:'Autorização do Gestor',                     perfil:'secretaria'    },
-  { n:7,  id:'Minuta',     nome:'Minuta do Edital',   label:'Elaboração da Minuta do Edital',            perfil:'licitacao'     },
-  { n:8,  id:'Parecer',    nome:'Parecer Jurídico',   label:'Parecer Jurídico',                          perfil:'juridico'      },
+  { n:7,  id:'Minuta',     nome:'Minuta Edital',      label:'Elaboração da Minuta do Edital',            perfil:'licitacao'     },
+  { n:8,  id:'Parecer',    nome:'Parecer',            label:'Parecer Jurídico',                          perfil:'juridico'      },
   { n:9,  id:'Edital',     nome:'Edital Final',       label:'Edital Final e Aprovação',                  perfil:'licitacao'     },
   { n:10, id:'Publicacao', nome:'Publicação',         label:'Publicação e Abertura',                     perfil:'licitacao'     },
 ];
 
-const PERFIL_LABEL = { requisitante:'Requisitante', protocolo:'Protocolo', compras:'Compras', contabilidade:'Contabilidade', secretaria:'Secretaria', licitacao:'Licitação', juridico:'Jurídico' };
+const PERFIL_LABEL = { requisitante:'Requisitante', protocolo:'Protocolo', compras:'Compras', contabilidade:'Contabilidade', secretaria:'Secretaria', licitacao:'Licitação', juridico:'Jurídico', admin:'Administrador' };
 const STATUS_BADGE = { rascunho:'badge badge-gray', andamento:'badge badge-blue', aguardando:'badge badge-gold', concluido:'badge badge-green', suspenso:'badge badge-red' };
 const STATUS_LABEL = { rascunho:'Rascunho', andamento:'Em andamento', aguardando:'Aguardando', concluido:'Concluído', suspenso:'Suspenso' };
 
-let processos=[], docAbertos=[], etapaAtual=null, filtroAtivo='todos', buscaQuery='';
+/* ════════════════════════════════════════
+   ESTADO LOCAL
+════════════════════════════════════════ */
+let processos = [], docsAbertos = [], etapaAtual = null;
+let filtroAtivo = 'todos', buscaQuery = '';
+let naoSalvo = false;
+let autoSaveTimer = null;
 
+/* ════════════════════════════════════════
+   BOOT
+════════════════════════════════════════ */
 async function init() {
   const usuario = await iniciarSessao();
   if (!usuario) return;
+
   const nome = usuario.nome || usuario.email || 'Usuário';
   const ini  = nome.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
   document.getElementById('tb-avatar').textContent    = ini;
   document.getElementById('tb-nome').textContent      = nome;
   document.getElementById('tb-perfil').textContent    = PERFIL_LABEL[usuario.perfil] || usuario.perfil || '—';
   document.getElementById('tb-municipio').textContent = usuario.prefeituras?.municipio || '—';
+
+  if (isAdmin()) {
+    document.getElementById('btn-admin').style.display = '';
+  }
+
   await carregarProcessos();
   bindListeners();
 }
 
+/* ════════════════════════════════════════
+   LISTA DE PROCESSOS
+════════════════════════════════════════ */
 async function carregarProcessos() {
   const lista = document.getElementById('sb-lista');
   lista.innerHTML = Array(4).fill('<div class="sk sk-card"></div>').join('');
-  const { data: rows, error } = await sb.from('processos').select('*, documentos(tipo)').eq('prefeitura_id', state.prefeitura?.id).order('created_at',{ascending:false}).range(0,49);
-  if (error) { toast('Erro ao carregar processos.','error'); lista.innerHTML=''; return; }
+
+  const { data: rows, error } = await sb
+    .from('processos')
+    .select('*, documentos(tipo, status)')
+    .eq('prefeitura_id', state.prefeitura?.id)
+    .order('created_at', { ascending: false })
+    .range(0, 49);
+
+  if (error) { toast('Erro ao carregar processos.', 'error'); return; }
   processos = rows || [];
   renderSidebar();
 }
 
 function renderSidebar() {
   const lista = document.getElementById('sb-lista');
-  let rows = processos;
-  if (filtroAtivo !== 'todos') rows = rows.filter(p => p.status === filtroAtivo);
-  if (buscaQuery) { const q = buscaQuery.toLowerCase(); rows = rows.filter(p => p.numero_protocolo?.toLowerCase().includes(q) || p.objeto?.toLowerCase().includes(q)); }
-  if (!rows.length) { lista.innerHTML='<div style="padding:24px;font-size:12px;color:var(--muted);text-align:center">Nenhum processo encontrado</div>'; return; }
-  const ativoId = state.processoAtual?.id;
-  lista.innerHTML = rows.map(p => {
-    const docs  = p.documentos || [];
-    const dots  = ETAPAS.map(e => { const t = docs.find(d=>d.tipo===e.id); const c = t?'done':(p.etapa_atual===e.n?'cur':''); return `<div class="proc-dot ${c}"></div>`; }).join('');
-    const bc = STATUS_BADGE[p.status]||'badge badge-gray';
-    const bl = STATUS_LABEL[p.status]||p.status;
-    return `<div class="proc-card ${p.id===ativoId?'ativo':''}" data-id="${p.id}"><div class="proc-card-num">${esc(p.numero_protocolo||'—')}</div><div class="proc-card-obj">${esc(p.objeto||'—')}</div><div class="proc-card-footer"><div class="proc-dots">${dots}</div><span class="${bc}">${bl}</span></div></div>`;
-  }).join('');
-  lista.querySelectorAll('.proc-card').forEach(c => c.addEventListener('click', () => { const p=processos.find(x=>x.id===c.dataset.id); if(p) abrirProcesso(p); }));
-}
-
-async function abrirProcesso(p) {
-  setState('processoAtual', p);
-  etapaAtual = null;
-  renderSidebar();
-  document.getElementById('empty-state').style.display = 'none';
-  document.getElementById('proc-view').classList.add('on');
-  document.getElementById('pv-num').textContent  = p.numero_protocolo || '—';
-  document.getElementById('pv-obj').textContent  = p.objeto || '—';
-  document.getElementById('pv-tipo').textContent = p.tipo_contratacao || '—';
-  const bc=STATUS_BADGE[p.status]||'badge badge-gray', bl=STATUS_LABEL[p.status]||p.status;
-  document.getElementById('pv-badge').innerHTML = `<span class="${bc}">${bl}</span>`;
-  await carregarDocs(p.id);
-}
-
-async function carregarDocs(processoId) {
-  const { data: rows } = await sb.from('documentos').select('*').eq('processo_id', processoId);
-  docAbertos = rows || [];
-  renderEtapasNav();
-  const proc = state.processoAtual;
-  selecionarEtapa(proc.etapa_atual || 1);
-}
-
-function renderEtapasNav() {
-  const nav  = document.getElementById('etapas-nav');
-  const proc = state.processoAtual;
-  nav.innerHTML = '<div class="etapas-nav-label">Etapas</div>';
-  ETAPAS.forEach(cfg => {
-    const doc      = docAbertos.find(d=>d.tipo===cfg.id);
-    const concluida = doc?.status === 'concluido';
-    const ativa    = cfg.n === (etapaAtual?.n || proc?.etapa_atual);
-    const bloq     = cfg.n > (proc?.etapa_atual || 1);
-    let cls = 'etapa-item';
-    if (ativa)     cls += ' ativa';
-    if (concluida) cls += ' concluida';
-    if (bloq)      cls += ' bloqueada';
-    const num  = concluida ? '✓' : cfg.n;
-    const dStr = doc?.updated_at ? `<div class="etapa-data">${data(doc.updated_at)}</div>` : '';
-    nav.innerHTML += `<div class="${cls}" data-n="${cfg.n}"><div class="etapa-num">${num}</div><div class="etapa-info"><div class="etapa-nome">${esc(cfg.nome)}</div><div class="etapa-resp">${PERFIL_LABEL[cfg.perfil]}</div>${dStr}</div></div>`;
-  });
-  nav.querySelectorAll('.etapa-item:not(.bloqueada)').forEach(el => el.addEventListener('click', () => selecionarEtapa(parseInt(el.dataset.n))));
-}
-
-function selecionarEtapa(n) {
-  const cfg = ETAPAS.find(e=>e.n===n); if (!cfg) return;
-  etapaAtual = cfg;
-  renderEtapasNav();
-  document.getElementById('fp-titulo').textContent  = `${cfg.n}. ${cfg.label}`;
-  document.getElementById('fp-sub').textContent     = `Responsável: ${PERFIL_LABEL[cfg.perfil]}`;
-  document.getElementById('prev-label').textContent = `Preview — ${cfg.nome}`;
   const usuario = state.usuario;
-  const podeEditar = cfg.perfil === usuario?.perfil || usuario?.role === 'admin';
-  const doc = docAbertos.find(d=>d.tipo===cfg.id);
-  const concluida = doc?.status === 'concluido';
-  if (!podeEditar && !concluida) {
-    document.getElementById('form-ct').innerHTML = `<div class="etapa-bloqueada-msg"><div class="icon">🔒</div><p>Esta etapa é responsabilidade do perfil <strong>${PERFIL_LABEL[cfg.perfil]}</strong>.</p><small>Você está conectado como <strong>${PERFIL_LABEL[usuario?.perfil]||usuario?.perfil}</strong>.</small></div>`;
+  let rows = processos;
+
+  if (filtroAtivo !== 'todos') rows = rows.filter(p => p.status === filtroAtivo);
+  if (buscaQuery) {
+    const q = buscaQuery.toLowerCase();
+    rows = rows.filter(p => p.numero_protocolo?.toLowerCase().includes(q) || p.objeto?.toLowerCase().includes(q));
+  }
+
+  if (!rows.length) {
+    lista.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--muted);text-align:center">Nenhum processo encontrado.</div>';
     return;
   }
-  renderForm(cfg, doc, podeEditar && !concluida);
-  renderPreview(cfg, doc?.dados || {});
+
+  // Etapas que este perfil é responsável
+  const minhasEtapas = ETAPAS.filter(e => e.perfil === usuario?.perfil).map(e => e.id);
+
+  lista.innerHTML = rows.map(p => {
+    const docs  = p.documentos || [];
+    const dots  = ETAPAS.map(e => {
+      const doc = docs.find(d => d.tipo === e.id);
+      const cls = doc?.status === 'concluido' ? 'done' : (p.etapa_atual === e.n ? 'cur' : '');
+      return `<div class="proc-dot ${cls}"></div>`;
+    }).join('');
+
+    // Aguardando este usuário?
+    const etapaAtualCfg = ETAPAS.find(e => e.n === p.etapa_atual);
+    const aguardandoEu  = !isAdmin() && etapaAtualCfg && minhasEtapas.includes(etapaAtualCfg.id);
+    const docAtual      = docs.find(d => d.tipo === etapaAtualCfg?.id);
+    const aguardandoEuReal = aguardandoEu && (!docAtual || docAtual.status === 'rascunho');
+
+    const bc = STATUS_BADGE[p.status] || 'badge badge-gray';
+    const bl = STATUS_LABEL[p.status] || p.status;
+
+    return `
+      <div class="proc-card" data-id="${p.id}">
+        ${aguardandoEuReal ? '<div class="proc-aguardando" title="Aguardando sua ação"></div>' : ''}
+        <div class="proc-card-num">${esc(p.numero_protocolo || '—')}</div>
+        <div class="proc-card-obj">${esc(p.objeto || '—')}</div>
+        <div class="proc-card-footer">
+          <div class="proc-dots">${dots}</div>
+          <span class="${bc}" style="font-size:10px">${bl}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  lista.querySelectorAll('.proc-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const p = processos.find(x => x.id === card.dataset.id);
+      if (p) abrirProcesso(p);
+    });
+  });
 }
 
-function renderForm(cfg, doc, editavel) {
-  const d=doc?.dados||{}, dis=!editavel;
-  const f  = (id,lbl,tipo='text',ph='',req=false,val='') => `<div class="field"><label class="label${req?' required':''}">${lbl}</label><input class="input" type="${tipo}" id="${id}" placeholder="${ph}" ${dis?'disabled':''} value="${esc(val??'')}"></div>`;
-  const ft = (id,lbl,ph='',req=false,val='') => `<div class="field col-full"><label class="label${req?' required':''}">${lbl}</label><textarea class="input" id="${id}" rows="4" ${dis?'disabled':''}>${esc(val??'')}</textarea></div>`;
-  const fs = (id,lbl,opts,req=false,val='') => `<div class="field"><label class="label${req?' required':''}">${lbl}</label><select class="select" id="${id}" ${dis?'disabled':''}><option value="">Selecione...</option>${opts.map(o=>`<option value="${o.v}"${val===o.v?' selected':''}>${o.l}</option>`).join('')}</select></div>`;
-  const FORMS = {
-    1: ()=>`<div class="form-grid">${f('dfd-obj','Objeto','text','Descreva o objeto',true,d.objeto)}${f('dfd-setor','Setor requisitante','text','',true,d.setor)}${f('dfd-qtd','Quantidade','number','0',true,d.quantidade)}${f('dfd-und','Unidade','text','UN, KG...',true,d.unidade)}${f('dfd-val','Valor estimado (R$)','text','0,00',false,d.valor_estimado)}${f('dfd-prazo','Prazo desejado','date','',false,d.prazo)}${ft('dfd-just','Justificativa da necessidade','',true,d.justificativa)}${f('dfd-resp','Responsável','text','Nome completo',true,d.responsavel)}${f('dfd-cargo','Cargo','text','',true,d.cargo)}</div>`,
-    2: ()=>`<div class="form-grid">${f('prot-num','Número no livro','text','0154/2026',false,d.numero)}${f('prot-data','Data de entrada','date','',false,d.data_entrada)}${f('prot-recv','Recebido por','text','',false,d.recebido_por)}${f('prot-dest','Setor de destino','text','',false,d.setor_destino)}${ft('prot-obs','Observações','',false,d.obs)}</div>`,
-    3: ()=>`<div class="form-grid">${ft('etp-nec','Descrição da necessidade','',true,d.necessidade)}${ft('etp-sol','Descrição da solução','',true,d.solucao)}${ft('etp-req','Requisitos da contratação','',false,d.requisitos)}${ft('etp-fund','Fundamentação legal','Art. 6º, 11, 18, 40 da Lei 14.133/2021',false,d.fund_legal)}${ft('tr-obj','Objeto do TR','',true,d.tr_objeto)}${f('tr-prazo','Prazo de entrega (dias)','number','30',true,d.prazo_execucao)}${ft('tr-esp','Especificações técnicas','',true,d.especificacoes)}</div>`,
-    4: ()=>`<div class="form-grid">${f('pp-f1','Fornecedor 1','text','',false,d.forn1)}${f('pp-v1','Valor (R$)','text','',false,d.val1)}${f('pp-f2','Fornecedor 2','text','',false,d.forn2)}${f('pp-v2','Valor (R$)','text','',false,d.val2)}${f('pp-f3','Fornecedor 3','text','',false,d.forn3)}${f('pp-v3','Valor (R$)','text','',false,d.val3)}${f('pp-med','Valor médio (R$)','text','',false,d.media)}${ft('pp-obs','Observações','',false,d.obs)}</div>`,
-    5: ()=>`<div class="form-grid">${f('dot-dot','Dotação orçamentária','text','',true,d.dotacao)}${f('dot-fon','Fonte de recurso','text','',true,d.fonte)}${f('dot-val','Valor a empenhar (R$)','text','',true,d.valor)}${f('dot-emp','Número do empenho','text','',false,d.empenho)}${ft('dot-obs','Observações','',false,d.obs)}</div>`,
-    6: ()=>`<div class="form-grid">${f('aut-aut','Autorizado por','text','',true,d.autorizado_por)}${f('aut-dat','Data','date','',true,d.data)}${fs('aut-dec','Decisão',[{v:'autorizado',l:'Autorizado'},{v:'indeferido',l:'Indeferido'},{v:'diligencia',l:'Em diligência'}],true,d.decisao)}${ft('aut-obs','Despacho / motivação','',true,d.despacho)}</div>`,
-    7: ()=>`<div class="form-grid">${fs('min-mod','Modalidade',[{v:'pregao_eletronico',l:'Pregão Eletrônico'},{v:'concorrencia',l:'Concorrência'},{v:'dispensa',l:'Dispensa'}],true,d.modalidade)}${fs('min-cri','Critério',[{v:'menor_preco',l:'Menor Preço'},{v:'tecnica_preco',l:'Técnica e Preço'}],true,d.criterio)}${ft('min-obj','Objeto no edital','',true,d.objeto_edital)}${ft('min-hab','Exigências de habilitação','',false,d.exigencias)}</div>`,
-    8: ()=>`<div class="form-grid">${f('par-num','Número do parecer','text','',true,d.numero)}${f('par-dat','Data','date','',true,d.data)}${f('par-adv','Procurador / Advogado','text','',true,d.advogado)}${fs('par-con','Conclusão',[{v:'aprovado',l:'Aprovado'},{v:'ressalvas',l:'Com ressalvas'},{v:'rejeitado',l:'Rejeitado'}],true,d.conclusao)}${ft('par-fund','Fundamentação legal','',true,d.fundamentacao)}${ft('par-obs','Ressalvas','',false,d.obs)}</div>`,
-    9: ()=>`<div class="form-grid">${f('ef-num','Número do edital','text','',true,d.numero)}${f('ef-dpub','Data de publicação','date','',true,d.data_publicacao)}${f('ef-dses','Data da sessão','date','',true,d.data_sessao)}${ft('ef-obs','Observações','',false,d.obs)}</div>`,
-    10:()=>`<div class="form-grid">${f('pub-vei','Veículo','text','PNCP, Diário Oficial',true,d.veiculo)}${f('pub-dat','Data de publicação','date','',true,d.data)}${f('pub-nav','Número do aviso','text','',false,d.numero_aviso)}${f('pub-lnk','Link','url','https://',false,d.link)}</div>`,
-  };
-  const concluida = doc?.status==='concluido';
-  const banner    = concluida ? `<div class="etapa-concluida-banner">✓ Etapa concluída em ${data(doc.updated_at)}</div>` : '';
-  const acoes     = editavel ? `<div class="form-actions"><button class="btn btn-ghost btn-sm" id="btn-rascunho">💾 Salvar rascunho</button><button class="btn btn-primary" id="btn-concluir">✅ Concluir etapa</button></div>` : '';
-  document.getElementById('form-ct').innerHTML = banner + (FORMS[cfg.n]?.() || '') + acoes;
-  if (editavel) {
-    document.getElementById('btn-rascunho')?.addEventListener('click', () => salvarEtapa(cfg, false));
-    document.getElementById('btn-concluir')?.addEventListener('click', () => salvarEtapa(cfg, true));
+/* ════════════════════════════════════════
+   ABRIR PROCESSO
+════════════════════════════════════════ */
+async function abrirProcesso(proc) {
+  setState('processoAtual', proc);
+  etapaAtual = null;
+
+  // Troca de tela
+  document.getElementById('tela-lista').style.display    = 'none';
+  document.getElementById('tela-processo').classList.add('on');
+
+  // Popula header
+  document.getElementById('pv-num').textContent = proc.numero_protocolo || '—';
+  document.getElementById('pv-obj').textContent = proc.objeto || '—';
+  const bc = STATUS_BADGE[proc.status] || 'badge badge-gray';
+  const bl = STATUS_LABEL[proc.status] || proc.status;
+  document.getElementById('pv-badge').innerHTML = `<span class="${bc}" style="font-size:11px">${bl}</span>`;
+
+  // Busca documentos
+  const { data: docs } = await sb.from('documentos').select('*').eq('processo_id', proc.id);
+  docsAbertos = docs || [];
+
+  // Stepper — só admin
+  const admin = isAdmin();
+  const stepper = document.getElementById('stepper');
+  if (admin) {
+    stepper.classList.remove('oculto');
+    renderStepper();
+  } else {
+    stepper.classList.add('oculto');
+  }
+
+  // Carrega etapa correta
+  const usuario = state.usuario;
+  if (admin) {
+    // Admin vai para a etapa atual do processo
+    carregarEtapa(proc.etapa_atual || 1);
+  } else {
+    // Usuário vai para a etapa que é dele
+    const minhaEtapa = ETAPAS.find(e => e.perfil === usuario?.perfil);
+    if (minhaEtapa) {
+      carregarEtapa(minhaEtapa.n);
+    } else {
+      document.getElementById('form-ct').innerHTML = `
+        <div class="etapa-bloqueada">
+          <div class="etapa-bloqueada-icon">🔒</div>
+          <div class="etapa-bloqueada-title">Sem etapas atribuídas</div>
+          <div class="etapa-bloqueada-sub">Seu perfil não possui etapas neste processo.</div>
+        </div>`;
+    }
   }
 }
 
-function coletarForm(n) {
-  const g = id => document.getElementById(id)?.value ?? '';
-  const m = {
-    1:()=>({objeto:g('dfd-obj'),setor:g('dfd-setor'),quantidade:g('dfd-qtd'),unidade:g('dfd-und'),valor_estimado:g('dfd-val'),prazo:g('dfd-prazo'),justificativa:g('dfd-just'),responsavel:g('dfd-resp'),cargo:g('dfd-cargo')}),
-    2:()=>({numero:g('prot-num'),data_entrada:g('prot-data'),recebido_por:g('prot-recv'),setor_destino:g('prot-dest'),obs:g('prot-obs')}),
-    3:()=>({necessidade:g('etp-nec'),solucao:g('etp-sol'),requisitos:g('etp-req'),fund_legal:g('etp-fund'),tr_objeto:g('tr-obj'),prazo_execucao:g('tr-prazo'),especificacoes:g('tr-esp')}),
-    4:()=>({forn1:g('pp-f1'),val1:g('pp-v1'),forn2:g('pp-f2'),val2:g('pp-v2'),forn3:g('pp-f3'),val3:g('pp-v3'),media:g('pp-med'),obs:g('pp-obs')}),
-    5:()=>({dotacao:g('dot-dot'),fonte:g('dot-fon'),valor:g('dot-val'),empenho:g('dot-emp'),obs:g('dot-obs')}),
-    6:()=>({autorizado_por:g('aut-aut'),data:g('aut-dat'),decisao:g('aut-dec'),despacho:g('aut-obs')}),
-    7:()=>({modalidade:g('min-mod'),criterio:g('min-cri'),objeto_edital:g('min-obj'),exigencias:g('min-hab')}),
-    8:()=>({numero:g('par-num'),data:g('par-dat'),advogado:g('par-adv'),conclusao:g('par-con'),fundamentacao:g('par-fund'),obs:g('par-obs')}),
-    9:()=>({numero:g('ef-num'),data_publicacao:g('ef-dpub'),data_sessao:g('ef-dses'),obs:g('ef-obs')}),
-    10:()=>({veiculo:g('pub-vei'),data:g('pub-dat'),numero_aviso:g('pub-nav'),link:g('pub-lnk')}),
-  };
-  return m[n]?.() || {};
+function voltarParaLista() {
+  // Confirma se tem alterações não salvas
+  if (naoSalvo) {
+    if (!confirm('Há alterações não salvas. Deseja sair mesmo assim?')) return;
+  }
+  document.getElementById('tela-processo').classList.remove('on');
+  document.getElementById('tela-lista').style.display = 'flex';
+  setState('processoAtual', null);
+  naoSalvo = false;
+  document.getElementById('unsaved-indicator').classList.remove('on');
+  carregarProcessos(); // Atualiza a lista
 }
 
-async function salvarEtapa(cfg, concluir) {
+/* ════════════════════════════════════════
+   STEPPER (admin)
+════════════════════════════════════════ */
+function renderStepper() {
+  const proc    = state.processoAtual;
+  const stepper = document.getElementById('stepper');
+  stepper.innerHTML = '';
+
+  ETAPAS.forEach(cfg => {
+    const doc       = docsAbertos.find(d => d.tipo === cfg.id);
+    const concluida = doc?.status === 'concluido';
+    const ativa     = cfg.n === (etapaAtual?.n || proc?.etapa_atual);
+    const cls       = ativa ? 'ativo' : (concluida ? 'concluido' : '');
+    const num       = concluida ? '✓' : cfg.n;
+
+    const el = document.createElement('div');
+    el.className = `step-item ${cls}`;
+    el.textContent = num;
+    el.title = cfg.nome;
+    el.addEventListener('click', () => carregarEtapa(cfg.n));
+    stepper.appendChild(el);
+  });
+}
+
+/* ════════════════════════════════════════
+   CARREGAR ETAPA
+════════════════════════════════════════ */
+function carregarEtapa(n) {
+  const cfg = ETAPAS.find(e => e.n === n);
+  if (!cfg) return;
+  etapaAtual = cfg;
+
+  if (isAdmin()) renderStepper();
+
+  document.getElementById('fp-titulo').textContent = `${cfg.n}. ${cfg.label}`;
+  document.getElementById('fp-sub').textContent    = `Responsável: ${PERFIL_LABEL[cfg.perfil]}`;
+
+  const usuario    = state.usuario;
+  const podeEditar = isAdmin() ? false : cfg.perfil === usuario?.perfil; // Admin só observa
+  const doc        = docsAbertos.find(d => d.tipo === cfg.id);
+  const concluida  = doc?.status === 'concluido';
+
+  // Etapa concluída
+  if (concluida && !isAdmin()) {
+    document.getElementById('form-ct').innerHTML = `
+      <div class="etapa-concluida">
+        <div class="etapa-concluida-icon">✅</div>
+        <div class="etapa-concluida-title">Etapa concluída!</div>
+        <div class="etapa-concluida-sub">
+          Esta etapa foi concluída em ${data(doc.updated_at)}.<br>
+          O processo avançou para a próxima fase.
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="voltarParaListaGlobal()">← Voltar para a lista</button>
+      </div>`;
+    document.getElementById('form-foot').style.display = 'none';
+    renderPreview(cfg, doc?.dados || {});
+    return;
+  }
+
+  // Etapa bloqueada (não é a etapa deste usuário)
   const proc = state.processoAtual;
-  if (concluir) { const ok = await confirmar(`Concluir a etapa "${cfg.nome}"?`,{titulo:'Confirmar',labelSim:'Concluir'}); if (!ok) return; }
-  const dados     = coletarForm(cfg.n);
-  const existente = docAbertos.find(d=>d.tipo===cfg.id);
-  const payload   = { processo_id:proc.id, tipo:cfg.id, dados, status:concluir?'concluido':'rascunho', updated_at:new Date().toISOString() };
-  let error;
-  if (existente) ({ error } = await sb.from('documentos').update(payload).eq('id',existente.id));
-  else           ({ error } = await sb.from('documentos').insert(payload));
-  if (error) { toast('Erro ao salvar.','error'); return; }
-  if (concluir && cfg.n < 10) { await sb.from('processos').update({etapa_atual:cfg.n+1,status:'andamento'}).eq('id',proc.id); setState('processoAtual',{...proc,etapa_atual:cfg.n+1,status:'andamento'}); }
-  else if (concluir && cfg.n===10) { await sb.from('processos').update({status:'concluido'}).eq('id',proc.id); }
-  toast(concluir?`"${cfg.nome}" concluída!`:'Rascunho salvo.', concluir?'success':'info');
-  await carregarProcessos();
-  await carregarDocs(proc.id);
+  if (!podeEditar && !isAdmin()) {
+    const etapaResponsavel = ETAPAS.find(e => e.perfil === usuario?.perfil);
+    const etapaAtualProc   = ETAPAS.find(e => e.n === proc?.etapa_atual);
+    document.getElementById('form-ct').innerHTML = `
+      <div class="etapa-bloqueada">
+        <div class="etapa-bloqueada-icon">⏳</div>
+        <div class="etapa-bloqueada-title">Processo em tramitação</div>
+        <div class="etapa-bloqueada-sub">
+          Atualmente na etapa <strong>${etapaAtualProc?.nome || '—'}</strong>.<br>
+          Sua etapa é <strong>${etapaResponsavel?.nome || '—'}</strong> — você será notificado quando chegar.
+        </div>
+      </div>`;
+    document.getElementById('form-foot').style.display = 'none';
+    renderPreview(cfg, doc?.dados || {});
+    return;
+  }
+
+  // Renderiza formulário
+  renderForm(cfg, doc, podeEditar || isAdmin());
+  renderPreview(cfg, doc?.dados || {});
+
+  // Mostra/oculta rodapé de ações
+  document.getElementById('form-foot').style.display = (podeEditar && !concluida) ? 'flex' : 'none';
+
+  // Auto-preview em tempo real
+  iniciarAutoPreview(cfg);
+}
+
+/* ════════════════════════════════════════
+   FORMULÁRIOS
+════════════════════════════════════════ */
+function renderForm(cfg, doc, editavel) {
+  const d   = doc?.dados || {};
+  const dis = !editavel;
+
+  const f  = (id, lbl, tipo='text', ph='', req=false, val='') =>
+    `<div class="field">
+      <label class="label${req?' required':''}">${lbl}</label>
+      <input class="input" type="${tipo}" id="${id}" placeholder="${ph}" ${dis?'disabled':''} value="${esc(val??'')}">
+    </div>`;
+
+  const ft = (id, lbl, ph='', req=false, val='', min=0) =>
+    `<div class="field col-full">
+      <label class="label${req?' required':''}">${lbl}</label>
+      <textarea class="input" id="${id}" rows="4" ${dis?'disabled':''}>${esc(val??'')}</textarea>
+      ${min > 0 ? `<div class="field-hint"><span id="${id}-wc">0</span> palavras${!dis?' — mínimo recomendado: '+min:''}.</div>` : ''}
+    </div>`;
+
+  const fs = (id, lbl, opts, req=false, val='') =>
+    `<div class="field">
+      <label class="label${req?' required':''}">${lbl}</label>
+      <select class="select" id="${id}" ${dis?'disabled':''}>
+        <option value="">Selecione...</option>
+        ${opts.map(o=>`<option value="${o.v}"${val===o.v?' selected':''}>${o.l}</option>`).join('')}
+      </select>
+    </div>`;
+
+  const FORMS = {
+    1: () => `
+      <div class="form-section">
+        <div class="section-title">Identificação</div>
+        <div class="form-grid">
+          ${f('dfd-obj','Objeto da contratação','text','Descreva o objeto',true,d.objeto)}
+          ${f('dfd-setor','Setor requisitante','text','Ex: Secretaria de Saúde',true,d.setor)}
+          ${f('dfd-qtd','Quantidade','number','0',true,d.quantidade)}
+          ${f('dfd-und','Unidade de medida','text','UN, KG, M²...',true,d.unidade)}
+          ${f('dfd-val','Valor estimado (R$)','text','0,00',false,d.valor_estimado)}
+          ${f('dfd-prazo','Prazo desejado','date','',false,d.prazo)}
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">Justificativa</div>
+        <div class="form-grid">
+          ${ft('dfd-just','Justificativa da necessidade','Descreva a necessidade que motiva esta contratação...',true,d.justificativa,80)}
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">Responsável</div>
+        <div class="form-grid">
+          ${f('dfd-resp','Nome do responsável','text','Nome completo',true,d.responsavel)}
+          ${f('dfd-cargo','Cargo','text','',true,d.cargo)}
+        </div>
+      </div>`,
+
+    2: () => `
+      <div class="form-section">
+        <div class="section-title">Dados do Protocolo</div>
+        <div class="form-grid">
+          ${f('prot-num','Número no livro','text','0154/2026',false,d.numero)}
+          ${f('prot-data','Data de entrada','date','',false,d.data_entrada)}
+          ${f('prot-recv','Recebido por','text','Nome do servidor',false,d.recebido_por)}
+          ${f('prot-dest','Setor de destino','text','',false,d.setor_destino)}
+          ${ft('prot-obs','Observações','',false,d.obs)}
+        </div>
+      </div>`,
+
+    3: () => `
+      <div class="form-section">
+        <div class="section-title">Estudo Técnico Preliminar</div>
+        <div class="form-grid">
+          ${ft('etp-nec','Descrição da necessidade','',true,d.necessidade,60)}
+          ${ft('etp-sol','Descrição da solução proposta','',true,d.solucao)}
+          ${ft('etp-req','Requisitos da contratação','',false,d.requisitos)}
+          ${ft('etp-fund','Fundamentação legal','Art. 6º, 11, 18, 40 da Lei 14.133/2021',false,d.fund_legal)}
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">Termo de Referência</div>
+        <div class="form-grid">
+          ${ft('tr-obj','Objeto do TR','',true,d.tr_objeto)}
+          ${f('tr-prazo','Prazo de entrega (dias)','number','30',true,d.prazo_execucao)}
+          ${ft('tr-esp','Especificações técnicas','',true,d.especificacoes)}
+          ${ft('tr-obr','Obrigações da contratada','',false,d.obrigacoes)}
+        </div>
+      </div>`,
+
+    4: () => `
+      <div class="form-section">
+        <div class="section-title">Cotações de Mercado</div>
+        <div class="form-grid">
+          ${f('pp-f1','Fornecedor 1','text','Razão social',false,d.forn1)}
+          ${f('pp-v1','Valor R$','text','0,00',false,d.val1)}
+          ${f('pp-f2','Fornecedor 2','text','',false,d.forn2)}
+          ${f('pp-v2','Valor R$','text','',false,d.val2)}
+          ${f('pp-f3','Fornecedor 3','text','',false,d.forn3)}
+          ${f('pp-v3','Valor R$','text','',false,d.val3)}
+          ${f('pp-med','Valor médio apurado R$','text','',false,d.media)}
+          ${f('pp-met','Método de pesquisa','text','PNCP, Painel de Preços...',false,d.metodo)}
+          ${ft('pp-obs','Observações','',false,d.obs)}
+        </div>
+      </div>`,
+
+    5: () => `
+      <div class="form-section">
+        <div class="section-title">Dotação Orçamentária</div>
+        <div class="form-grid">
+          ${f('dot-dot','Dotação','text','02.003.10.301.0001',true,d.dotacao)}
+          ${f('dot-fon','Fonte de recurso','text','101 – Recursos Próprios',true,d.fonte)}
+          ${f('dot-val','Valor a empenhar R$','text','0,00',true,d.valor)}
+          ${f('dot-emp','Número do empenho','text','',false,d.empenho)}
+          ${ft('dot-obs','Observações','',false,d.obs)}
+        </div>
+      </div>`,
+
+    6: () => `
+      <div class="form-section">
+        <div class="section-title">Autorização</div>
+        <div class="form-grid">
+          ${f('aut-aut','Autorizado por','text','Nome e cargo',true,d.autorizado_por)}
+          ${f('aut-dat','Data','date','',true,d.data)}
+          ${fs('aut-dec','Decisão',[{v:'autorizado',l:'Autorizado'},{v:'indeferido',l:'Indeferido'},{v:'diligencia',l:'Em diligência'}],true,d.decisao)}
+          ${ft('aut-obs','Despacho / motivação','',true,d.despacho)}
+        </div>
+      </div>`,
+
+    7: () => `
+      <div class="form-section">
+        <div class="section-title">Minuta do Edital</div>
+        <div class="form-grid">
+          ${fs('min-mod','Modalidade',[{v:'pregao_eletronico',l:'Pregão Eletrônico'},{v:'concorrencia',l:'Concorrência'},{v:'dispensa',l:'Dispensa'}],true,d.modalidade)}
+          ${fs('min-cri','Critério',[{v:'menor_preco',l:'Menor Preço'},{v:'tecnica_preco',l:'Técnica e Preço'}],true,d.criterio)}
+          ${ft('min-obj','Objeto no edital','',true,d.objeto_edital)}
+          ${ft('min-hab','Exigências de habilitação','',false,d.exigencias)}
+        </div>
+      </div>`,
+
+    8: () => `
+      <div class="form-section">
+        <div class="section-title">Parecer Jurídico</div>
+        <div class="form-grid">
+          ${f('par-num','Número do parecer','text','PAR-0042/2026',true,d.numero)}
+          ${f('par-dat','Data','date','',true,d.data)}
+          ${f('par-adv','Procurador / Advogado','text','Nome e OAB',true,d.advogado)}
+          ${fs('par-con','Conclusão',[{v:'aprovado',l:'Aprovado'},{v:'ressalvas',l:'Com ressalvas'},{v:'rejeitado',l:'Rejeitado'}],true,d.conclusao)}
+          ${ft('par-fund','Fundamentação legal','',true,d.fundamentacao)}
+          ${ft('par-obs','Ressalvas e considerações','',false,d.obs)}
+        </div>
+      </div>`,
+
+    9: () => `
+      <div class="form-section">
+        <div class="section-title">Edital Final</div>
+        <div class="form-grid">
+          ${f('ef-num','Número do edital','text','0042/2026',true,d.numero)}
+          ${f('ef-dpub','Data de publicação prevista','date','',true,d.data_publicacao)}
+          ${f('ef-dses','Data da sessão pública','date','',true,d.data_sessao)}
+          ${f('ef-hora','Hora da sessão','time','09:00',false,d.hora_sessao)}
+          ${ft('ef-obs','Observações finais','',false,d.obs)}
+        </div>
+      </div>`,
+
+    10: () => `
+      <div class="form-section">
+        <div class="section-title">Publicação</div>
+        <div class="form-grid">
+          ${f('pub-vei','Veículo de publicação','text','PNCP, Diário Oficial GO',true,d.veiculo)}
+          ${f('pub-dat','Data de publicação','date','',true,d.data)}
+          ${f('pub-nav','Número do aviso','text','',false,d.numero_aviso)}
+          ${f('pub-lnk','Link da publicação','url','https://',false,d.link)}
+        </div>
+      </div>`,
+  };
+
+  const concluida = doc?.status === 'concluido';
+  const banner = concluida
+    ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--green-l);border:1px solid rgba(65,243,106,.2);border-radius:var(--r-sm);font-size:12px;color:var(--green);margin-bottom:16px">✓ Etapa concluída em ${data(doc.updated_at)}</div>`
+    : '';
+
+  document.getElementById('form-ct').innerHTML = banner + (FORMS[cfg.n]?.() || `<div style="padding:20px;color:var(--muted)">Formulário em construção.</div>`);
+
+  // Contador de palavras
+  document.querySelectorAll('[id$="-wc"]').forEach(el => {
+    const fieldId = el.id.replace('-wc', '');
+    const field   = document.getElementById(fieldId);
+    if (!field) return;
+    const atualizar = () => {
+      const qtd = field.value.trim().split(/\s+/).filter(Boolean).length;
+      el.textContent = qtd;
+      el.style.color = qtd >= 80 ? 'var(--green)' : qtd > 0 ? 'var(--gold)' : 'var(--muted)';
+    };
+    atualizar();
+    field.addEventListener('input', atualizar);
+  });
+}
+
+/* ════════════════════════════════════════
+   COLETA DE DADOS DO FORMULÁRIO
+════════════════════════════════════════ */
+function coletarForm(n) {
+  const g = id => document.getElementById(id)?.value ?? '';
+  const mapas = {
+    1:  () => ({ objeto:g('dfd-obj'), setor:g('dfd-setor'), quantidade:g('dfd-qtd'), unidade:g('dfd-und'), valor_estimado:g('dfd-val'), prazo:g('dfd-prazo'), justificativa:g('dfd-just'), responsavel:g('dfd-resp'), cargo:g('dfd-cargo') }),
+    2:  () => ({ numero:g('prot-num'), data_entrada:g('prot-data'), recebido_por:g('prot-recv'), setor_destino:g('prot-dest'), obs:g('prot-obs') }),
+    3:  () => ({ necessidade:g('etp-nec'), solucao:g('etp-sol'), requisitos:g('etp-req'), fund_legal:g('etp-fund'), tr_objeto:g('tr-obj'), prazo_execucao:g('tr-prazo'), especificacoes:g('tr-esp'), obrigacoes:g('tr-obr') }),
+    4:  () => ({ forn1:g('pp-f1'), val1:g('pp-v1'), forn2:g('pp-f2'), val2:g('pp-v2'), forn3:g('pp-f3'), val3:g('pp-v3'), media:g('pp-med'), metodo:g('pp-met'), obs:g('pp-obs') }),
+    5:  () => ({ dotacao:g('dot-dot'), fonte:g('dot-fon'), valor:g('dot-val'), empenho:g('dot-emp'), obs:g('dot-obs') }),
+    6:  () => ({ autorizado_por:g('aut-aut'), data:g('aut-dat'), decisao:g('aut-dec'), despacho:g('aut-obs') }),
+    7:  () => ({ modalidade:g('min-mod'), criterio:g('min-cri'), objeto_edital:g('min-obj'), exigencias:g('min-hab') }),
+    8:  () => ({ numero:g('par-num'), data:g('par-dat'), advogado:g('par-adv'), conclusao:g('par-con'), fundamentacao:g('par-fund'), obs:g('par-obs') }),
+    9:  () => ({ numero:g('ef-num'), data_publicacao:g('ef-dpub'), data_sessao:g('ef-dses'), hora_sessao:g('ef-hora'), obs:g('ef-obs') }),
+    10: () => ({ veiculo:g('pub-vei'), data:g('pub-dat'), numero_aviso:g('pub-nav'), link:g('pub-lnk') }),
+  };
+  return mapas[n]?.() || {};
+}
+
+/* ════════════════════════════════════════
+   SALVAR ETAPA
+════════════════════════════════════════ */
+async function salvarEtapa(concluir = false) {
+  const cfg  = etapaAtual;
+  const proc = state.processoAtual;
+  if (!cfg || !proc) return;
+
+  if (concluir) {
+    const ok = await confirmar(`Concluir a etapa "${cfg.nome}"?`, {
+      titulo: 'Confirmar conclusão',
+      labelSim: 'Concluir',
+      subtitulo: 'Esta ação não poderá ser desfeita.'
+    });
+    if (!ok) return;
+  }
+
+  const btn = document.getElementById(concluir ? 'btn-concluir' : 'btn-rascunho');
+  if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
+
+  try {
+    const dados   = coletarForm(cfg.n);
+    const status  = concluir ? 'concluido' : 'rascunho';
+    const existente = docsAbertos.find(d => d.tipo === cfg.id);
+    const payload   = { processo_id: proc.id, tipo: cfg.id, dados, status, updated_at: new Date().toISOString() };
+
+    let error;
+    if (existente) {
+      ({ error } = await sb.from('documentos').update(payload).eq('id', existente.id));
+    } else {
+      ({ error } = await sb.from('documentos').insert(payload));
+    }
+    if (error) throw error;
+
+    // Avança o processo
+    if (concluir) {
+      const proximaEtapa = cfg.n < 10 ? cfg.n + 1 : cfg.n;
+      const novoStatus   = cfg.n === 10 ? 'concluido' : 'andamento';
+      await sb.from('processos').update({ etapa_atual: proximaEtapa, status: novoStatus }).eq('id', proc.id);
+    }
+
+    // Atualiza estado local
+    const { data: docs } = await sb.from('documentos').select('*').eq('processo_id', proc.id);
+    docsAbertos = docs || [];
+
+    marcarSalvo();
+
+    if (concluir) {
+      toast(`"${cfg.nome}" concluída! Processo avançou.`, 'success');
+      // Usuário comum volta para a lista após concluir
+      if (!isAdmin()) {
+        setTimeout(() => voltarParaLista(), 2000);
+        carregarEtapa(cfg.n); // Mostra tela de concluída
+      } else {
+        carregarEtapa(Math.min(cfg.n + 1, 10));
+        if (isAdmin()) renderStepper();
+      }
+    } else {
+      toast('Rascunho salvo.', 'info');
+    }
+  } catch(e) {
+    toast('Erro ao salvar: ' + e.message, 'error');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = concluir ? '✅ Concluir etapa' : '💾 Salvar rascunho';
+    }
+  }
+}
+
+function marcarSalvo() {
+  naoSalvo = false;
+  document.getElementById('unsaved-indicator').classList.remove('on');
+}
+
+function marcarNaoSalvo() {
+  if (!naoSalvo) {
+    naoSalvo = true;
+    document.getElementById('unsaved-indicator').classList.add('on');
+  }
+  // Auto-save local a cada 30s
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    const proc = state.processoAtual;
+    const cfg  = etapaAtual;
+    if (proc && cfg) {
+      const dados = coletarForm(cfg.n);
+      localStorage.setItem(`draft_${proc.id}_${cfg.id}`, JSON.stringify({ dados, ts: Date.now() }));
+      toast('Rascunho salvo localmente.', 'info', 2000);
+      marcarSalvo();
+    }
+  }, 30000);
+}
+
+/* ════════════════════════════════════════
+   PREVIEW AO VIVO
+════════════════════════════════════════ */
+function iniciarAutoPreview(cfg) {
+  const formCt = document.getElementById('form-ct');
+  if (!formCt) return;
+  formCt.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', () => {
+      marcarNaoSalvo();
+      renderPreview(cfg, coletarForm(cfg.n));
+    });
+    el.addEventListener('change', () => {
+      marcarNaoSalvo();
+      renderPreview(cfg, coletarForm(cfg.n));
+    });
+  });
 }
 
 function renderPreview(cfg, d) {
-  const pref=state.prefeitura||{}, proc=state.processoAtual;
+  const pref = state.prefeitura || {};
+  const proc = state.processoAtual;
+  const hoje = dataExtenso();
+
   const linhas = {
-    1:[['Objeto',d.objeto],['Setor',d.setor],['Quantidade',`${d.quantidade||''} ${d.unidade||''}`],['Valor estimado',d.valor_estimado],['Justificativa',d.justificativa]],
-    2:[['Protocolo nº',d.numero],['Data',d.data_entrada],['Recebido por',d.recebido_por]],
-    3:[['Objeto TR',d.tr_objeto],['Necessidade',d.necessidade],['Especificações',d.especificacoes]],
-    4:[['Fornecedor 1',d.forn1],['Fornecedor 2',d.forn2],['Fornecedor 3',d.forn3],['Valor médio',d.media]],
-    5:[['Dotação',d.dotacao],['Fonte',d.fonte],['Valor',d.valor]],
-    6:[['Autorizado por',d.autorizado_por],['Decisão',d.decisao],['Despacho',d.despacho]],
-    7:[['Modalidade',d.modalidade],['Critério',d.criterio],['Objeto',d.objeto_edital]],
-    8:[['Parecer nº',d.numero],['Procurador',d.advogado],['Conclusão',d.conclusao]],
-    9:[['Edital nº',d.numero],['Publicação',d.data_publicacao],['Sessão',d.data_sessao]],
-    10:[['Veículo',d.veiculo],['Data',d.data],['Link',d.link]],
+    1:  [['Objeto',d.objeto],['Setor',d.setor],['Quantidade',d.quantidade && d.unidade ? `${d.quantidade} ${d.unidade}` : ''],['Valor estimado',d.valor_estimado ? 'R$ '+d.valor_estimado : '']],
+    2:  [['Protocolo nº',d.numero],['Data de entrada',d.data_entrada],['Recebido por',d.recebido_por],['Setor de destino',d.setor_destino]],
+    3:  [['Objeto TR',d.tr_objeto],['Prazo de entrega',d.prazo_execucao ? d.prazo_execucao+' dias' : ''],['Necessidade',d.necessidade]],
+    4:  [['Fornecedor 1',d.forn1 ? `${d.forn1} — R$ ${d.val1}` : ''],['Fornecedor 2',d.forn2 ? `${d.forn2} — R$ ${d.val2}` : ''],['Fornecedor 3',d.forn3 ? `${d.forn3} — R$ ${d.val3}` : ''],['Valor médio',d.media ? 'R$ '+d.media : '']],
+    5:  [['Dotação',d.dotacao],['Fonte',d.fonte],['Valor a empenhar',d.valor ? 'R$ '+d.valor : ''],['Empenho',d.empenho]],
+    6:  [['Autorizado por',d.autorizado_por],['Data',d.data],['Decisão',d.decisao],['Motivação',d.despacho]],
+    7:  [['Modalidade',d.modalidade],['Critério de julgamento',d.criterio],['Objeto',d.objeto_edital]],
+    8:  [['Parecer nº',d.numero],['Procurador',d.advogado],['Conclusão',d.conclusao],['Fundamentação',d.fundamentacao]],
+    9:  [['Edital nº',d.numero],['Data de publicação',d.data_publicacao],['Data da sessão',d.data_sessao],['Hora',d.hora_sessao]],
+    10: [['Veículo',d.veiculo],['Data',d.data],['Nº do aviso',d.numero_aviso],['Link',d.link]],
   };
-  const campos = (linhas[cfg.n]||[]).filter(([,v])=>v).map(([l,v])=>`<p><span class="pdf-field-label">${l}:</span> ${esc(String(v))}</p>`).join('') || '<p style="color:#aaa;font-style:italic">Nenhum dado preenchido ainda.</p>';
-  document.getElementById('pdf-doc').innerHTML = `<div class="pdf-cabecalho"><div class="pdf-brasao">🏛️</div><div class="pdf-pref">${esc(pref.nome||'PREFEITURA MUNICIPAL')}</div><div class="pdf-subtit">${esc(pref.cnpj||'')} · ${esc(pref.municipio||'')}</div><div class="pdf-titulo">${esc(cfg.label)}</div><div class="pdf-protocolo">Processo nº ${esc(proc?.numero_protocolo||'—')} · Etapa ${cfg.n}/10</div></div><div class="pdf-body">${campos}</div><div class="pdf-footer"><div><div>Lei 14.133/2021 · TCM-GO · IN-009/2023</div><div>Emitido em ${new Date().toLocaleDateString('pt-BR')}</div></div><div class="pdf-hash">SHA-256: gerado ao concluir</div></div>`;
+
+  const campos = (linhas[cfg.n] || [])
+    .filter(([,v]) => v)
+    .map(([l,v]) => `<div class="pdf-field"><span class="pdf-field-label">${l}:</span> ${esc(String(v))}</div>`)
+    .join('') || '<div style="color:#aaa;font-style:italic;font-size:11px">Preencha os campos ao lado para ver o documento.</div>';
+
+  // Justificativa com parágrafo especial para DFD
+  const justificativa = cfg.n === 1 && d.justificativa
+    ? `<div class="pdf-section">
+        <div class="pdf-section-title">Justificativa</div>
+        <div class="pdf-justificativa">${esc(d.justificativa)}</div>
+       </div>` : '';
+
+  // Assinatura para etapas que têm responsável
+  const responsavel = d.responsavel || d.autorizado_por || d.advogado || '';
+  const cargo       = d.cargo || '';
+  const assinatura  = responsavel ? `
+    <div class="pdf-assinatura">
+      <div class="pdf-assinatura-linha">
+        <div class="pdf-assinatura-nome">${esc(responsavel)}</div>
+        ${cargo ? `<div class="pdf-assinatura-cargo">${esc(cargo)}</div>` : ''}
+      </div>
+      <div style="font-size:10px;color:#888;margin-top:8px">${esc(pref.municipio || '')}, ${hoje}</div>
+    </div>` : '';
+
+  document.getElementById('pdf-doc').innerHTML = `
+    <div class="pdf-header">
+      <div class="pdf-brasao">🏛️</div>
+      <div class="pdf-pref">${esc(pref.nome || 'PREFEITURA MUNICIPAL')}</div>
+      <div class="pdf-cnpj">${pref.cnpj ? 'CNPJ: ' + esc(pref.cnpj) : ''} ${pref.municipio ? '· ' + esc(pref.municipio) : ''}${pref.uf ? '/' + esc(pref.uf) : ''}</div>
+      <div class="pdf-titulo">${esc(cfg.label)}</div>
+      <div class="pdf-num">Processo nº ${esc(proc?.numero_protocolo || '—')} · Etapa ${cfg.n}/10</div>
+    </div>
+    <div class="pdf-section">
+      <div class="pdf-section-title">Dados</div>
+      ${campos}
+    </div>
+    ${justificativa}
+    ${assinatura}
+    <div class="pdf-footer">
+      <div>
+        <div>Lei Federal nº 14.133/2021 · TCM-GO · IN-009/2023</div>
+        <div>Gerado em ${new Date().toLocaleString('pt-BR')}</div>
+      </div>
+      <div class="pdf-hash">SHA-256: gerado ao concluir a etapa</div>
+    </div>`;
 }
 
-function setView(modo) {
-  const fp=document.getElementById('form-panel'), pp=document.getElementById('preview-panel');
-  document.getElementById('vbtn-form').classList.toggle('on',  modo==='form');
-  document.getElementById('vbtn-split').classList.toggle('on', modo==='split');
-  document.getElementById('vbtn-prev').classList.toggle('on',  modo==='prev');
-  fp.style.display = modo==='prev' ? 'none' : '';
-  pp.classList.toggle('hidden', modo==='form');
-}
-
+/* ════════════════════════════════════════
+   CRIAR PROCESSO
+════════════════════════════════════════ */
 async function criarProcesso() {
-  const objeto=document.getElementById('np-objeto').value.trim(), tipo=document.getElementById('np-tipo').value, setor=document.getElementById('np-setor').value.trim(), valor=document.getElementById('np-valor').value;
-  if (!objeto||!tipo||!setor) { toast('Preencha os campos obrigatórios.','warning'); return; }
-  const pref=state.prefeitura, ano=new Date().getFullYear();
-  const { count } = await sb.from('processos').select('*',{count:'exact',head:true}).eq('prefeitura_id',pref?.id);
-  const numero = `${String((count||0)+1).padStart(4,'0')}/${ano}`;
-  const { data: proc, error } = await sb.from('processos').insert({ prefeitura_id:pref?.id, numero_protocolo:numero, objeto, tipo_contratacao:tipo, setor_requisitante:setor, valor_estimado:valor, etapa_atual:1, status:'rascunho' }).select().single();
-  if (error) { toast('Erro ao criar processo.','error'); return; }
-  fecharModal();
-  toast(`Processo ${numero} criado!`,'success');
-  await carregarProcessos();
-  abrirProcesso({...proc, documentos:[]});
+  const objeto = document.getElementById('np-objeto').value.trim();
+  const tipo   = document.getElementById('np-tipo').value;
+  const setor  = document.getElementById('np-setor').value.trim();
+  const valor  = document.getElementById('np-valor').value;
+
+  if (!objeto || !tipo || !setor) { toast('Preencha os campos obrigatórios.', 'warning'); return; }
+
+  const btn = document.getElementById('modal-criar');
+  btn.disabled = true; btn.textContent = 'Criando...';
+
+  try {
+    const pref = state.prefeitura;
+    const ano  = new Date().getFullYear();
+    const { count } = await sb.from('processos').select('*', { count:'exact', head:true }).eq('prefeitura_id', pref?.id);
+    const numero = `${String((count||0)+1).padStart(4,'0')}/${ano}`;
+
+    const { data: proc, error } = await sb.from('processos').insert({
+      prefeitura_id: pref?.id,
+      numero_protocolo: numero,
+      objeto, tipo_contratacao: tipo,
+      setor_requisitante: setor,
+      valor_estimado: valor,
+      etapa_atual: 1,
+      status: 'rascunho',
+    }).select().single();
+
+    if (error) throw error;
+
+    fecharModal();
+    toast(`Processo ${numero} criado!`);
+    await carregarProcessos();
+    abrirProcesso({ ...proc, documentos: [] });
+  } catch(e) {
+    toast('Erro ao criar processo: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Criar Processo';
+  }
 }
 
-function abrirModal()  { document.getElementById('modal-novo').style.display='flex'; }
-function fecharModal() { document.getElementById('modal-novo').style.display='none'; ['np-objeto','np-setor','np-valor'].forEach(id=>{document.getElementById(id).value='';}); document.getElementById('np-tipo').value=''; }
+function abrirModal()  { document.getElementById('modal-novo').style.display = 'flex'; }
+function fecharModal() {
+  document.getElementById('modal-novo').style.display = 'none';
+  ['np-objeto','np-setor','np-valor'].forEach(id => { document.getElementById(id).value=''; });
+  document.getElementById('np-tipo').value = '';
+}
 
+// Expõe globalmente para o onclick inline da etapa concluída
+window.voltarParaListaGlobal = voltarParaLista;
+
+/* ════════════════════════════════════════
+   LISTENERS
+════════════════════════════════════════ */
 function bindListeners() {
-  document.getElementById('btn-logout').addEventListener('click', async () => { if (await confirmar('Deseja sair do sistema?')) await logout(); });
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    if (await confirmar('Deseja sair do sistema?')) await logout();
+  });
+  document.getElementById('btn-admin').addEventListener('click', () => { window.location.href = '/admin.html'; });
   document.getElementById('btn-novo').addEventListener('click', abrirModal);
   document.getElementById('modal-fechar').addEventListener('click', fecharModal);
   document.getElementById('modal-cancelar').addEventListener('click', fecharModal);
   document.getElementById('modal-criar').addEventListener('click', criarProcesso);
-  document.getElementById('modal-novo').addEventListener('click', e => { if (e.target===e.currentTarget) fecharModal(); });
-  document.getElementById('vbtn-form').addEventListener('click',  () => setView('form'));
-  document.getElementById('vbtn-split').addEventListener('click', () => setView('split'));
-  document.getElementById('vbtn-prev').addEventListener('click',  () => setView('prev'));
-  document.getElementById('sb-busca').addEventListener('input', e => { buscaQuery=e.target.value; renderSidebar(); });
-  document.querySelectorAll('.filter-chip').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('.filter-chip').forEach(x=>x.classList.remove('on')); c.classList.add('on'); filtroAtivo=c.dataset.filtro; renderSidebar(); }));
-  document.getElementById('btn-dossie').addEventListener('click', () => toast('Geração de dossiê em implementação.','info'));
-  document.getElementById('btn-pdf').addEventListener('click',    () => toast('Download de PDF em implementação.','info'));
+  document.getElementById('modal-novo').addEventListener('click', e => { if (e.target === e.currentTarget) fecharModal(); });
+
+  document.getElementById('btn-voltar').addEventListener('click', voltarParaLista);
+  document.getElementById('btn-rascunho').addEventListener('click', () => salvarEtapa(false));
+  document.getElementById('btn-concluir').addEventListener('click', () => salvarEtapa(true));
+  document.getElementById('btn-pdf').addEventListener('click', () => toast('Geração de PDF em implementação.', 'info'));
+
+  document.getElementById('sb-busca').addEventListener('input', e => { buscaQuery = e.target.value; renderSidebar(); });
+
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('on'));
+      chip.classList.add('on');
+      filtroAtivo = chip.dataset.filtro;
+      renderSidebar();
+    });
+  });
 }
 
+/* ── Start ── */
 init().catch(console.error);
 </script>
 </body>
