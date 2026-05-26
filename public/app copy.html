@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Centurion â€” GestÃ£o LicitatÃ³ria Municipal</title>
+  <title>Centurion — Gestão Licitatória Municipal</title>
   <link rel="stylesheet" href="../src/style.css" />
-  <!-- Apenas JetBrains Mono para nÃºmeros de protocolo; Syne+DM Sans jÃ¡ vÃªm do style.css -->
+  <!-- Apenas JetBrains Mono para números de protocolo; Syne+DM Sans já vêm do style.css -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-       app.html â†’ APENAS layout de tela.
+    /* ─────────────────────────────────────────────────────────────
+       app.html → APENAS layout de tela.
        Cores, fontes, componentes base: tudo via src/style.css.
-    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    ───────────────────────────────────────────────────────────── */
     :root {
       --sidebar-w: 300px;
       --etapas-w:  220px;
@@ -25,7 +25,7 @@
     .modal-overlay      { display: none; }
     .modal-overlay.open { display: flex; }
 
-    /* â”€â”€ Topbar â”€â”€ */
+    /* ── Topbar ── */
     #topbar {
       position: fixed; inset: 0 0 auto 0;
       height: var(--topbar-h);
@@ -48,10 +48,10 @@
     .tb-uname   { font-size: 12px; font-weight: 500; color: var(--text); }
     .tb-uperfil { font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: .06em; }
 
-    /* â”€â”€ Shell â”€â”€ */
+    /* ── Shell ── */
     #layout { display: flex; height: 100vh; padding-top: var(--topbar-h); }
 
-    /* â”€â”€ Sidebar â”€â”€ */
+    /* ── Sidebar ── */
     #sidebar {
       width: var(--sidebar-w); min-width: var(--sidebar-w);
       background: var(--s1); border-right: 1px solid var(--border);
@@ -117,7 +117,7 @@
     @keyframes sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
     .sk-c { height: 72px; margin-bottom: 3px; }
 
-    /* â”€â”€ Main â”€â”€ */
+    /* ── Main ── */
     #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
 
     /* Empty state */
@@ -151,7 +151,7 @@
     /* Body */
     .pv-body { flex: 1; display: flex; overflow: hidden; }
 
-    /* â”€â”€ Etapas nav (stepper lateral) â”€â”€ */
+    /* ── Etapas nav (stepper lateral) ── */
     #etapas-nav {
       width: var(--etapas-w); min-width: var(--etapas-w);
       background: var(--s1); border-right: 1px solid var(--border);
@@ -187,7 +187,7 @@
     .e-who  { font-size: 10px; color: var(--muted); margin-top: 2px; }
     .e-date { font-size: 10px; color: var(--green); margin-top: 2px; }
 
-    /* â”€â”€ Etapa content â”€â”€ */
+    /* ── Etapa content ── */
     #etapa-ct   { flex: 1; display: flex; overflow: hidden; }
     .form-panel { flex: 1; overflow-y: auto; padding: 20px 24px; }
 
@@ -217,7 +217,7 @@
     .e-blocked p     { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
     .e-blocked small { font-size: 11px; color: var(--muted); }
 
-    /* Etapa concluÃ­da banner */
+    /* Etapa concluída banner */
     .done-banner {
       display: flex; align-items: center; gap: 8px;
       padding: 8px 14px; margin-bottom: 16px;
@@ -225,13 +225,13 @@
       border-radius: var(--r-sm); font-size: 12px; color: var(--green);
     }
 
-    /* AÃ§Ãµes do form */
+    /* Ações do form */
     .form-acts {
       display: flex; justify-content: flex-end; gap: 8px;
       padding-top: 16px; border-top: 1px solid var(--border); margin-top: 20px;
     }
 
-    /* â”€â”€ Preview panel â”€â”€ */
+    /* ── Preview panel ── */
     #preview-panel {
       width: 44%; min-width: 300px;
       background: var(--s2); border-left: 1px solid var(--border);
@@ -245,7 +245,7 @@
     .prev-lbl { font-size: 11px; color: var(--text2); }
     .prev-body { flex: 1; overflow-y: auto; padding: 14px; }
 
-    /* PDF mock â€” fundo branco porque simula papel impresso */
+    /* PDF mock — fundo branco porque simula papel impresso */
     .pdf-doc {
       background: #fff; border-radius: var(--r-sm); box-shadow: var(--shadow);
       padding: 36px 32px; min-height: 500px;
@@ -272,45 +272,45 @@
 </head>
 <body>
 
-<!-- â”€â”€ TOPBAR â”€â”€ -->
+<!-- ── TOPBAR ── -->
 <header id="topbar">
   <a href="#" class="tb-brand">
     <div class="brand-icon">C</div>
     <div>
       <div class="brand-name">CENTURION</div>
-      <div class="tb-sub">GestÃ£o LicitatÃ³ria</div>
+      <div class="tb-sub">Gestão Licitatória</div>
     </div>
   </a>
   <div class="tb-sep"></div>
-  <div class="tb-mun">MunicÃ­pio: <strong id="tb-mun">â€”</strong></div>
+  <div class="tb-mun">Município: <strong id="tb-mun">—</strong></div>
   <div class="tb-spacer"></div>
   <div class="tb-user">
-    <div class="tb-avatar" id="tb-avatar">â€”</div>
+    <div class="tb-avatar" id="tb-avatar">—</div>
     <div>
       <div class="tb-uname"   id="tb-nome">Carregando...</div>
-      <div class="tb-uperfil" id="tb-perfil">â€”</div>
+      <div class="tb-uperfil" id="tb-perfil">—</div>
     </div>
-    <button class="btn btn-icon btn-ghost" id="btn-logout" title="Sair">â†©</button>
+    <button class="btn btn-icon btn-ghost" id="btn-logout" title="Sair">↩</button>
   </div>
 </header>
 
-<!-- â”€â”€ LAYOUT â”€â”€ -->
+<!-- ── LAYOUT ── -->
 <div id="layout">
 
   <!-- SIDEBAR -->
   <aside id="sidebar">
     <div class="sb-head">
-      <div class="sb-lbl">Processos LicitatÃ³rios</div>
+      <div class="sb-lbl">Processos Licitatórios</div>
       <button class="btn btn-primary w-full" id="btn-novo">+ Novo Processo</button>
       <div class="sb-search mt-8">
-        <span class="si">ðŸ”</span>
-        <input type="text" id="sb-search" class="input" placeholder="NÃºmero ou objeto..." />
+        <span class="si">🔍</span>
+        <input type="text" id="sb-search" class="input" placeholder="Número ou objeto..." />
       </div>
       <div class="sb-filters mt-8">
         <button class="f-chip on" data-f="todos">Todos</button>
         <button class="f-chip" data-f="andamento">Em andamento</button>
         <button class="f-chip" data-f="aguardando">Aguardando</button>
-        <button class="f-chip" data-f="concluido">ConcluÃ­dos</button>
+        <button class="f-chip" data-f="concluido">Concluídos</button>
       </div>
     </div>
     <div class="sb-list" id="sb-list"></div>
@@ -320,25 +320,25 @@
   <main id="main">
 
     <div id="empty-st">
-      <div class="es-icon">ðŸ“‹</div>
+      <div class="es-icon">📋</div>
       <div class="es-title">Selecione um processo</div>
-      <div class="es-sub">Escolha um processo licitatÃ³rio na lista ao lado para ver suas etapas e documentos.</div>
+      <div class="es-sub">Escolha um processo licitatório na lista ao lado para ver suas etapas e documentos.</div>
     </div>
 
     <div id="pv">
 
       <div class="pv-head">
-        <div class="pv-num" id="pv-num">â€”</div>
+        <div class="pv-num" id="pv-num">—</div>
         <div class="pv-meta">
-          <div class="pv-obj"  id="pv-obj">â€”</div>
+          <div class="pv-obj"  id="pv-obj">—</div>
           <div class="pv-info">
-            <span class="pv-tipo" id="pv-tipo">â€”</span>
+            <span class="pv-tipo" id="pv-tipo">—</span>
             <span id="pv-badge"></span>
           </div>
         </div>
         <div class="pv-acts">
-          <button class="btn btn-ghost btn-sm"     id="btn-hist">ðŸ“œ HistÃ³rico</button>
-          <button class="btn btn-secondary btn-sm" id="btn-dossie">ðŸ“„ DossiÃª</button>
+          <button class="btn btn-ghost btn-sm"     id="btn-hist">📜 Histórico</button>
+          <button class="btn btn-secondary btn-sm" id="btn-dossie">📄 Dossiê</button>
         </div>
       </div>
 
@@ -351,13 +351,13 @@
           <div class="form-panel" id="form-panel">
             <div class="fp-head">
               <div>
-                <div class="fp-title" id="fp-title">â€”</div>
-                <div class="fp-sub"   id="fp-sub">â€”</div>
+                <div class="fp-title" id="fp-title">—</div>
+                <div class="fp-sub"   id="fp-sub">—</div>
               </div>
               <div class="view-tog">
-                <button class="vbtn on" id="vbtn-form">âœ Form</button>
-                <button class="vbtn"    id="vbtn-prev">ðŸ“„ Preview</button>
-                <button class="vbtn"    id="vbtn-split">âŠŸ Split</button>
+                <button class="vbtn on" id="vbtn-form">✏ Form</button>
+                <button class="vbtn"    id="vbtn-prev">📄 Preview</button>
+                <button class="vbtn"    id="vbtn-split">⊟ Split</button>
               </div>
             </div>
             <div id="form-ct"></div>
@@ -366,7 +366,7 @@
           <div id="preview-panel" class="hidden">
             <div class="prev-toolbar">
               <span class="prev-lbl" id="prev-lbl">Preview do Documento</span>
-              <button class="btn btn-ghost btn-sm" id="btn-dl-pdf">â¬‡ PDF</button>
+              <button class="btn btn-ghost btn-sm" id="btn-dl-pdf">⬇ PDF</button>
             </div>
             <div class="prev-body">
               <div class="pdf-doc" id="pdf-doc"></div>
@@ -379,46 +379,46 @@
   </main>
 </div>
 
-<!-- â”€â”€ MODAL: Novo Processo â”€â”€ -->
+<!-- ── MODAL: Novo Processo ── -->
 <div class="modal-overlay" id="modal-novo">
   <div class="modal">
     <div class="modal-header">
       <div>
-        <div class="modal-title">Novo Processo LicitatÃ³rio</div>
+        <div class="modal-title">Novo Processo Licitatório</div>
         <div class="modal-subtitle">Preencha os dados iniciais para abrir o processo.</div>
       </div>
-      <button class="btn btn-icon btn-ghost" id="mnovo-close">âœ•</button>
+      <button class="btn btn-icon btn-ghost" id="mnovo-close">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div class="field col-full">
           <label class="label required" for="np-obj">Objeto</label>
-          <input type="text" id="np-obj" class="input" placeholder="Ex: AquisiÃ§Ã£o de medicamentos para a rede municipal" />
+          <input type="text" id="np-obj" class="input" placeholder="Ex: Aquisição de medicamentos para a rede municipal" />
         </div>
         <div class="field">
           <label class="label required" for="np-tipo">Modalidade</label>
           <select id="np-tipo" class="select">
             <option value="">Selecione...</option>
-            <option>PregÃ£o EletrÃ´nico</option>
-            <option>PregÃ£o Presencial</option>
-            <option>ConcorrÃªncia</option>
-            <option>Tomada de PreÃ§os</option>
+            <option>Pregão Eletrônico</option>
+            <option>Pregão Presencial</option>
+            <option>Concorrência</option>
+            <option>Tomada de Preços</option>
             <option>Convite</option>
-            <option>Dispensa de LicitaÃ§Ã£o</option>
+            <option>Dispensa de Licitação</option>
             <option>Inexigibilidade</option>
             <option>RDC</option>
           </select>
         </div>
         <div class="field">
           <label class="label required" for="np-sec">Secretaria Requisitante</label>
-          <input type="text" id="np-sec" class="input" placeholder="Ex: Secretaria Municipal de SaÃºde" />
+          <input type="text" id="np-sec" class="input" placeholder="Ex: Secretaria Municipal de Saúde" />
         </div>
         <div class="field">
           <label class="label" for="np-val">Valor Estimado (R$)</label>
           <input type="text" id="np-val" class="input" placeholder="0,00" />
         </div>
         <div class="field col-full">
-          <label class="label" for="np-obj-det">DescriÃ§Ã£o Complementar</label>
+          <label class="label" for="np-obj-det">Descrição Complementar</label>
           <textarea id="np-obj-det" placeholder="Detalhes adicionais sobre o objeto..."></textarea>
         </div>
       </div>
@@ -430,31 +430,31 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>`n<script type="module">
+<script type="module">
 import { sb as supabase }                               from '../src/services/supabase.js';
 import { iniciarSessao as getSession, logout }           from '../src/services/auth.js';
 import { toast, confirmar }                             from '../src/utils/ui.js';
 import { data as formatData, moeda as formatMoeda, esc } from '../src/utils/format.js';
 
-/* â”€â”€ ETAPAS CONFIG â”€â”€ */
+/* ── ETAPAS CONFIG ── */
 const ETAPAS = [
-  { n:1,  nome:'DFD',                label:'Documento de FormalizaÃ§Ã£o de Demanda',     perfil:'requisitante'  },
+  { n:1,  nome:'DFD',                label:'Documento de Formalização de Demanda',     perfil:'requisitante'  },
   { n:2,  nome:'Protocolo',          label:'Registro de Protocolo',                    perfil:'protocolo'     },
-  { n:3,  nome:'ETP + TR',           label:'Estudo TÃ©cnico Preliminar + Termo de Ref.',perfil:'requisitante'  },
-  { n:4,  nome:'Pesquisa de PreÃ§os', label:'Pesquisa de PreÃ§os de Mercado',            perfil:'compras'       },
-  { n:5,  nome:'DotaÃ§Ã£o',            label:'DotaÃ§Ã£o OrÃ§amentÃ¡ria',                     perfil:'contabilidade' },
-  { n:6,  nome:'AutorizaÃ§Ã£o',        label:'AutorizaÃ§Ã£o da Secretaria',                perfil:'secretaria'    },
-  { n:7,  nome:'Minuta do Edital',   label:'ElaboraÃ§Ã£o da Minuta do Edital',           perfil:'licitacao'     },
-  { n:8,  nome:'Parecer JurÃ­dico',   label:'Parecer JurÃ­dico',                         perfil:'juridico'      },
-  { n:9,  nome:'Edital Final',       label:'Edital Final e AprovaÃ§Ã£o',                 perfil:'licitacao'     },
-  { n:10, nome:'PublicaÃ§Ã£o',         label:'PublicaÃ§Ã£o e Abertura',                    perfil:'licitacao'     },
+  { n:3,  nome:'ETP + TR',           label:'Estudo Técnico Preliminar + Termo de Ref.',perfil:'requisitante'  },
+  { n:4,  nome:'Pesquisa de Preços', label:'Pesquisa de Preços de Mercado',            perfil:'compras'       },
+  { n:5,  nome:'Dotação',            label:'Dotação Orçamentária',                     perfil:'contabilidade' },
+  { n:6,  nome:'Autorização',        label:'Autorização da Secretaria',                perfil:'secretaria'    },
+  { n:7,  nome:'Minuta do Edital',   label:'Elaboração da Minuta do Edital',           perfil:'licitacao'     },
+  { n:8,  nome:'Parecer Jurídico',   label:'Parecer Jurídico',                         perfil:'juridico'      },
+  { n:9,  nome:'Edital Final',       label:'Edital Final e Aprovação',                 perfil:'licitacao'     },
+  { n:10, nome:'Publicação',         label:'Publicação e Abertura',                    perfil:'licitacao'     },
 ];
 
 const PERFIL_LABEL = {
   requisitante:'Requisitante', protocolo:'Protocolo',
   compras:'Compras',           contabilidade:'Contabilidade',
-  secretaria:'Secretaria',     licitacao:'LicitaÃ§Ã£o',
-  juridico:'JurÃ­dico',
+  secretaria:'Secretaria',     licitacao:'Licitação',
+  juridico:'Jurídico',
 };
 
 /* Mapeamento para classes de badge do style.css */
@@ -464,10 +464,10 @@ const STATUS_BADGE = {
 };
 const STATUS_LABEL = {
   rascunho:'Rascunho', andamento:'Em andamento',
-  aguardando:'Aguardando', concluido:'ConcluÃ­do', suspenso:'Suspenso',
+  aguardando:'Aguardando', concluido:'Concluído', suspenso:'Suspenso',
 };
 
-/* â”€â”€ STATE â”€â”€ */
+/* ── STATE ── */
 let session      = null;
 let processos    = [];
 let procAtivo    = null;
@@ -476,9 +476,9 @@ let etapaAtiva   = null;
 let filtroStatus = 'todos';
 let searchQ      = '';
 
-/* â”€â”€ BOOT â”€â”€ */
+/* ── BOOT ── */
 
-/* Calcula etapa atual com base nos documentos concluÃ­dos */
+/* Calcula etapa atual com base nos documentos concluídos */
 function calcularEtapaAtual(docs) {
   for (let i = 1; i <= 10; i++) {
     const doc = docs.find(d => d.tipo === ETAPAS[i-1]?.id);
@@ -497,15 +497,15 @@ async function init() {
 
 function renderUser() {
   
-  const nome     = session.nome || session.email || 'UsuÃ¡rio';
+  const nome     = session.nome || session.email || 'Usuário';
   const initials = nome.trim().split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
   document.getElementById('tb-avatar').textContent  = initials;
   document.getElementById('tb-nome').textContent    = nome;
-  document.getElementById('tb-perfil').textContent  = PERFIL_LABEL[session.perfil] || session.perfil || 'â€”';
-  document.getElementById('tb-mun').textContent     = session.prefeituras?.nome || 'â€”';
+  document.getElementById('tb-perfil').textContent  = PERFIL_LABEL[session.perfil] || session.perfil || '—';
+  document.getElementById('tb-mun').textContent     = session.prefeituras?.nome || '—';
 }
 
-/* â”€â”€ PROCESSOS â”€â”€ */
+/* ── PROCESSOS ── */
 async function loadProcessos() {
   const list = document.getElementById('sb-list');
   list.innerHTML = Array(5).fill('<div class="sk sk-c"></div>').join('');
@@ -547,8 +547,8 @@ function renderSidebar() {
     const bl = STATUS_LABEL[p.status] || p.status;
     return `
       <div class="p-card ${procAtivo?.id===p.id?'on':''}" data-id="${p.id}">
-        <div class="pc-num">${esc(p.numero||'â€”')}</div>
-        <div class="pc-obj">${esc(p.objeto||'â€”')}</div>
+        <div class="pc-num">${esc(p.numero||'—')}</div>
+        <div class="pc-obj">${esc(p.objeto||'—')}</div>
         <div class="pc-foot">
           <div class="pc-dots">${dots}</div>
           <span class="badge ${bc}">${bl}</span>
@@ -564,7 +564,7 @@ function renderSidebar() {
   });
 }
 
-/* â”€â”€ PROCESSO â”€â”€ */
+/* ── PROCESSO ── */
 async function selectProcesso(p) {
   procAtivo  = p;
   etapaAtiva = null;
@@ -573,9 +573,9 @@ async function selectProcesso(p) {
   document.getElementById('empty-st').style.display = 'none';
   document.getElementById('pv').classList.add('on');
 
-  document.getElementById('pv-num').textContent  = p.numero || 'â€”';
-  document.getElementById('pv-obj').textContent  = p.objeto || 'â€”';
-  document.getElementById('pv-tipo').textContent = p.tipo   || 'â€”';
+  document.getElementById('pv-num').textContent  = p.numero || '—';
+  document.getElementById('pv-obj').textContent  = p.objeto || '—';
+  document.getElementById('pv-tipo').textContent = p.tipo   || '—';
   const bc = STATUS_BADGE[p.status] || 'badge-gray';
   const bl = STATUS_LABEL[p.status] || p.status;
   document.getElementById('pv-badge').innerHTML = `<span class="badge ${bc}">${bl}</span>`;
@@ -583,7 +583,7 @@ async function selectProcesso(p) {
   await loadEtapas(p.id);
 }
 
-/* â”€â”€ ETAPAS â”€â”€ */
+/* ── ETAPAS ── */
 async function loadEtapas(processoId) {
   const { data, error } = await supabase
     .from('etapas').select('*')
@@ -610,7 +610,7 @@ function renderEtapasNav() {
     if (isCur)             cls += ' cur';
     else if (st==='concluida') cls += ' done';
     else if (!e)           cls += ' locked';
-    const step = st==='concluida' ? 'âœ“' : cfg.n;
+    const step = st==='concluida' ? '✓' : cfg.n;
     const dStr = e?.data_conclusao ? `<div class="e-date">${formatData(e.data_conclusao)}</div>` : '';
     nav.innerHTML += `
       <div class="${cls}" data-n="${cfg.n}">
@@ -634,8 +634,8 @@ function selectEtapa(n) {
   renderEtapasNav();
 
   document.getElementById('fp-title').textContent = `${cfg.n}. ${cfg.label}`;
-  document.getElementById('fp-sub').textContent   = `ResponsÃ¡vel: ${PERFIL_LABEL[cfg.perfil]}`;
-  document.getElementById('prev-lbl').textContent = `Preview â€” ${cfg.nome}`;
+  document.getElementById('fp-sub').textContent   = `Responsável: ${PERFIL_LABEL[cfg.perfil]}`;
+  document.getElementById('prev-lbl').textContent = `Preview — ${cfg.nome}`;
 
   const perfil  = session.perfil;
   const canEdit = cfg.perfil === perfil || perfil === 'admin';
@@ -645,9 +645,9 @@ function selectEtapa(n) {
   if (!canEdit && !isConcl) {
     ct.innerHTML = `
       <div class="e-blocked">
-        <div class="icon">ðŸ”’</div>
-        <p>Esta etapa Ã© responsabilidade do perfil <strong>${PERFIL_LABEL[cfg.perfil]}</strong>.</p>
-        <small>VocÃª estÃ¡ conectado como <strong>${PERFIL_LABEL[perfil]||perfil}</strong>.</small>
+        <div class="icon">🔒</div>
+        <p>Esta etapa é responsabilidade do perfil <strong>${PERFIL_LABEL[cfg.perfil]}</strong>.</p>
+        <small>Você está conectado como <strong>${PERFIL_LABEL[perfil]||perfil}</strong>.</small>
       </div>`;
     return;
   }
@@ -661,7 +661,7 @@ function showEtapaPlaceholder() {
   document.getElementById('form-ct').innerHTML    = '';
 }
 
-/* â”€â”€ FORM HELPERS (usam classes do style.css) â”€â”€ */
+/* ── FORM HELPERS (usam classes do style.css) ── */
 const fi  = (id, lbl, type='text', ph='', req=false, dis=false, val='') =>
   `<div class="field">
     <label class="label${req?' required':''}" for="${id}">${lbl}</label>
@@ -682,15 +682,15 @@ const fta = (id, lbl, ph='', req=false, dis=false, val='') =>
     <textarea id="${id}" ${dis?'disabled':''}>${esc(val??'')}</textarea>
   </div>`;
 
-/* â”€â”€ FORMS POR ETAPA â”€â”€ */
+/* ── FORMS POR ETAPA ── */
 const FORMS = {
   1: (d,dis) => `
-    <div class="form-section"><div class="section-title">IdentificaÃ§Ã£o da Demanda</div>
+    <div class="form-section"><div class="section-title">Identificação da Demanda</div>
     <div class="form-grid">
-      ${fi('dfd-obj','Objeto da Demanda','text','Ex: AquisiÃ§Ã£o de medicamentos',true,dis,d.objeto)}
-      ${fi('dfd-setor','Setor Requisitante','text','Ex: Secretaria de SaÃºde',true,dis,d.setor)}
+      ${fi('dfd-obj','Objeto da Demanda','text','Ex: Aquisição de medicamentos',true,dis,d.objeto)}
+      ${fi('dfd-setor','Setor Requisitante','text','Ex: Secretaria de Saúde',true,dis,d.setor)}
       ${fi('dfd-qtd','Quantidade','number','0',true,dis,d.quantidade)}
-      ${fi('dfd-und','Unidade de Medida','text','Ex: unidade, kg, mÂ²',true,dis,d.unidade)}
+      ${fi('dfd-und','Unidade de Medida','text','Ex: unidade, kg, m²',true,dis,d.unidade)}
       ${fi('dfd-val','Valor Estimado (R$)','text','0,00',false,dis,d.valor_estimado)}
       ${fi('dfd-prazo','Prazo de Entrega Desejado','date','',false,dis,d.prazo)}
       ${fta('dfd-just','Justificativa da Necessidade','Descreva a necessidade que motiva esta demanda...',true,dis,d.justificativa)}
@@ -698,103 +698,103 @@ const FORMS = {
   2: (d,dis) => `
     <div class="form-section"><div class="section-title">Dados do Protocolo</div>
     <div class="form-grid">
-      ${fi('prot-num','NÃºmero de Protocolo','text','Ex: 0042/2026',true,dis,d.numero)}
+      ${fi('prot-num','Número de Protocolo','text','Ex: 0042/2026',true,dis,d.numero)}
       ${fi('prot-data','Data de Protocolo','date','',true,dis,d.data)}
       ${fi('prot-recv','Recebido por','text','Nome do servidor',true,dis,d.recebido_por)}
-      ${fi('prot-lot','LotaÃ§Ã£o','text','Setor / Secretaria',false,dis,d.lotacao)}
-      ${fta('prot-obs','ObservaÃ§Ãµes','',false,dis,d.obs)}
+      ${fi('prot-lot','Lotação','text','Setor / Secretaria',false,dis,d.lotacao)}
+      ${fta('prot-obs','Observações','',false,dis,d.obs)}
     </div></div>`,
   3: (d,dis) => `
-    <div class="form-section"><div class="section-title">Estudo TÃ©cnico Preliminar</div>
+    <div class="form-section"><div class="section-title">Estudo Técnico Preliminar</div>
     <div class="form-grid">
-      ${fta('etp-nec','DescriÃ§Ã£o da Necessidade','Descreva detalhadamente...',true,dis,d.necessidade)}
-      ${fta('etp-sol','DescriÃ§Ã£o da SoluÃ§Ã£o Proposta','',true,dis,d.solucao)}
-      ${fta('etp-req','Requisitos da ContrataÃ§Ã£o','',false,dis,d.requisitos)}
+      ${fta('etp-nec','Descrição da Necessidade','Descreva detalhadamente...',true,dis,d.necessidade)}
+      ${fta('etp-sol','Descrição da Solução Proposta','',true,dis,d.solucao)}
+      ${fta('etp-req','Requisitos da Contratação','',false,dis,d.requisitos)}
     </div></div>
-    <div class="form-section"><div class="section-title">Termo de ReferÃªncia</div>
+    <div class="form-section"><div class="section-title">Termo de Referência</div>
     <div class="form-grid">
       ${fi('tr-obj','Objeto do TR','text','',true,dis,d.tr_objeto)}
-      ${fi('tr-prazo','Prazo de ExecuÃ§Ã£o (dias)','number','30',false,dis,d.prazo_execucao)}
-      ${fta('tr-esp','EspecificaÃ§Ãµes TÃ©cnicas','',true,dis,d.especificacoes)}
-      ${fta('tr-obr','ObrigaÃ§Ãµes do Contratado','',false,dis,d.obrigacoes)}
+      ${fi('tr-prazo','Prazo de Execução (dias)','number','30',false,dis,d.prazo_execucao)}
+      ${fta('tr-esp','Especificações Técnicas','',true,dis,d.especificacoes)}
+      ${fta('tr-obr','Obrigações do Contratado','',false,dis,d.obrigacoes)}
     </div></div>`,
   4: (d,dis) => `
-    <div class="form-section"><div class="section-title">CotaÃ§Ãµes de Mercado</div>
+    <div class="form-section"><div class="section-title">Cotações de Mercado</div>
     <div class="form-grid">
-      ${fi('pp-f1','Fornecedor 1','text','RazÃ£o social',false,dis,d.forn1)}
+      ${fi('pp-f1','Fornecedor 1','text','Razão social',false,dis,d.forn1)}
       ${fi('pp-v1','Valor (R$)','text','0,00',false,dis,d.val1)}
-      ${fi('pp-f2','Fornecedor 2','text','RazÃ£o social',false,dis,d.forn2)}
+      ${fi('pp-f2','Fornecedor 2','text','Razão social',false,dis,d.forn2)}
       ${fi('pp-v2','Valor (R$)','text','0,00',false,dis,d.val2)}
-      ${fi('pp-f3','Fornecedor 3','text','RazÃ£o social',false,dis,d.forn3)}
+      ${fi('pp-f3','Fornecedor 3','text','Razão social',false,dis,d.forn3)}
       ${fi('pp-v3','Valor (R$)','text','0,00',false,dis,d.val3)}
-      ${fi('pp-med','Valor MÃ©dio Apurado (R$)','text','0,00',false,dis,d.media)}
-      ${fi('pp-met','MÃ©todo de Pesquisa','text','Ex: PNCP, Painel de PreÃ§os',false,dis,d.metodo)}
-      ${fta('pp-obs','ObservaÃ§Ãµes','',false,dis,d.obs)}
+      ${fi('pp-med','Valor Médio Apurado (R$)','text','0,00',false,dis,d.media)}
+      ${fi('pp-met','Método de Pesquisa','text','Ex: PNCP, Painel de Preços',false,dis,d.metodo)}
+      ${fta('pp-obs','Observações','',false,dis,d.obs)}
     </div></div>`,
   5: (d,dis) => `
-    <div class="form-section"><div class="section-title">DotaÃ§Ã£o OrÃ§amentÃ¡ria</div>
+    <div class="form-section"><div class="section-title">Dotação Orçamentária</div>
     <div class="form-grid">
-      ${fi('dot-dot','DotaÃ§Ã£o OrÃ§amentÃ¡ria','text','Ex: 02.003.10.301.0001.2.003',true,dis,d.dotacao)}
-      ${fi('dot-fon','Fonte de Recurso','text','Ex: 101 â€” Recursos PrÃ³prios',true,dis,d.fonte)}
+      ${fi('dot-dot','Dotação Orçamentária','text','Ex: 02.003.10.301.0001.2.003',true,dis,d.dotacao)}
+      ${fi('dot-fon','Fonte de Recurso','text','Ex: 101 — Recursos Próprios',true,dis,d.fonte)}
       ${fi('dot-val','Valor a Empenhar (R$)','text','0,00',true,dis,d.valor)}
-      ${fi('dot-emp','NÃºmero do Empenho','text','',false,dis,d.empenho)}
-      ${fi('dot-exc','ExercÃ­cio','number',String(new Date().getFullYear()),false,dis,d.exercicio)}
-      ${fta('dot-obs','ObservaÃ§Ãµes','',false,dis,d.obs)}
+      ${fi('dot-emp','Número do Empenho','text','',false,dis,d.empenho)}
+      ${fi('dot-exc','Exercício','number',String(new Date().getFullYear()),false,dis,d.exercicio)}
+      ${fta('dot-obs','Observações','',false,dis,d.obs)}
     </div></div>`,
   6: (d,dis) => `
-    <div class="form-section"><div class="section-title">AutorizaÃ§Ã£o da Secretaria</div>
+    <div class="form-section"><div class="section-title">Autorização da Secretaria</div>
     <div class="form-grid">
       ${fi('aut-aut','Autorizado por','text','Nome e cargo',true,dis,d.autorizado)}
-      ${fi('aut-dat','Data de AutorizaÃ§Ã£o','date','',true,dis,d.data)}
-      ${fsl('aut-dec','DecisÃ£o',[{v:'autorizado',l:'Autorizado'},{v:'indeferido',l:'Indeferido'},{v:'diligencia',l:'DiligÃªncia'}],true,dis,d.decisao)}
-      ${fta('aut-obs','ObservaÃ§Ãµes / Condicionantes','',false,dis,d.obs)}
+      ${fi('aut-dat','Data de Autorização','date','',true,dis,d.data)}
+      ${fsl('aut-dec','Decisão',[{v:'autorizado',l:'Autorizado'},{v:'indeferido',l:'Indeferido'},{v:'diligencia',l:'Diligência'}],true,dis,d.decisao)}
+      ${fta('aut-obs','Observações / Condicionantes','',false,dis,d.obs)}
     </div></div>`,
   7: (d,dis) => `
     <div class="form-section"><div class="section-title">Minuta do Edital</div>
     <div class="form-grid">
       ${fsl('min-mod','Modalidade',[
-        {v:'pregao_eletronico',l:'PregÃ£o EletrÃ´nico'},{v:'pregao_presencial',l:'PregÃ£o Presencial'},
-        {v:'concorrencia',l:'ConcorrÃªncia'},{v:'tomada_precos',l:'Tomada de PreÃ§os'},
-        {v:'dispensa',l:'Dispensa de LicitaÃ§Ã£o'},
+        {v:'pregao_eletronico',l:'Pregão Eletrônico'},{v:'pregao_presencial',l:'Pregão Presencial'},
+        {v:'concorrencia',l:'Concorrência'},{v:'tomada_precos',l:'Tomada de Preços'},
+        {v:'dispensa',l:'Dispensa de Licitação'},
       ],true,dis,d.modalidade)}
-      ${fsl('min-cri','CritÃ©rio de Julgamento',[
-        {v:'menor_preco',l:'Menor PreÃ§o'},{v:'melhor_tecnica',l:'Melhor TÃ©cnica'},
-        {v:'tecnica_preco',l:'TÃ©cnica e PreÃ§o'},{v:'maior_desconto',l:'Maior Desconto'},
+      ${fsl('min-cri','Critério de Julgamento',[
+        {v:'menor_preco',l:'Menor Preço'},{v:'melhor_tecnica',l:'Melhor Técnica'},
+        {v:'tecnica_preco',l:'Técnica e Preço'},{v:'maior_desconto',l:'Maior Desconto'},
       ],true,dis,d.criterio)}
       ${fi('min-pra','Prazo de Propostas (dias)','number','8',false,dis,d.prazo_proposta)}
       ${fta('min-obj','Objeto no Edital','',true,dis,d.objeto_edital)}
-      ${fta('min-hab','ExigÃªncias de HabilitaÃ§Ã£o','',false,dis,d.exigencias)}
+      ${fta('min-hab','Exigências de Habilitação','',false,dis,d.exigencias)}
     </div></div>`,
   8: (d,dis) => `
-    <div class="form-section"><div class="section-title">Parecer JurÃ­dico</div>
+    <div class="form-section"><div class="section-title">Parecer Jurídico</div>
     <div class="form-grid">
-      ${fi('par-num','NÃºmero do Parecer','text','Ex: PAR-0042/2026',true,dis,d.numero)}
+      ${fi('par-num','Número do Parecer','text','Ex: PAR-0042/2026',true,dis,d.numero)}
       ${fi('par-dat','Data do Parecer','date','',true,dis,d.data)}
       ${fi('par-adv','Procurador / Advogado','text','Nome e OAB',true,dis,d.advogado)}
-      ${fsl('par-con','ConclusÃ£o',[
+      ${fsl('par-con','Conclusão',[
         {v:'aprovado',l:'Aprovado'},{v:'aprovado_ressalvas',l:'Aprovado com Ressalvas'},
-        {v:'rejeitado',l:'Rejeitado'},{v:'diligencia',l:'Necessita DiligÃªncia'},
+        {v:'rejeitado',l:'Rejeitado'},{v:'diligencia',l:'Necessita Diligência'},
       ],true,dis,d.conclusao)}
-      ${fta('par-fun','FundamentaÃ§Ã£o Legal','Lei 14.133/2021, art...',true,dis,d.fundamentacao)}
-      ${fta('par-obs','ConsideraÃ§Ãµes e Ressalvas','',false,dis,d.obs)}
+      ${fta('par-fun','Fundamentação Legal','Lei 14.133/2021, art...',true,dis,d.fundamentacao)}
+      ${fta('par-obs','Considerações e Ressalvas','',false,dis,d.obs)}
     </div></div>`,
   9: (d,dis) => `
     <div class="form-section"><div class="section-title">Edital Final</div>
     <div class="form-grid">
-      ${fi('ef-num','NÃºmero do Edital','text','Ex: 0042/2026',true,dis,d.numero)}
-      ${fi('ef-dpub','Data de PublicaÃ§Ã£o Prevista','date','',true,dis,d.data_publicacao)}
-      ${fi('ef-dses','Data da SessÃ£o PÃºblica','date','',true,dis,d.data_sessao)}
-      ${fi('ef-hora','Hora da SessÃ£o','time','09:00',false,dis,d.hora_sessao)}
-      ${fta('ef-obs','ObservaÃ§Ãµes Finais','',false,dis,d.obs)}
+      ${fi('ef-num','Número do Edital','text','Ex: 0042/2026',true,dis,d.numero)}
+      ${fi('ef-dpub','Data de Publicação Prevista','date','',true,dis,d.data_publicacao)}
+      ${fi('ef-dses','Data da Sessão Pública','date','',true,dis,d.data_sessao)}
+      ${fi('ef-hora','Hora da Sessão','time','09:00',false,dis,d.hora_sessao)}
+      ${fta('ef-obs','Observações Finais','',false,dis,d.obs)}
     </div></div>`,
   10: (d,dis) => `
-    <div class="form-section"><div class="section-title">PublicaÃ§Ã£o</div>
+    <div class="form-section"><div class="section-title">Publicação</div>
     <div class="form-grid">
-      ${fi('pub-vei','VeÃ­culo de PublicaÃ§Ã£o','text','Ex: PNCP, DiÃ¡rio Oficial GO',true,dis,d.veiculo)}
-      ${fi('pub-dat','Data de PublicaÃ§Ã£o','date','',true,dis,d.data)}
-      ${fi('pub-nav','NÃºmero do Aviso','text','',false,dis,d.numero_aviso)}
-      ${fi('pub-lnk','Link da PublicaÃ§Ã£o','url','https://...',false,dis,d.link)}
-      ${fta('pub-obs','ObservaÃ§Ãµes','',false,dis,d.obs)}
+      ${fi('pub-vei','Veículo de Publicação','text','Ex: PNCP, Diário Oficial GO',true,dis,d.veiculo)}
+      ${fi('pub-dat','Data de Publicação','date','',true,dis,d.data)}
+      ${fi('pub-nav','Número do Aviso','text','',false,dis,d.numero_aviso)}
+      ${fi('pub-lnk','Link da Publicação','url','https://...',false,dis,d.link)}
+      ${fta('pub-obs','Observações','',false,dis,d.obs)}
     </div></div>`,
 };
 
@@ -804,12 +804,12 @@ function renderForm(cfg, etapa, editable) {
   const formHtml = FORMS[cfg.n]?.(d, dis) || '';
 
   const doneBanner = !editable && etapa?.status === 'concluida'
-    ? `<div class="done-banner">âœ“ Etapa concluÃ­da em ${formatData(etapa.data_conclusao)}</div>` : '';
+    ? `<div class="done-banner">✓ Etapa concluída em ${formatData(etapa.data_conclusao)}</div>` : '';
 
   const acts = editable ? `
     <div class="form-acts">
-      <button class="btn btn-ghost btn-sm"   id="btn-rascunho">ðŸ’¾ Salvar Rascunho</button>
-      <button class="btn btn-primary btn-sm" id="btn-concluir">âœ… Concluir Etapa</button>
+      <button class="btn btn-ghost btn-sm"   id="btn-rascunho">💾 Salvar Rascunho</button>
+      <button class="btn btn-primary btn-sm" id="btn-concluir">✅ Concluir Etapa</button>
     </div>` : '';
 
   document.getElementById('form-ct').innerHTML = doneBanner + formHtml + acts;
@@ -820,7 +820,7 @@ function renderForm(cfg, etapa, editable) {
   }
 }
 
-/* â”€â”€ COLETAR DADOS DO FORM â”€â”€ */
+/* ── COLETAR DADOS DO FORM ── */
 function coletarForm(n) {
   const g = id => document.getElementById(id)?.value ?? '';
   const maps = {
@@ -838,12 +838,12 @@ function coletarForm(n) {
   return maps[n]?.() || {};
 }
 
-/* â”€â”€ SALVAR ETAPA â”€â”€ */
+/* ── SALVAR ETAPA ── */
 async function salvarEtapa(cfg, concluir) {
   if (concluir) {
     const ok = await confirmar(
       `Concluir a etapa "${cfg.nome}"?`,
-      'Esta aÃ§Ã£o bloqueia a ediÃ§Ã£o. Confirme apenas se os dados estiverem corretos.'
+      'Esta ação bloqueia a edição. Confirme apenas se os dados estiverem corretos.'
     );
     if (!ok) return;
   }
@@ -871,25 +871,25 @@ async function salvarEtapa(cfg, concluir) {
     await supabase.from('processos').update({ status: 'concluido' }).eq('id', procAtivo.id);
   }
 
-  toast(concluir ? `"${cfg.nome}" concluÃ­da!` : 'Rascunho salvo.', concluir ? 'success' : 'info');
+  toast(concluir ? `"${cfg.nome}" concluída!` : 'Rascunho salvo.', concluir ? 'success' : 'info');
   await loadProcessos();
   await loadEtapas(procAtivo.id);
 }
 
-/* â”€â”€ PDF PREVIEW â”€â”€ */
+/* ── PDF PREVIEW ── */
 function renderPreview(cfg, d) {
-  const mun  = session.prefeituras?.nome || 'â€”';
+  const mun  = session.prefeituras?.nome || '—';
   const rows = {
     1:  [['Objeto',d.objeto],['Setor',d.setor],['Quantidade',`${d.quantidade||''} ${d.unidade||''}`],['Valor Estimado',d.valor_estimado?`R$ ${d.valor_estimado}`:''],['Justificativa',d.justificativa]],
-    2:  [['NÃºmero',d.numero],['Data',d.data],['Recebido por',d.recebido_por],['ObservaÃ§Ãµes',d.obs]],
-    3:  [['Objeto TR',d.tr_objeto],['Necessidade',d.necessidade],['EspecificaÃ§Ãµes',d.especificacoes]],
-    4:  [['Fornecedor 1',d.forn1?`${d.forn1} â€” R$ ${d.val1}`:''],['Fornecedor 2',d.forn2?`${d.forn2} â€” R$ ${d.val2}`:''],['Fornecedor 3',d.forn3?`${d.forn3} â€” R$ ${d.val3}`:''],['Valor MÃ©dio',d.media?`R$ ${d.media}`:'']],
-    5:  [['DotaÃ§Ã£o',d.dotacao],['Fonte',d.fonte],['Valor',d.valor?`R$ ${d.valor}`:''],['Empenho',d.empenho]],
-    6:  [['Autorizado por',d.autorizado],['Data',d.data],['DecisÃ£o',d.decisao],['ObservaÃ§Ãµes',d.obs]],
-    7:  [['Modalidade',d.modalidade],['CritÃ©rio',d.criterio],['Objeto',d.objeto_edital]],
-    8:  [['Parecer nÂº',d.numero],['Procurador',d.advogado],['ConclusÃ£o',d.conclusao],['FundamentaÃ§Ã£o',d.fundamentacao]],
-    9:  [['Edital nÂº',d.numero],['PublicaÃ§Ã£o prevista',d.data_publicacao],['Data da SessÃ£o',d.data_sessao]],
-    10: [['VeÃ­culo',d.veiculo],['Data',d.data],['NÂº Aviso',d.numero_aviso],['Link',d.link]],
+    2:  [['Número',d.numero],['Data',d.data],['Recebido por',d.recebido_por],['Observações',d.obs]],
+    3:  [['Objeto TR',d.tr_objeto],['Necessidade',d.necessidade],['Especificações',d.especificacoes]],
+    4:  [['Fornecedor 1',d.forn1?`${d.forn1} — R$ ${d.val1}`:''],['Fornecedor 2',d.forn2?`${d.forn2} — R$ ${d.val2}`:''],['Fornecedor 3',d.forn3?`${d.forn3} — R$ ${d.val3}`:''],['Valor Médio',d.media?`R$ ${d.media}`:'']],
+    5:  [['Dotação',d.dotacao],['Fonte',d.fonte],['Valor',d.valor?`R$ ${d.valor}`:''],['Empenho',d.empenho]],
+    6:  [['Autorizado por',d.autorizado],['Data',d.data],['Decisão',d.decisao],['Observações',d.obs]],
+    7:  [['Modalidade',d.modalidade],['Critério',d.criterio],['Objeto',d.objeto_edital]],
+    8:  [['Parecer nº',d.numero],['Procurador',d.advogado],['Conclusão',d.conclusao],['Fundamentação',d.fundamentacao]],
+    9:  [['Edital nº',d.numero],['Publicação prevista',d.data_publicacao],['Data da Sessão',d.data_sessao]],
+    10: [['Veículo',d.veiculo],['Data',d.data],['Nº Aviso',d.numero_aviso],['Link',d.link]],
   };
   const fieldRows = (rows[cfg.n]||[])
     .filter(([,v]) => v)
@@ -898,23 +898,23 @@ function renderPreview(cfg, d) {
 
   document.getElementById('pdf-doc').innerHTML = `
     <div class="pdf-head">
-      <div class="pdf-brasao">ðŸ›ï¸</div>
+      <div class="pdf-brasao">🏛️</div>
       <div class="pdf-pref">PREFEITURA MUNICIPAL DE ${mun.toUpperCase()}</div>
-      <div class="pdf-sec">Sistema Centurion â€” GestÃ£o LicitatÃ³ria Municipal</div>
+      <div class="pdf-sec">Sistema Centurion — Gestão Licitatória Municipal</div>
       <div class="pdf-dtitle">${cfg.label}</div>
-      <div class="pdf-dnum">Processo nÂº ${esc(procAtivo?.numero||'â€”')} â€” Etapa ${cfg.n} de 10</div>
+      <div class="pdf-dnum">Processo nº ${esc(procAtivo?.numero||'—')} — Etapa ${cfg.n} de 10</div>
     </div>
     <div class="pdf-body">${fieldRows}</div>
     <div class="pdf-foot">
       <div>
-        <div>Lei Federal nÂº 14.133/2021 | TCM-GO</div>
+        <div>Lei Federal nº 14.133/2021 | TCM-GO</div>
         <div>Emitido em: ${new Date().toLocaleDateString('pt-BR')}</div>
       </div>
       <div class="pdf-hash">SHA-256: pendente (gerado ao concluir)</div>
     </div>`;
 }
 
-/* â”€â”€ VIEW MODE â”€â”€ */
+/* ── VIEW MODE ── */
 function setView(mode) {
   const fp = document.getElementById('form-panel');
   const pp = document.getElementById('preview-panel');
@@ -925,12 +925,12 @@ function setView(mode) {
   pp.classList.toggle('hidden', mode==='form');
 }
 
-/* â”€â”€ NOVO PROCESSO â”€â”€ */
+/* ── NOVO PROCESSO ── */
 async function criarProcesso() {
   const obj  = document.getElementById('np-obj').value.trim();
   const tipo = document.getElementById('np-tipo').value;
   const sec  = document.getElementById('np-sec').value.trim();
-  if (!obj || !tipo || !sec) { toast('Preencha os campos obrigatÃ³rios.', 'error'); return; }
+  if (!obj || !tipo || !sec) { toast('Preencha os campos obrigatórios.', 'error'); return; }
 
   const prefeituraId = session.prefeitura_id || null;
   const ano  = new Date().getFullYear();
@@ -957,7 +957,7 @@ async function criarProcesso() {
   selectProcesso({ ...data, etapas: [] });
 }
 
-/* â”€â”€ MODAL â”€â”€ */
+/* ── MODAL ── */
 const abrirModal  = () => document.getElementById('modal-novo').classList.add('open');
 function fecharModal() {
   document.getElementById('modal-novo').classList.remove('open');
@@ -966,10 +966,10 @@ function fecharModal() {
   document.getElementById('np-val').value  = '';
 }
 
-/* â”€â”€ LISTENERS â”€â”€ */
+/* ── LISTENERS ── */
 function bindListeners() {
   document.getElementById('btn-logout').addEventListener('click', async () => {
-    if (await confirmar('Sair do sistema?','VocÃª serÃ¡ desconectado.')) {
+    if (await confirmar('Sair do sistema?','Você será desconectado.')) {
       await logout(); window.location.href = '/login.html';
     }
   });
@@ -992,9 +992,9 @@ function bindListeners() {
       renderSidebar();
     });
   });
-  document.getElementById('btn-dossie').addEventListener('click', () => toast('GeraÃ§Ã£o de dossiÃª em implementaÃ§Ã£o.','info'));
-  document.getElementById('btn-hist').addEventListener('click',   () => toast('HistÃ³rico em implementaÃ§Ã£o.','info'));
-  document.getElementById('btn-dl-pdf').addEventListener('click', () => toast('Download de PDF em implementaÃ§Ã£o.','info'));
+  document.getElementById('btn-dossie').addEventListener('click', () => toast('Geração de dossiê em implementação.','info'));
+  document.getElementById('btn-hist').addEventListener('click',   () => toast('Histórico em implementação.','info'));
+  document.getElementById('btn-dl-pdf').addEventListener('click', () => toast('Download de PDF em implementação.','info'));
 }
 
 init().catch(console.error);
