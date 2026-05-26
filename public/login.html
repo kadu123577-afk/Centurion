@@ -384,8 +384,8 @@
 <script>
   // ── Conexão Supabase (inline no login — não tem módulos ainda) ──
   const sb = supabase.createClient(
-    'https://vhgeibeudnshbrahsjui.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoZ2VpYmV1ZG5zaGJyYWhzanVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NTE5OTcsImV4cCI6MjA5NTEyNzk5N30.3EGjtjsNBT8Cc9JIIl6R9EphERIblxOpHjGyhFJeaPs'
+    'https://euxyecbhqxdinnczqzqz.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eHllY2JocXhkaW5uY3pxenF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDUzODksImV4cCI6MjA5NTM4MTM4OX0.0V7n-l_5pvMwnRcmLXy8dzsW9ZbkdHPYs5FCxoJWkeI'
   );
 
   // ── Se já tem sessão, redireciona direto ──
@@ -452,7 +452,7 @@
     // Redireciona conforme role
     switch(usuario.role) {
       case 'super_admin': window.location.href = '/superadmin.html'; break;
-      case 'admin':       window.location.href = '/admin.html';      break;
+      case 'admin': window.location.href = '/app.html'; break;
       default:            window.location.href = '/app.html';
     }
   }

@@ -8,11 +8,9 @@
  *        não manipula DOM.
  */
 
-// ── Importa o cliente Supabase do CDN (carregado no HTML via <script>) ──
-const { createClient } = window.supabase;
-
-const SUPA_URL = 'https://vhgeibeudnshbrahsjui.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoZ2VpYmV1ZG5zaGJyYWhzanVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NTE5OTcsImV4cCI6MjA5NTEyNzk5N30.3EGjtjsNBT8Cc9JIIl6R9EphERIblxOpHjGyhFJeaPs';
+import { createClient } from '@supabase/supabase-js';
+const SUPA_URL = 'https://euxyecbhqxdinnczqzqz.supabase.co';
+const SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eHllY2JocXhkaW5uY3pxenF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDUzODksImV4cCI6MjA5NTM4MTM4OX0.0V7n-l_5pvMwnRcmLXy8dzsW9ZbkdHPYs5FCxoJWkeI";
 
 /** Cliente único compartilhado por todo o app */
 export const sb = createClient(SUPA_URL, SUPA_KEY);
