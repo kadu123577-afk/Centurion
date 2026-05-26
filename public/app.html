@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Centurion — Gestão Licitatória</title>
+  <title>Centurion Ã¢â‚¬â€ GestÃƒÂ£o LicitatÃƒÂ³ria</title>
   <link rel="stylesheet" href="../src/style.css">
   <style>
     html, body { overflow: hidden; height: 100%; }
     .app-shell { display:flex; flex-direction:column; height:100vh; }
 
-    /* ── Topbar ── */
+    /* Ã¢â€â‚¬Ã¢â€â‚¬ Topbar Ã¢â€â‚¬Ã¢â€â‚¬ */
     .topbar { height:52px; min-height:52px; display:flex; align-items:center; gap:16px; padding:0 16px; background:var(--s1); border-bottom:1px solid var(--border); z-index:10; flex-shrink:0; }
     .topbar-sep { width:1px; height:20px; background:var(--border2); }
     .topbar-mun { font-size:12px; color:var(--text2); }
@@ -19,9 +19,9 @@
     .user-nome   { font-size:12px; font-weight:600; }
     .user-perfil { font-size:11px; color:var(--text2); }
 
-    /* ══════════════════════════════════════
-       TELA 1 — LISTA DE PROCESSOS
-    ══════════════════════════════════════ */
+    /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
+       TELA 1 Ã¢â‚¬â€ LISTA DE PROCESSOS
+    Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
     #tela-lista { display:flex; flex:1; overflow:hidden; }
 
     .sidebar { width:300px; min-width:300px; display:flex; flex-direction:column; background:var(--s1); border-right:1px solid var(--border); overflow:hidden; transition:width .25s ease; }
@@ -53,9 +53,9 @@
     .main-vazia-title { font-size:15px; font-weight:600; color:var(--text2); }
     .main-vazia-sub   { font-size:13px; text-align:center; max-width:260px; line-height:1.6; }
 
-    /* ══════════════════════════════════════
-       TELA 2 — PROCESSO ABERTO
-    ══════════════════════════════════════ */
+    /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
+       TELA 2 Ã¢â‚¬â€ PROCESSO ABERTO
+    Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
     #tela-processo { display:none; flex:1; flex-direction:column; overflow:hidden; }
     #tela-processo.on { display:flex; }
 
@@ -69,7 +69,7 @@
     /* Layout interno do processo */
     .proc-body { flex:1; display:flex; overflow:hidden; }
 
-    /* Stepper vertical — só admin vê */
+    /* Stepper vertical Ã¢â‚¬â€ sÃƒÂ³ admin vÃƒÂª */
     .stepper { width:52px; min-width:52px; background:var(--s1); border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; padding:12px 0; gap:4px; overflow-y:auto; }
     .stepper.oculto { display:none; }
     .step-item { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer; transition:all .15s; background:var(--s3); color:var(--text2); position:relative; flex-shrink:0; }
@@ -78,10 +78,10 @@
     .step-item.concluido { background:var(--green-l); color:var(--green); }
     .step-item[title]:hover::after { content:attr(title); position:absolute; left:44px; top:50%; transform:translateY(-50%); background:var(--s1); border:1px solid var(--border2); color:var(--text); font-size:11px; font-weight:500; white-space:nowrap; padding:4px 10px; border-radius:var(--r-sm); z-index:100; pointer-events:none; box-shadow:var(--shadow); }
 
-    /* Split: formulário + preview */
+    /* Split: formulÃƒÂ¡rio + preview */
     .split { flex:1; display:grid; grid-template-columns:1fr 1fr; overflow:hidden; }
 
-    /* Painel formulário */
+    /* Painel formulÃƒÂ¡rio */
     .form-panel { display:flex; flex-direction:column; overflow:hidden; border-right:1px solid var(--border); }
     .form-panel-head { padding:14px 20px; border-bottom:1px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:space-between; }
     .form-panel-title { font-size:14px; font-weight:700; }
@@ -89,7 +89,7 @@
     .form-panel-body  { flex:1; overflow-y:auto; padding:20px; }
     .form-panel-foot  { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; flex-shrink:0; background:var(--s1); }
 
-    /* Indicador não salvo */
+    /* Indicador nÃƒÂ£o salvo */
     .unsaved { display:none; align-items:center; gap:6px; font-size:11px; color:var(--orange); }
     .unsaved.on { display:flex; }
     .unsaved-dot { width:6px; height:6px; border-radius:50%; background:var(--orange); animation:pulse-dot 1.2s ease-in-out infinite; }
@@ -118,7 +118,7 @@
     .pdf-assinatura-nome  { font-weight:700; font-size:12px; }
     .pdf-assinatura-cargo { font-size:10px; color:#555; }
 
-    /* Etapa concluída */
+    /* Etapa concluÃƒÂ­da */
     .etapa-concluida { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; padding:40px; }
     .etapa-concluida-icon  { font-size:48px; }
     .etapa-concluida-title { font-size:18px; font-weight:700; color:var(--green); font-family:var(--font-display); }
@@ -144,33 +144,33 @@
     <div class="brand-icon" style="width:28px;height:28px;font-size:12px">C</div>
     <div><div class="brand-name" style="font-size:14px">Centurion</div></div>
     <div class="topbar-sep"></div>
-    <span class="topbar-mun">Município: <strong id="tb-municipio">—</strong></span>
+    <span class="topbar-mun">MunicÃƒÂ­pio: <strong id="tb-municipio">Ã¢â‚¬â€</strong></span>
     <div class="topbar-spacer"></div>
     <div class="topbar-user">
-      <div class="user-avatar" id="tb-avatar">—</div>
+      <div class="user-avatar" id="tb-avatar">Ã¢â‚¬â€</div>
       <div>
         <div class="user-nome"   id="tb-nome">Carregando...</div>
-        <div class="user-perfil" id="tb-perfil">—</div>
+        <div class="user-perfil" id="tb-perfil">Ã¢â‚¬â€</div>
       </div>
-      <button class="btn btn-ghost btn-sm" id="btn-admin" style="display:none">⚙ Admin</button>
+      <button class="btn btn-ghost btn-sm" id="btn-admin" style="display:none">Ã¢Å¡â„¢ Admin</button>
       <button class="btn btn-ghost btn-sm" id="btn-logout">Sair</button>
     </div>
   </header>
 
-  <!-- ══ TELA 1: LISTA ══ -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢Â TELA 1: LISTA Ã¢â€¢ÂÃ¢â€¢Â -->
   <div id="tela-lista">
     <aside class="sidebar">
       <div class="sidebar-head">
-        <div class="sidebar-label">Processos Licitatórios</div>
+        <div class="sidebar-label">Processos LicitatÃƒÂ³rios</div>
         <button class="btn btn-primary btn-sm" id="btn-novo" style="width:100%;justify-content:center">+ Novo Processo</button>
         <div class="sidebar-search">
-          <span class="sidebar-search-icon">🔍</span>
-          <input class="input" type="text" id="sb-busca" placeholder="Número ou objeto...">
+          <span class="sidebar-search-icon">Ã°Å¸â€Â</span>
+          <input class="input" type="text" id="sb-busca" placeholder="NÃƒÂºmero ou objeto...">
         </div>
         <div class="sidebar-filters">
           <button class="filter-chip on" data-filtro="todos">Todos</button>
           <button class="filter-chip" data-filtro="andamento">Andamento</button>
-          <button class="filter-chip" data-filtro="concluido">Concluídos</button>
+          <button class="filter-chip" data-filtro="concluido">ConcluÃƒÂ­dos</button>
           <button class="filter-chip" data-filtro="rascunho">Rascunho</button>
         </div>
       </div>
@@ -178,60 +178,60 @@
     </aside>
 
     <div class="main-vazia">
-      <div class="main-vazia-icon">📋</div>
+      <div class="main-vazia-icon">Ã°Å¸â€œâ€¹</div>
       <div class="main-vazia-title">Selecione um processo</div>
-      <div class="main-vazia-sub">Escolha um processo licitatório na lista ao lado para começar.</div>
+      <div class="main-vazia-sub">Escolha um processo licitatÃƒÂ³rio na lista ao lado para comeÃƒÂ§ar.</div>
     </div>
   </div>
 
-  <!-- ══ TELA 2: PROCESSO ABERTO ══ -->
+  <!-- Ã¢â€¢ÂÃ¢â€¢Â TELA 2: PROCESSO ABERTO Ã¢â€¢ÂÃ¢â€¢Â -->
   <div id="tela-processo">
 
     <!-- Header do processo -->
     <div class="proc-topbar">
-      <button class="btn btn-ghost btn-sm" id="btn-voltar">← Voltar</button>
+      <button class="btn btn-ghost btn-sm" id="btn-voltar">Ã¢â€ Â Voltar</button>
       <div class="topbar-sep"></div>
       <div class="proc-topbar-meta">
-        <span class="proc-topbar-num" id="pv-num">—</span>
-        <span class="proc-topbar-obj" id="pv-obj">—</span>
+        <span class="proc-topbar-num" id="pv-num">Ã¢â‚¬â€</span>
+        <span class="proc-topbar-obj" id="pv-obj">Ã¢â‚¬â€</span>
         <span id="pv-badge"></span>
       </div>
       <div class="proc-topbar-acts">
         <div class="unsaved" id="unsaved-indicator">
           <div class="unsaved-dot"></div>
-          <span>Não salvo</span>
+          <span>NÃƒÂ£o salvo</span>
         </div>
       </div>
     </div>
 
     <div class="proc-body">
 
-      <!-- Stepper (só admin) -->
+      <!-- Stepper (sÃƒÂ³ admin) -->
       <div class="stepper oculto" id="stepper"></div>
 
       <!-- Split -->
       <div class="split">
 
-        <!-- Formulário -->
+        <!-- FormulÃƒÂ¡rio -->
         <div class="form-panel">
           <div class="form-panel-head">
             <div>
-              <div class="form-panel-title" id="fp-titulo">—</div>
-              <div class="form-panel-sub"   id="fp-sub">—</div>
+              <div class="form-panel-title" id="fp-titulo">Ã¢â‚¬â€</div>
+              <div class="form-panel-sub"   id="fp-sub">Ã¢â‚¬â€</div>
             </div>
           </div>
           <div class="form-panel-body" id="form-ct"></div>
           <div class="form-panel-foot" id="form-foot" style="display:none">
-            <button class="btn btn-ghost btn-sm" id="btn-rascunho">💾 Salvar rascunho</button>
-            <button class="btn btn-primary"      id="btn-concluir">✅ Concluir etapa</button>
+            <button class="btn btn-ghost btn-sm" id="btn-rascunho">Ã°Å¸â€™Â¾ Salvar rascunho</button>
+            <button class="btn btn-primary"      id="btn-concluir">Ã¢Å“â€¦ Concluir etapa</button>
           </div>
         </div>
 
         <!-- Preview -->
         <div class="preview-panel">
           <div class="preview-head">
-            <span class="preview-head-label">Pré-visualização do documento</span>
-            <button class="btn btn-ghost btn-sm" id="btn-pdf">⬇ PDF</button>
+            <span class="preview-head-label">PrÃƒÂ©-visualizaÃƒÂ§ÃƒÂ£o do documento</span>
+            <button class="btn btn-ghost btn-sm" id="btn-pdf">Ã¢Â¬â€¡ PDF</button>
           </div>
           <div class="preview-body">
             <div class="pdf-doc" id="pdf-doc"></div>
@@ -249,32 +249,32 @@
   <div class="modal">
     <div class="modal-header">
       <div>
-        <div class="modal-title">Novo Processo Licitatório</div>
-        <div class="modal-subtitle">Preencha os dados básicos para iniciar.</div>
+        <div class="modal-title">Novo Processo LicitatÃƒÂ³rio</div>
+        <div class="modal-subtitle">Preencha os dados bÃƒÂ¡sicos para iniciar.</div>
       </div>
-      <button class="btn btn-icon btn-ghost" id="modal-fechar">✕</button>
+      <button class="btn btn-icon btn-ghost" id="modal-fechar">Ã¢Å“â€¢</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div class="field col-full">
-          <label class="label required">Objeto da contratação</label>
-          <input class="input" type="text" id="np-objeto" placeholder="Ex: Aquisição de medicamentos para a rede municipal">
+          <label class="label required">Objeto da contrataÃƒÂ§ÃƒÂ£o</label>
+          <input class="input" type="text" id="np-objeto" placeholder="Ex: AquisiÃƒÂ§ÃƒÂ£o de medicamentos para a rede municipal">
         </div>
         <div class="field">
-          <label class="label required">Tipo de contratação</label>
+          <label class="label required">Tipo de contrataÃƒÂ§ÃƒÂ£o</label>
           <select class="select" id="np-tipo">
             <option value="">Selecione...</option>
-            <option value="Aquisição de Bens">Aquisição de Bens</option>
-            <option value="Serviços Comuns">Serviços Comuns</option>
+            <option value="AquisiÃƒÂ§ÃƒÂ£o de Bens">AquisiÃƒÂ§ÃƒÂ£o de Bens</option>
+            <option value="ServiÃƒÂ§os Comuns">ServiÃƒÂ§os Comuns</option>
             <option value="Obras e Engenharia">Obras e Engenharia</option>
-            <option value="Locação">Locação</option>
-            <option value="Dispensa de Licitação">Dispensa de Licitação</option>
+            <option value="LocaÃƒÂ§ÃƒÂ£o">LocaÃƒÂ§ÃƒÂ£o</option>
+            <option value="Dispensa de LicitaÃƒÂ§ÃƒÂ£o">Dispensa de LicitaÃƒÂ§ÃƒÂ£o</option>
             <option value="Inexigibilidade">Inexigibilidade</option>
           </select>
         </div>
         <div class="field">
           <label class="label required">Setor requisitante</label>
-          <input class="input" type="text" id="np-setor" placeholder="Ex: Secretaria Municipal de Saúde">
+          <input class="input" type="text" id="np-setor" placeholder="Ex: Secretaria Municipal de SaÃƒÂºde">
         </div>
         <div class="field col-full">
           <label class="label">Valor estimado (R$)</label>
@@ -301,47 +301,47 @@ import { state, setState }             from '../src/services/state.js';
 import { toast, confirmar }            from '../src/utils/ui.js';
 import { esc, data, dataExtenso, moeda } from '../src/utils/format.js';
 
-/* ════════════════════════════════════════
-   CONFIGURAÇÃO
-════════════════════════════════════════ */
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
+   CONFIGURAÃƒâ€¡ÃƒÆ’O
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 const ETAPAS = [
-  { n:1,  id:'DFD',        nome:'DFD',               label:'Documento de Formalização de Demanda',      perfil:'requisitante'  },
+  { n:1,  id:'DFD',        nome:'DFD',               label:'Documento de FormalizaÃƒÂ§ÃƒÂ£o de Demanda',      perfil:'requisitante'  },
   { n:2,  id:'Protocolo',  nome:'Protocolo',          label:'Registro e Protocolo',                      perfil:'protocolo'     },
-  { n:3,  id:'ETP',        nome:'ETP + TR',           label:'Estudo Técnico Preliminar + Termo de Ref.', perfil:'requisitante'  },
-  { n:4,  id:'PP',         nome:'Pesquisa de Preços', label:'Pesquisa de Preços de Mercado',             perfil:'compras'       },
-  { n:5,  id:'Dotacao',    nome:'Dotação Orç.',       label:'Dotação Orçamentária',                      perfil:'contabilidade' },
-  { n:6,  id:'Autorizacao',nome:'Autorização',        label:'Autorização do Gestor',                     perfil:'secretaria'    },
-  { n:7,  id:'Minuta',     nome:'Minuta Edital',      label:'Elaboração da Minuta do Edital',            perfil:'licitacao'     },
-  { n:8,  id:'Parecer',    nome:'Parecer',            label:'Parecer Jurídico',                          perfil:'juridico'      },
-  { n:9,  id:'Edital',     nome:'Edital Final',       label:'Edital Final e Aprovação',                  perfil:'licitacao'     },
-  { n:10, id:'Publicacao', nome:'Publicação',         label:'Publicação e Abertura',                     perfil:'licitacao'     },
+  { n:3,  id:'ETP',        nome:'ETP + TR',           label:'Estudo TÃƒÂ©cnico Preliminar + Termo de Ref.', perfil:'requisitante'  },
+  { n:4,  id:'PP',         nome:'Pesquisa de PreÃƒÂ§os', label:'Pesquisa de PreÃƒÂ§os de Mercado',             perfil:'compras'       },
+  { n:5,  id:'Dotacao',    nome:'DotaÃƒÂ§ÃƒÂ£o OrÃƒÂ§.',       label:'DotaÃƒÂ§ÃƒÂ£o OrÃƒÂ§amentÃƒÂ¡ria',                      perfil:'contabilidade' },
+  { n:6,  id:'Autorizacao',nome:'AutorizaÃƒÂ§ÃƒÂ£o',        label:'AutorizaÃƒÂ§ÃƒÂ£o do Gestor',                     perfil:'secretaria'    },
+  { n:7,  id:'Minuta',     nome:'Minuta Edital',      label:'ElaboraÃƒÂ§ÃƒÂ£o da Minuta do Edital',            perfil:'licitacao'     },
+  { n:8,  id:'Parecer',    nome:'Parecer',            label:'Parecer JurÃƒÂ­dico',                          perfil:'juridico'      },
+  { n:9,  id:'Edital',     nome:'Edital Final',       label:'Edital Final e AprovaÃƒÂ§ÃƒÂ£o',                  perfil:'licitacao'     },
+  { n:10, id:'Publicacao', nome:'PublicaÃƒÂ§ÃƒÂ£o',         label:'PublicaÃƒÂ§ÃƒÂ£o e Abertura',                     perfil:'licitacao'     },
 ];
 
-const PERFIL_LABEL = { requisitante:'Requisitante', protocolo:'Protocolo', compras:'Compras', contabilidade:'Contabilidade', secretaria:'Secretaria', licitacao:'Licitação', juridico:'Jurídico', admin:'Administrador' };
+const PERFIL_LABEL = { requisitante:'Requisitante', protocolo:'Protocolo', compras:'Compras', contabilidade:'Contabilidade', secretaria:'Secretaria', licitacao:'LicitaÃƒÂ§ÃƒÂ£o', juridico:'JurÃƒÂ­dico', admin:'Administrador' };
 const STATUS_BADGE = { rascunho:'badge badge-gray', andamento:'badge badge-blue', aguardando:'badge badge-gold', concluido:'badge badge-green', suspenso:'badge badge-red' };
-const STATUS_LABEL = { rascunho:'Rascunho', andamento:'Em andamento', aguardando:'Aguardando', concluido:'Concluído', suspenso:'Suspenso' };
+const STATUS_LABEL = { rascunho:'Rascunho', andamento:'Em andamento', aguardando:'Aguardando', concluido:'ConcluÃƒÂ­do', suspenso:'Suspenso' };
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    ESTADO LOCAL
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 let processos = [], docsAbertos = [], etapaAtual = null;
 let filtroAtivo = 'todos', buscaQuery = '';
 let naoSalvo = false;
 let autoSaveTimer = null;
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    BOOT
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 async function init() {
   const usuario = await iniciarSessao();
   if (!usuario) return;
 
-  const nome = usuario.nome || usuario.email || 'Usuário';
+  const nome = usuario.nome || usuario.email || 'UsuÃƒÂ¡rio';
   const ini  = nome.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
   document.getElementById('tb-avatar').textContent    = ini;
   document.getElementById('tb-nome').textContent      = nome;
-  document.getElementById('tb-perfil').textContent    = PERFIL_LABEL[usuario.perfil] || usuario.perfil || '—';
-  document.getElementById('tb-municipio').textContent = usuario.prefeituras?.municipio || '—';
+  document.getElementById('tb-perfil').textContent    = PERFIL_LABEL[usuario.perfil] || usuario.perfil || 'Ã¢â‚¬â€';
+  document.getElementById('tb-municipio').textContent = usuario.prefeituras?.municipio || 'Ã¢â‚¬â€';
 
   if (isAdmin()) {
     document.getElementById('btn-admin').style.display = '';
@@ -351,9 +351,9 @@ async function init() {
   bindListeners();
 }
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    LISTA DE PROCESSOS
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 async function carregarProcessos() {
   const lista = document.getElementById('sb-lista');
   lista.innerHTML = Array(4).fill('<div class="sk sk-card"></div>').join('');
@@ -378,7 +378,7 @@ function renderSidebar() {
   if (filtroAtivo !== 'todos') rows = rows.filter(p => p.status === filtroAtivo);
   if (buscaQuery) {
     const q = buscaQuery.toLowerCase();
-    rows = rows.filter(p => p.numero_protocolo?.toLowerCase().includes(q) || p.objeto?.toLowerCase().includes(q));
+    rows = rows.filter(p => p.numero?.toLowerCase().includes(q) || p.objeto?.toLowerCase().includes(q));
   }
 
   if (!rows.length) {
@@ -386,7 +386,7 @@ function renderSidebar() {
     return;
   }
 
-  // Etapas que este perfil é responsável
+  // Etapas que este perfil ÃƒÂ© responsÃƒÂ¡vel
   const minhasEtapas = ETAPAS.filter(e => e.perfil === usuario?.perfil).map(e => e.id);
 
   lista.innerHTML = rows.map(p => {
@@ -397,7 +397,7 @@ function renderSidebar() {
       return `<div class="proc-dot ${cls}"></div>`;
     }).join('');
 
-    // Aguardando este usuário?
+    // Aguardando este usuÃƒÂ¡rio?
     const etapaAtualCfg = ETAPAS.find(e => e.n === p.etapa_atual);
     const aguardandoEu  = !isAdmin() && etapaAtualCfg && minhasEtapas.includes(etapaAtualCfg.id);
     const docAtual      = docs.find(d => d.tipo === etapaAtualCfg?.id);
@@ -408,9 +408,9 @@ function renderSidebar() {
 
     return `
       <div class="proc-card" data-id="${p.id}">
-        ${aguardandoEuReal ? '<div class="proc-aguardando" title="Aguardando sua ação"></div>' : ''}
-        <div class="proc-card-num">${esc(p.numero_protocolo || '—')}</div>
-        <div class="proc-card-obj">${esc(p.objeto || '—')}</div>
+        ${aguardandoEuReal ? '<div class="proc-aguardando" title="Aguardando sua aÃƒÂ§ÃƒÂ£o"></div>' : ''}
+        <div class="proc-card-num">${esc(p.numero_protocolo || 'Ã¢â‚¬â€')}</div>
+        <div class="proc-card-obj">${esc(p.objeto || 'Ã¢â‚¬â€')}</div>
         <div class="proc-card-footer">
           <div class="proc-dots">${dots}</div>
           <span class="${bc}" style="font-size:10px">${bl}</span>
@@ -426,9 +426,9 @@ function renderSidebar() {
   });
 }
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    ABRIR PROCESSO
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 async function abrirProcesso(proc) {
   setState('processoAtual', proc);
   etapaAtual = null;
@@ -438,8 +438,8 @@ async function abrirProcesso(proc) {
   document.getElementById('tela-processo').classList.add('on');
 
   // Popula header
-  document.getElementById('pv-num').textContent = proc.numero_protocolo || '—';
-  document.getElementById('pv-obj').textContent = proc.objeto || '—';
+  document.getElementById('pv-num').textContent = proc.numero || 'Ã¢â‚¬â€';
+  document.getElementById('pv-obj').textContent = proc.objeto || 'Ã¢â‚¬â€';
   const bc = STATUS_BADGE[proc.status] || 'badge badge-gray';
   const bl = STATUS_LABEL[proc.status] || proc.status;
   document.getElementById('pv-badge').innerHTML = `<span class="${bc}" style="font-size:11px">${bl}</span>`;
@@ -448,7 +448,7 @@ async function abrirProcesso(proc) {
   const { data: docs } = await sb.from('documentos').select('*').eq('processo_id', proc.id);
   docsAbertos = docs || [];
 
-  // Stepper — só admin
+  // Stepper Ã¢â‚¬â€ sÃƒÂ³ admin
   const admin = isAdmin();
   const stepper = document.getElementById('stepper');
   if (admin) {
@@ -464,25 +464,25 @@ async function abrirProcesso(proc) {
     // Admin vai para a etapa atual do processo
     carregarEtapa(proc.etapa_atual || 1);
   } else {
-    // Usuário vai para a etapa que é dele
+    // UsuÃƒÂ¡rio vai para a etapa que ÃƒÂ© dele
     const minhaEtapa = ETAPAS.find(e => e.perfil === usuario?.perfil);
     if (minhaEtapa) {
       carregarEtapa(minhaEtapa.n);
     } else {
       document.getElementById('form-ct').innerHTML = `
         <div class="etapa-bloqueada">
-          <div class="etapa-bloqueada-icon">🔒</div>
-          <div class="etapa-bloqueada-title">Sem etapas atribuídas</div>
-          <div class="etapa-bloqueada-sub">Seu perfil não possui etapas neste processo.</div>
+          <div class="etapa-bloqueada-icon">Ã°Å¸â€â€™</div>
+          <div class="etapa-bloqueada-title">Sem etapas atribuÃƒÂ­das</div>
+          <div class="etapa-bloqueada-sub">Seu perfil nÃƒÂ£o possui etapas neste processo.</div>
         </div>`;
     }
   }
 }
 
 function voltarParaLista() {
-  // Confirma se tem alterações não salvas
+  // Confirma se tem alteraÃƒÂ§ÃƒÂµes nÃƒÂ£o salvas
   if (naoSalvo) {
-    if (!confirm('Há alterações não salvas. Deseja sair mesmo assim?')) return;
+    if (!confirm('HÃƒÂ¡ alteraÃƒÂ§ÃƒÂµes nÃƒÂ£o salvas. Deseja sair mesmo assim?')) return;
   }
   document.getElementById('tela-processo').classList.remove('on');
   document.getElementById('tela-lista').style.display = 'flex';
@@ -492,9 +492,9 @@ function voltarParaLista() {
   carregarProcessos(); // Atualiza a lista
 }
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    STEPPER (admin)
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 function renderStepper() {
   const proc    = state.processoAtual;
   const stepper = document.getElementById('stepper');
@@ -505,7 +505,7 @@ function renderStepper() {
     const concluida = doc?.status === 'concluido';
     const ativa     = cfg.n === (etapaAtual?.n || proc?.etapa_atual);
     const cls       = ativa ? 'ativo' : (concluida ? 'concluido' : '');
-    const num       = concluida ? '✓' : cfg.n;
+    const num       = concluida ? 'Ã¢Å“â€œ' : cfg.n;
 
     const el = document.createElement('div');
     el.className = `step-item ${cls}`;
@@ -516,9 +516,9 @@ function renderStepper() {
   });
 }
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    CARREGAR ETAPA
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 function carregarEtapa(n) {
   const cfg = ETAPAS.find(e => e.n === n);
   if (!cfg) return;
@@ -527,42 +527,42 @@ function carregarEtapa(n) {
   if (isAdmin()) renderStepper();
 
   document.getElementById('fp-titulo').textContent = `${cfg.n}. ${cfg.label}`;
-  document.getElementById('fp-sub').textContent    = `Responsável: ${PERFIL_LABEL[cfg.perfil]}`;
+  document.getElementById('fp-sub').textContent    = `ResponsÃƒÂ¡vel: ${PERFIL_LABEL[cfg.perfil]}`;
 
   const usuario    = state.usuario;
-  const podeEditar = isAdmin() ? false : cfg.perfil === usuario?.perfil; // Admin só observa
+  const podeEditar = isAdmin() ? false : cfg.perfil === usuario?.perfil; // Admin sÃƒÂ³ observa
   const doc        = docsAbertos.find(d => d.tipo === cfg.id);
   const concluida  = doc?.status === 'concluido';
 
-  // Etapa concluída
+  // Etapa concluÃƒÂ­da
   if (concluida && !isAdmin()) {
     document.getElementById('form-ct').innerHTML = `
       <div class="etapa-concluida">
-        <div class="etapa-concluida-icon">✅</div>
-        <div class="etapa-concluida-title">Etapa concluída!</div>
+        <div class="etapa-concluida-icon">Ã¢Å“â€¦</div>
+        <div class="etapa-concluida-title">Etapa concluÃƒÂ­da!</div>
         <div class="etapa-concluida-sub">
-          Esta etapa foi concluída em ${data(doc.updated_at)}.<br>
-          O processo avançou para a próxima fase.
+          Esta etapa foi concluÃƒÂ­da em ${data(doc.updated_at)}.<br>
+          O processo avanÃƒÂ§ou para a prÃƒÂ³xima fase.
         </div>
-        <button class="btn btn-ghost btn-sm" onclick="voltarParaListaGlobal()">← Voltar para a lista</button>
+        <button class="btn btn-ghost btn-sm" onclick="voltarParaListaGlobal()">Ã¢â€ Â Voltar para a lista</button>
       </div>`;
     document.getElementById('form-foot').style.display = 'none';
     renderPreview(cfg, doc?.dados || {});
     return;
   }
 
-  // Etapa bloqueada (não é a etapa deste usuário)
+  // Etapa bloqueada (nÃƒÂ£o ÃƒÂ© a etapa deste usuÃƒÂ¡rio)
   const proc = state.processoAtual;
   if (!podeEditar && !isAdmin()) {
     const etapaResponsavel = ETAPAS.find(e => e.perfil === usuario?.perfil);
     const etapaAtualProc   = ETAPAS.find(e => e.n === proc?.etapa_atual);
     document.getElementById('form-ct').innerHTML = `
       <div class="etapa-bloqueada">
-        <div class="etapa-bloqueada-icon">⏳</div>
-        <div class="etapa-bloqueada-title">Processo em tramitação</div>
+        <div class="etapa-bloqueada-icon">Ã¢ÂÂ³</div>
+        <div class="etapa-bloqueada-title">Processo em tramitaÃƒÂ§ÃƒÂ£o</div>
         <div class="etapa-bloqueada-sub">
-          Atualmente na etapa <strong>${etapaAtualProc?.nome || '—'}</strong>.<br>
-          Sua etapa é <strong>${etapaResponsavel?.nome || '—'}</strong> — você será notificado quando chegar.
+          Atualmente na etapa <strong>${etapaAtualProc?.nome || 'Ã¢â‚¬â€'}</strong>.<br>
+          Sua etapa ÃƒÂ© <strong>${etapaResponsavel?.nome || 'Ã¢â‚¬â€'}</strong> Ã¢â‚¬â€ vocÃƒÂª serÃƒÂ¡ notificado quando chegar.
         </div>
       </div>`;
     document.getElementById('form-foot').style.display = 'none';
@@ -570,20 +570,20 @@ function carregarEtapa(n) {
     return;
   }
 
-  // Renderiza formulário
+  // Renderiza formulÃƒÂ¡rio
   renderForm(cfg, doc, podeEditar || isAdmin());
   renderPreview(cfg, doc?.dados || {});
 
-  // Mostra/oculta rodapé de ações
+  // Mostra/oculta rodapÃƒÂ© de aÃƒÂ§ÃƒÂµes
   document.getElementById('form-foot').style.display = (podeEditar && !concluida) ? 'flex' : 'none';
 
   // Auto-preview em tempo real
   iniciarAutoPreview(cfg);
 }
 
-/* ════════════════════════════════════════
-   FORMULÁRIOS
-════════════════════════════════════════ */
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
+   FORMULÃƒÂRIOS
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 function renderForm(cfg, doc, editavel) {
   const d   = doc?.dados || {};
   const dis = !editavel;
@@ -598,7 +598,7 @@ function renderForm(cfg, doc, editavel) {
     `<div class="field col-full">
       <label class="label${req?' required':''}">${lbl}</label>
       <textarea class="input" id="${id}" rows="4" ${dis?'disabled':''}>${esc(val??'')}</textarea>
-      ${min > 0 ? `<div class="field-hint"><span id="${id}-wc">0</span> palavras${!dis?' — mínimo recomendado: '+min:''}.</div>` : ''}
+      ${min > 0 ? `<div class="field-hint"><span id="${id}-wc">0</span> palavras${!dis?' Ã¢â‚¬â€ mÃƒÂ­nimo recomendado: '+min:''}.</div>` : ''}
     </div>`;
 
   const fs = (id, lbl, opts, req=false, val='') =>
@@ -613,12 +613,12 @@ function renderForm(cfg, doc, editavel) {
   const FORMS = {
     1: () => `
       <div class="form-section">
-        <div class="section-title">Identificação</div>
+        <div class="section-title">IdentificaÃƒÂ§ÃƒÂ£o</div>
         <div class="form-grid">
-          ${f('dfd-obj','Objeto da contratação','text','Descreva o objeto',true,d.objeto)}
-          ${f('dfd-setor','Setor requisitante','text','Ex: Secretaria de Saúde',true,d.setor)}
+          ${f('dfd-obj','Objeto da contrataÃƒÂ§ÃƒÂ£o','text','Descreva o objeto',true,d.objeto)}
+          ${f('dfd-setor','Setor requisitante','text','Ex: Secretaria de SaÃƒÂºde',true,d.setor)}
           ${f('dfd-qtd','Quantidade','number','0',true,d.quantidade)}
-          ${f('dfd-und','Unidade de medida','text','UN, KG, M²...',true,d.unidade)}
+          ${f('dfd-und','Unidade de medida','text','UN, KG, MÃ‚Â²...',true,d.unidade)}
           ${f('dfd-val','Valor estimado (R$)','text','0,00',false,d.valor_estimado)}
           ${f('dfd-prazo','Prazo desejado','date','',false,d.prazo)}
         </div>
@@ -626,13 +626,13 @@ function renderForm(cfg, doc, editavel) {
       <div class="form-section">
         <div class="section-title">Justificativa</div>
         <div class="form-grid">
-          ${ft('dfd-just','Justificativa da necessidade','Descreva a necessidade que motiva esta contratação...',true,d.justificativa,80)}
+          ${ft('dfd-just','Justificativa da necessidade','Descreva a necessidade que motiva esta contrataÃƒÂ§ÃƒÂ£o...',true,d.justificativa,80)}
         </div>
       </div>
       <div class="form-section">
-        <div class="section-title">Responsável</div>
+        <div class="section-title">ResponsÃƒÂ¡vel</div>
         <div class="form-grid">
-          ${f('dfd-resp','Nome do responsável','text','Nome completo',true,d.responsavel)}
+          ${f('dfd-resp','Nome do responsÃƒÂ¡vel','text','Nome completo',true,d.responsavel)}
           ${f('dfd-cargo','Cargo','text','',true,d.cargo)}
         </div>
       </div>`,
@@ -641,70 +641,70 @@ function renderForm(cfg, doc, editavel) {
       <div class="form-section">
         <div class="section-title">Dados do Protocolo</div>
         <div class="form-grid">
-          ${f('prot-num','Número no livro','text','0154/2026',false,d.numero)}
+          ${f('prot-num','NÃƒÂºmero no livro','text','0154/2026',false,d.numero)}
           ${f('prot-data','Data de entrada','date','',false,d.data_entrada)}
           ${f('prot-recv','Recebido por','text','Nome do servidor',false,d.recebido_por)}
           ${f('prot-dest','Setor de destino','text','',false,d.setor_destino)}
-          ${ft('prot-obs','Observações','',false,d.obs)}
+          ${ft('prot-obs','ObservaÃƒÂ§ÃƒÂµes','',false,d.obs)}
         </div>
       </div>`,
 
     3: () => `
       <div class="form-section">
-        <div class="section-title">Estudo Técnico Preliminar</div>
+        <div class="section-title">Estudo TÃƒÂ©cnico Preliminar</div>
         <div class="form-grid">
-          ${ft('etp-nec','Descrição da necessidade','',true,d.necessidade,60)}
-          ${ft('etp-sol','Descrição da solução proposta','',true,d.solucao)}
-          ${ft('etp-req','Requisitos da contratação','',false,d.requisitos)}
-          ${ft('etp-fund','Fundamentação legal','Art. 6º, 11, 18, 40 da Lei 14.133/2021',false,d.fund_legal)}
+          ${ft('etp-nec','DescriÃƒÂ§ÃƒÂ£o da necessidade','',true,d.necessidade,60)}
+          ${ft('etp-sol','DescriÃƒÂ§ÃƒÂ£o da soluÃƒÂ§ÃƒÂ£o proposta','',true,d.solucao)}
+          ${ft('etp-req','Requisitos da contrataÃƒÂ§ÃƒÂ£o','',false,d.requisitos)}
+          ${ft('etp-fund','FundamentaÃƒÂ§ÃƒÂ£o legal','Art. 6Ã‚Âº, 11, 18, 40 da Lei 14.133/2021',false,d.fund_legal)}
         </div>
       </div>
       <div class="form-section">
-        <div class="section-title">Termo de Referência</div>
+        <div class="section-title">Termo de ReferÃƒÂªncia</div>
         <div class="form-grid">
           ${ft('tr-obj','Objeto do TR','',true,d.tr_objeto)}
           ${f('tr-prazo','Prazo de entrega (dias)','number','30',true,d.prazo_execucao)}
-          ${ft('tr-esp','Especificações técnicas','',true,d.especificacoes)}
-          ${ft('tr-obr','Obrigações da contratada','',false,d.obrigacoes)}
+          ${ft('tr-esp','EspecificaÃƒÂ§ÃƒÂµes tÃƒÂ©cnicas','',true,d.especificacoes)}
+          ${ft('tr-obr','ObrigaÃƒÂ§ÃƒÂµes da contratada','',false,d.obrigacoes)}
         </div>
       </div>`,
 
     4: () => `
       <div class="form-section">
-        <div class="section-title">Cotações de Mercado</div>
+        <div class="section-title">CotaÃƒÂ§ÃƒÂµes de Mercado</div>
         <div class="form-grid">
-          ${f('pp-f1','Fornecedor 1','text','Razão social',false,d.forn1)}
+          ${f('pp-f1','Fornecedor 1','text','RazÃƒÂ£o social',false,d.forn1)}
           ${f('pp-v1','Valor R$','text','0,00',false,d.val1)}
           ${f('pp-f2','Fornecedor 2','text','',false,d.forn2)}
           ${f('pp-v2','Valor R$','text','',false,d.val2)}
           ${f('pp-f3','Fornecedor 3','text','',false,d.forn3)}
           ${f('pp-v3','Valor R$','text','',false,d.val3)}
-          ${f('pp-med','Valor médio apurado R$','text','',false,d.media)}
-          ${f('pp-met','Método de pesquisa','text','PNCP, Painel de Preços...',false,d.metodo)}
-          ${ft('pp-obs','Observações','',false,d.obs)}
+          ${f('pp-med','Valor mÃƒÂ©dio apurado R$','text','',false,d.media)}
+          ${f('pp-met','MÃƒÂ©todo de pesquisa','text','PNCP, Painel de PreÃƒÂ§os...',false,d.metodo)}
+          ${ft('pp-obs','ObservaÃƒÂ§ÃƒÂµes','',false,d.obs)}
         </div>
       </div>`,
 
     5: () => `
       <div class="form-section">
-        <div class="section-title">Dotação Orçamentária</div>
+        <div class="section-title">DotaÃƒÂ§ÃƒÂ£o OrÃƒÂ§amentÃƒÂ¡ria</div>
         <div class="form-grid">
-          ${f('dot-dot','Dotação','text','02.003.10.301.0001',true,d.dotacao)}
-          ${f('dot-fon','Fonte de recurso','text','101 – Recursos Próprios',true,d.fonte)}
+          ${f('dot-dot','DotaÃƒÂ§ÃƒÂ£o','text','02.003.10.301.0001',true,d.dotacao)}
+          ${f('dot-fon','Fonte de recurso','text','101 Ã¢â‚¬â€œ Recursos PrÃƒÂ³prios',true,d.fonte)}
           ${f('dot-val','Valor a empenhar R$','text','0,00',true,d.valor)}
-          ${f('dot-emp','Número do empenho','text','',false,d.empenho)}
-          ${ft('dot-obs','Observações','',false,d.obs)}
+          ${f('dot-emp','NÃƒÂºmero do empenho','text','',false,d.empenho)}
+          ${ft('dot-obs','ObservaÃƒÂ§ÃƒÂµes','',false,d.obs)}
         </div>
       </div>`,
 
     6: () => `
       <div class="form-section">
-        <div class="section-title">Autorização</div>
+        <div class="section-title">AutorizaÃƒÂ§ÃƒÂ£o</div>
         <div class="form-grid">
           ${f('aut-aut','Autorizado por','text','Nome e cargo',true,d.autorizado_por)}
           ${f('aut-dat','Data','date','',true,d.data)}
-          ${fs('aut-dec','Decisão',[{v:'autorizado',l:'Autorizado'},{v:'indeferido',l:'Indeferido'},{v:'diligencia',l:'Em diligência'}],true,d.decisao)}
-          ${ft('aut-obs','Despacho / motivação','',true,d.despacho)}
+          ${fs('aut-dec','DecisÃƒÂ£o',[{v:'autorizado',l:'Autorizado'},{v:'indeferido',l:'Indeferido'},{v:'diligencia',l:'Em diligÃƒÂªncia'}],true,d.decisao)}
+          ${ft('aut-obs','Despacho / motivaÃƒÂ§ÃƒÂ£o','',true,d.despacho)}
         </div>
       </div>`,
 
@@ -712,23 +712,23 @@ function renderForm(cfg, doc, editavel) {
       <div class="form-section">
         <div class="section-title">Minuta do Edital</div>
         <div class="form-grid">
-          ${fs('min-mod','Modalidade',[{v:'pregao_eletronico',l:'Pregão Eletrônico'},{v:'concorrencia',l:'Concorrência'},{v:'dispensa',l:'Dispensa'}],true,d.modalidade)}
-          ${fs('min-cri','Critério',[{v:'menor_preco',l:'Menor Preço'},{v:'tecnica_preco',l:'Técnica e Preço'}],true,d.criterio)}
+          ${fs('min-mod','Modalidade',[{v:'pregao_eletronico',l:'PregÃƒÂ£o EletrÃƒÂ´nico'},{v:'concorrencia',l:'ConcorrÃƒÂªncia'},{v:'dispensa',l:'Dispensa'}],true,d.modalidade)}
+          ${fs('min-cri','CritÃƒÂ©rio',[{v:'menor_preco',l:'Menor PreÃƒÂ§o'},{v:'tecnica_preco',l:'TÃƒÂ©cnica e PreÃƒÂ§o'}],true,d.criterio)}
           ${ft('min-obj','Objeto no edital','',true,d.objeto_edital)}
-          ${ft('min-hab','Exigências de habilitação','',false,d.exigencias)}
+          ${ft('min-hab','ExigÃƒÂªncias de habilitaÃƒÂ§ÃƒÂ£o','',false,d.exigencias)}
         </div>
       </div>`,
 
     8: () => `
       <div class="form-section">
-        <div class="section-title">Parecer Jurídico</div>
+        <div class="section-title">Parecer JurÃƒÂ­dico</div>
         <div class="form-grid">
-          ${f('par-num','Número do parecer','text','PAR-0042/2026',true,d.numero)}
+          ${f('par-num','NÃƒÂºmero do parecer','text','PAR-0042/2026',true,d.numero)}
           ${f('par-dat','Data','date','',true,d.data)}
           ${f('par-adv','Procurador / Advogado','text','Nome e OAB',true,d.advogado)}
-          ${fs('par-con','Conclusão',[{v:'aprovado',l:'Aprovado'},{v:'ressalvas',l:'Com ressalvas'},{v:'rejeitado',l:'Rejeitado'}],true,d.conclusao)}
-          ${ft('par-fund','Fundamentação legal','',true,d.fundamentacao)}
-          ${ft('par-obs','Ressalvas e considerações','',false,d.obs)}
+          ${fs('par-con','ConclusÃƒÂ£o',[{v:'aprovado',l:'Aprovado'},{v:'ressalvas',l:'Com ressalvas'},{v:'rejeitado',l:'Rejeitado'}],true,d.conclusao)}
+          ${ft('par-fund','FundamentaÃƒÂ§ÃƒÂ£o legal','',true,d.fundamentacao)}
+          ${ft('par-obs','Ressalvas e consideraÃƒÂ§ÃƒÂµes','',false,d.obs)}
         </div>
       </div>`,
 
@@ -736,32 +736,32 @@ function renderForm(cfg, doc, editavel) {
       <div class="form-section">
         <div class="section-title">Edital Final</div>
         <div class="form-grid">
-          ${f('ef-num','Número do edital','text','0042/2026',true,d.numero)}
-          ${f('ef-dpub','Data de publicação prevista','date','',true,d.data_publicacao)}
-          ${f('ef-dses','Data da sessão pública','date','',true,d.data_sessao)}
-          ${f('ef-hora','Hora da sessão','time','09:00',false,d.hora_sessao)}
-          ${ft('ef-obs','Observações finais','',false,d.obs)}
+          ${f('ef-num','NÃƒÂºmero do edital','text','0042/2026',true,d.numero)}
+          ${f('ef-dpub','Data de publicaÃƒÂ§ÃƒÂ£o prevista','date','',true,d.data_publicacao)}
+          ${f('ef-dses','Data da sessÃƒÂ£o pÃƒÂºblica','date','',true,d.data_sessao)}
+          ${f('ef-hora','Hora da sessÃƒÂ£o','time','09:00',false,d.hora_sessao)}
+          ${ft('ef-obs','ObservaÃƒÂ§ÃƒÂµes finais','',false,d.obs)}
         </div>
       </div>`,
 
     10: () => `
       <div class="form-section">
-        <div class="section-title">Publicação</div>
+        <div class="section-title">PublicaÃƒÂ§ÃƒÂ£o</div>
         <div class="form-grid">
-          ${f('pub-vei','Veículo de publicação','text','PNCP, Diário Oficial GO',true,d.veiculo)}
-          ${f('pub-dat','Data de publicação','date','',true,d.data)}
-          ${f('pub-nav','Número do aviso','text','',false,d.numero_aviso)}
-          ${f('pub-lnk','Link da publicação','url','https://',false,d.link)}
+          ${f('pub-vei','VeÃƒÂ­culo de publicaÃƒÂ§ÃƒÂ£o','text','PNCP, DiÃƒÂ¡rio Oficial GO',true,d.veiculo)}
+          ${f('pub-dat','Data de publicaÃƒÂ§ÃƒÂ£o','date','',true,d.data)}
+          ${f('pub-nav','NÃƒÂºmero do aviso','text','',false,d.numero_aviso)}
+          ${f('pub-lnk','Link da publicaÃƒÂ§ÃƒÂ£o','url','https://',false,d.link)}
         </div>
       </div>`,
   };
 
   const concluida = doc?.status === 'concluido';
   const banner = concluida
-    ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--green-l);border:1px solid rgba(65,243,106,.2);border-radius:var(--r-sm);font-size:12px;color:var(--green);margin-bottom:16px">✓ Etapa concluída em ${data(doc.updated_at)}</div>`
+    ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--green-l);border:1px solid rgba(65,243,106,.2);border-radius:var(--r-sm);font-size:12px;color:var(--green);margin-bottom:16px">Ã¢Å“â€œ Etapa concluÃƒÂ­da em ${data(doc.updated_at)}</div>`
     : '';
 
-  document.getElementById('form-ct').innerHTML = banner + (FORMS[cfg.n]?.() || `<div style="padding:20px;color:var(--muted)">Formulário em construção.</div>`);
+  document.getElementById('form-ct').innerHTML = banner + (FORMS[cfg.n]?.() || `<div style="padding:20px;color:var(--muted)">FormulÃƒÂ¡rio em construÃƒÂ§ÃƒÂ£o.</div>`);
 
   // Contador de palavras
   document.querySelectorAll('[id$="-wc"]').forEach(el => {
@@ -778,9 +778,9 @@ function renderForm(cfg, doc, editavel) {
   });
 }
 
-/* ════════════════════════════════════════
-   COLETA DE DADOS DO FORMULÁRIO
-════════════════════════════════════════ */
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
+   COLETA DE DADOS DO FORMULÃƒÂRIO
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 function coletarForm(n) {
   const g = id => document.getElementById(id)?.value ?? '';
   const mapas = {
@@ -798,9 +798,9 @@ function coletarForm(n) {
   return mapas[n]?.() || {};
 }
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    SALVAR ETAPA
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 async function salvarEtapa(concluir = false) {
   const cfg  = etapaAtual;
   const proc = state.processoAtual;
@@ -808,9 +808,9 @@ async function salvarEtapa(concluir = false) {
 
   if (concluir) {
     const ok = await confirmar(`Concluir a etapa "${cfg.nome}"?`, {
-      titulo: 'Confirmar conclusão',
+      titulo: 'Confirmar conclusÃƒÂ£o',
       labelSim: 'Concluir',
-      subtitulo: 'Esta ação não poderá ser desfeita.'
+      subtitulo: 'Esta aÃƒÂ§ÃƒÂ£o nÃƒÂ£o poderÃƒÂ¡ ser desfeita.'
     });
     if (!ok) return;
   }
@@ -832,7 +832,7 @@ async function salvarEtapa(concluir = false) {
     }
     if (error) throw error;
 
-    // Avança o processo
+    // AvanÃƒÂ§a o processo
     if (concluir) {
       const proximaEtapa = cfg.n < 10 ? cfg.n + 1 : cfg.n;
       const novoStatus   = cfg.n === 10 ? 'concluido' : 'andamento';
@@ -846,11 +846,11 @@ async function salvarEtapa(concluir = false) {
     marcarSalvo();
 
     if (concluir) {
-      toast(`"${cfg.nome}" concluída! Processo avançou.`, 'success');
-      // Usuário comum volta para a lista após concluir
+      toast(`"${cfg.nome}" concluÃƒÂ­da! Processo avanÃƒÂ§ou.`, 'success');
+      // UsuÃƒÂ¡rio comum volta para a lista apÃƒÂ³s concluir
       if (!isAdmin()) {
         setTimeout(() => voltarParaLista(), 2000);
-        carregarEtapa(cfg.n); // Mostra tela de concluída
+        carregarEtapa(cfg.n); // Mostra tela de concluÃƒÂ­da
       } else {
         carregarEtapa(Math.min(cfg.n + 1, 10));
         if (isAdmin()) renderStepper();
@@ -863,7 +863,7 @@ async function salvarEtapa(concluir = false) {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.textContent = concluir ? '✅ Concluir etapa' : '💾 Salvar rascunho';
+      btn.textContent = concluir ? 'Ã¢Å“â€¦ Concluir etapa' : 'Ã°Å¸â€™Â¾ Salvar rascunho';
     }
   }
 }
@@ -892,9 +892,9 @@ function marcarNaoSalvo() {
   }, 30000);
 }
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    PREVIEW AO VIVO
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 function iniciarAutoPreview(cfg) {
   const formCt = document.getElementById('form-ct');
   if (!formCt) return;
@@ -917,15 +917,15 @@ function renderPreview(cfg, d) {
 
   const linhas = {
     1:  [['Objeto',d.objeto],['Setor',d.setor],['Quantidade',d.quantidade && d.unidade ? `${d.quantidade} ${d.unidade}` : ''],['Valor estimado',d.valor_estimado ? 'R$ '+d.valor_estimado : '']],
-    2:  [['Protocolo nº',d.numero],['Data de entrada',d.data_entrada],['Recebido por',d.recebido_por],['Setor de destino',d.setor_destino]],
+    2:  [['Protocolo nÃ‚Âº',d.numero],['Data de entrada',d.data_entrada],['Recebido por',d.recebido_por],['Setor de destino',d.setor_destino]],
     3:  [['Objeto TR',d.tr_objeto],['Prazo de entrega',d.prazo_execucao ? d.prazo_execucao+' dias' : ''],['Necessidade',d.necessidade]],
-    4:  [['Fornecedor 1',d.forn1 ? `${d.forn1} — R$ ${d.val1}` : ''],['Fornecedor 2',d.forn2 ? `${d.forn2} — R$ ${d.val2}` : ''],['Fornecedor 3',d.forn3 ? `${d.forn3} — R$ ${d.val3}` : ''],['Valor médio',d.media ? 'R$ '+d.media : '']],
-    5:  [['Dotação',d.dotacao],['Fonte',d.fonte],['Valor a empenhar',d.valor ? 'R$ '+d.valor : ''],['Empenho',d.empenho]],
-    6:  [['Autorizado por',d.autorizado_por],['Data',d.data],['Decisão',d.decisao],['Motivação',d.despacho]],
-    7:  [['Modalidade',d.modalidade],['Critério de julgamento',d.criterio],['Objeto',d.objeto_edital]],
-    8:  [['Parecer nº',d.numero],['Procurador',d.advogado],['Conclusão',d.conclusao],['Fundamentação',d.fundamentacao]],
-    9:  [['Edital nº',d.numero],['Data de publicação',d.data_publicacao],['Data da sessão',d.data_sessao],['Hora',d.hora_sessao]],
-    10: [['Veículo',d.veiculo],['Data',d.data],['Nº do aviso',d.numero_aviso],['Link',d.link]],
+    4:  [['Fornecedor 1',d.forn1 ? `${d.forn1} Ã¢â‚¬â€ R$ ${d.val1}` : ''],['Fornecedor 2',d.forn2 ? `${d.forn2} Ã¢â‚¬â€ R$ ${d.val2}` : ''],['Fornecedor 3',d.forn3 ? `${d.forn3} Ã¢â‚¬â€ R$ ${d.val3}` : ''],['Valor mÃƒÂ©dio',d.media ? 'R$ '+d.media : '']],
+    5:  [['DotaÃƒÂ§ÃƒÂ£o',d.dotacao],['Fonte',d.fonte],['Valor a empenhar',d.valor ? 'R$ '+d.valor : ''],['Empenho',d.empenho]],
+    6:  [['Autorizado por',d.autorizado_por],['Data',d.data],['DecisÃƒÂ£o',d.decisao],['MotivaÃƒÂ§ÃƒÂ£o',d.despacho]],
+    7:  [['Modalidade',d.modalidade],['CritÃƒÂ©rio de julgamento',d.criterio],['Objeto',d.objeto_edital]],
+    8:  [['Parecer nÃ‚Âº',d.numero],['Procurador',d.advogado],['ConclusÃƒÂ£o',d.conclusao],['FundamentaÃƒÂ§ÃƒÂ£o',d.fundamentacao]],
+    9:  [['Edital nÃ‚Âº',d.numero],['Data de publicaÃƒÂ§ÃƒÂ£o',d.data_publicacao],['Data da sessÃƒÂ£o',d.data_sessao],['Hora',d.hora_sessao]],
+    10: [['VeÃƒÂ­culo',d.veiculo],['Data',d.data],['NÃ‚Âº do aviso',d.numero_aviso],['Link',d.link]],
   };
 
   const campos = (linhas[cfg.n] || [])
@@ -933,14 +933,14 @@ function renderPreview(cfg, d) {
     .map(([l,v]) => `<div class="pdf-field"><span class="pdf-field-label">${l}:</span> ${esc(String(v))}</div>`)
     .join('') || '<div style="color:#aaa;font-style:italic;font-size:11px">Preencha os campos ao lado para ver o documento.</div>';
 
-  // Justificativa com parágrafo especial para DFD
+  // Justificativa com parÃƒÂ¡grafo especial para DFD
   const justificativa = cfg.n === 1 && d.justificativa
     ? `<div class="pdf-section">
         <div class="pdf-section-title">Justificativa</div>
         <div class="pdf-justificativa">${esc(d.justificativa)}</div>
        </div>` : '';
 
-  // Assinatura para etapas que têm responsável
+  // Assinatura para etapas que tÃƒÂªm responsÃƒÂ¡vel
   const responsavel = d.responsavel || d.autorizado_por || d.advogado || '';
   const cargo       = d.cargo || '';
   const assinatura  = responsavel ? `
@@ -954,11 +954,11 @@ function renderPreview(cfg, d) {
 
   document.getElementById('pdf-doc').innerHTML = `
     <div class="pdf-header">
-      <div class="pdf-brasao">🏛️</div>
+      <div class="pdf-brasao">Ã°Å¸Ââ€ºÃ¯Â¸Â</div>
       <div class="pdf-pref">${esc(pref.nome || 'PREFEITURA MUNICIPAL')}</div>
-      <div class="pdf-cnpj">${pref.cnpj ? 'CNPJ: ' + esc(pref.cnpj) : ''} ${pref.municipio ? '· ' + esc(pref.municipio) : ''}${pref.uf ? '/' + esc(pref.uf) : ''}</div>
+      <div class="pdf-cnpj">${pref.cnpj ? 'CNPJ: ' + esc(pref.cnpj) : ''} ${pref.municipio ? 'Ã‚Â· ' + esc(pref.municipio) : ''}${pref.uf ? '/' + esc(pref.uf) : ''}</div>
       <div class="pdf-titulo">${esc(cfg.label)}</div>
-      <div class="pdf-num">Processo nº ${esc(proc?.numero_protocolo || '—')} · Etapa ${cfg.n}/10</div>
+      <div class="pdf-num">Processo nÃ‚Âº ${esc(proc?.numero_protocolo || 'Ã¢â‚¬â€')} Ã‚Â· Etapa ${cfg.n}/10</div>
     </div>
     <div class="pdf-section">
       <div class="pdf-section-title">Dados</div>
@@ -968,23 +968,23 @@ function renderPreview(cfg, d) {
     ${assinatura}
     <div class="pdf-footer">
       <div>
-        <div>Lei Federal nº 14.133/2021 · TCM-GO · IN-009/2023</div>
+        <div>Lei Federal nÃ‚Âº 14.133/2021 Ã‚Â· TCM-GO Ã‚Â· IN-009/2023</div>
         <div>Gerado em ${new Date().toLocaleString('pt-BR')}</div>
       </div>
       <div class="pdf-hash">SHA-256: gerado ao concluir a etapa</div>
     </div>`;
 }
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    CRIAR PROCESSO
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 async function criarProcesso() {
   const objeto = document.getElementById('np-objeto').value.trim();
   const tipo   = document.getElementById('np-tipo').value;
   const setor  = document.getElementById('np-setor').value.trim();
   const valor  = document.getElementById('np-valor').value;
 
-  if (!objeto || !tipo || !setor) { toast('Preencha os campos obrigatórios.', 'warning'); return; }
+  if (!objeto || !tipo || !setor) { toast('Preencha os campos obrigatÃƒÂ³rios.', 'warning'); return; }
 
   const btn = document.getElementById('modal-criar');
   btn.disabled = true; btn.textContent = 'Criando...';
@@ -997,9 +997,9 @@ async function criarProcesso() {
 
     const { data: proc, error } = await sb.from('processos').insert({
       prefeitura_id: pref?.id,
-      numero_protocolo: numero,
-      objeto, tipo_contratacao: tipo,
-      setor_requisitante: setor,
+      numero: numero,
+      objeto, tipo: tipo,
+      secretaria: setor,
       valor_estimado: valor,
       etapa_atual: 1,
       status: 'rascunho',
@@ -1025,12 +1025,12 @@ function fecharModal() {
   document.getElementById('np-tipo').value = '';
 }
 
-// Expõe globalmente para o onclick inline da etapa concluída
+// ExpÃƒÂµe globalmente para o onclick inline da etapa concluÃƒÂ­da
 window.voltarParaListaGlobal = voltarParaLista;
 
-/* ════════════════════════════════════════
+/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
    LISTENERS
-════════════════════════════════════════ */
+Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
 function bindListeners() {
   document.getElementById('btn-logout').addEventListener('click', async () => {
     if (await confirmar('Deseja sair do sistema?')) await logout();
@@ -1045,7 +1045,7 @@ function bindListeners() {
   document.getElementById('btn-voltar').addEventListener('click', voltarParaLista);
   document.getElementById('btn-rascunho').addEventListener('click', () => salvarEtapa(false));
   document.getElementById('btn-concluir').addEventListener('click', () => salvarEtapa(true));
-  document.getElementById('btn-pdf').addEventListener('click', () => toast('Geração de PDF em implementação.', 'info'));
+  document.getElementById('btn-pdf').addEventListener('click', () => toast('GeraÃƒÂ§ÃƒÂ£o de PDF em implementaÃƒÂ§ÃƒÂ£o.', 'info'));
 
   document.getElementById('sb-busca').addEventListener('input', e => { buscaQuery = e.target.value; renderSidebar(); });
 
@@ -1059,7 +1059,7 @@ function bindListeners() {
   });
 }
 
-/* ── Start ── */
+/* Ã¢â€â‚¬Ã¢â€â‚¬ Start Ã¢â€â‚¬Ã¢â€â‚¬ */
 init().catch(console.error);
 </script>
 </body>
