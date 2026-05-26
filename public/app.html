@@ -1,1065 +1,1002 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Centurion Ã¢â‚¬â€ GestÃƒÂ£o LicitatÃƒÂ³ria</title>
-  <link rel="stylesheet" href="../src/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centurion — Gestão Licitatória Municipal</title>
+  <link rel="stylesheet" href="../src/style.css" />
+  <!-- Apenas JetBrains Mono para números de protocolo; Syne+DM Sans já vêm do style.css -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    html, body { overflow: hidden; height: 100%; }
-    .app-shell { display:flex; flex-direction:column; height:100vh; }
+    /* ─────────────────────────────────────────────────────────────
+       app.html → APENAS layout de tela.
+       Cores, fontes, componentes base: tudo via src/style.css.
+    ───────────────────────────────────────────────────────────── */
+    :root {
+      --sidebar-w: 300px;
+      --etapas-w:  220px;
+      --topbar-h:  56px;
+      --mono: 'JetBrains Mono', monospace;
+    }
 
-    /* Ã¢â€â‚¬Ã¢â€â‚¬ Topbar Ã¢â€â‚¬Ã¢â€â‚¬ */
-    .topbar { height:52px; min-height:52px; display:flex; align-items:center; gap:16px; padding:0 16px; background:var(--s1); border-bottom:1px solid var(--border); z-index:10; flex-shrink:0; }
-    .topbar-sep { width:1px; height:20px; background:var(--border2); }
-    .topbar-mun { font-size:12px; color:var(--text2); }
-    .topbar-spacer { flex:1; }
-    .topbar-user { display:flex; align-items:center; gap:10px; }
-    .user-avatar { width:30px; height:30px; border-radius:50%; background:var(--s3); border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--green); font-family:var(--font-display); }
-    .user-nome   { font-size:12px; font-weight:600; }
-    .user-perfil { font-size:11px; color:var(--text2); }
+    html, body { overflow: hidden; }
 
-    /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-       TELA 1 Ã¢â‚¬â€ LISTA DE PROCESSOS
-    Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-    #tela-lista { display:flex; flex:1; overflow:hidden; }
+    /* style.css deixa .modal-overlay sempre display:flex; ocultamos aqui */
+    .modal-overlay      { display: none; }
+    .modal-overlay.open { display: flex; }
 
-    .sidebar { width:300px; min-width:300px; display:flex; flex-direction:column; background:var(--s1); border-right:1px solid var(--border); overflow:hidden; transition:width .25s ease; }
-    .sidebar-head { padding:14px; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:10px; }
-    .sidebar-label { font-size:10px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:.08em; }
-    .sidebar-search { position:relative; }
-    .sidebar-search input { padding-left:28px; background:var(--s2); }
-    .sidebar-search-icon { position:absolute; left:9px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--muted); pointer-events:none; }
-    .sidebar-filters { display:flex; gap:5px; flex-wrap:wrap; }
-    .filter-chip { padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; cursor:pointer; border:1px solid var(--border2); background:transparent; color:var(--text2); font-family:var(--font-body); transition:all .15s; }
-    .filter-chip.on { background:var(--green-l); border-color:rgba(65,243,106,.3); color:var(--green); }
-    .sidebar-list { flex:1; overflow-y:auto; padding:8px; }
+    /* ── Topbar ── */
+    #topbar {
+      position: fixed; inset: 0 0 auto 0;
+      height: var(--topbar-h);
+      background: var(--s1); border-bottom: 1px solid var(--border2);
+      display: flex; align-items: center; padding: 0 20px; gap: 14px; z-index: 100;
+    }
+    .tb-brand  { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .tb-sub    { font-size: 9px; color: var(--text2); letter-spacing: .1em; text-transform: uppercase; margin-top: -2px; }
+    .tb-sep    { width: 1px; height: 22px; background: var(--border2); }
+    .tb-mun    { font-size: 11px; color: var(--text2); }
+    .tb-mun strong { color: var(--text); font-weight: 500; }
+    .tb-spacer { flex: 1; }
+    .tb-user   { display: flex; align-items: center; gap: 10px; }
+    .tb-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--green-l); border: 1px solid rgba(65,243,106,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: var(--green);
+    }
+    .tb-uname   { font-size: 12px; font-weight: 500; color: var(--text); }
+    .tb-uperfil { font-size: 10px; color: var(--green); text-transform: uppercase; letter-spacing: .06em; }
 
-    .proc-card { padding:12px; border-radius:var(--r); cursor:pointer; border:1px solid transparent; margin-bottom:4px; transition:all .15s; position:relative; }
-    .proc-card:hover { background:var(--s2); border-color:var(--border); }
-    .proc-card.ativo { background:var(--s2); border-color:rgba(65,243,106,.25); }
-    .proc-card-num { font-size:10px; font-weight:700; color:var(--text2); margin-bottom:3px; }
-    .proc-card-obj { font-size:12px; font-weight:500; color:var(--text); line-height:1.4; margin-bottom:8px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-    .proc-card-footer { display:flex; align-items:center; justify-content:space-between; }
-    .proc-dots { display:flex; gap:3px; }
-    .proc-dot { width:6px; height:6px; border-radius:50%; background:var(--s3); }
-    .proc-dot.done { background:var(--green); }
-    .proc-dot.cur  { background:var(--teal); }
-    .proc-aguardando { position:absolute; top:10px; right:10px; width:8px; height:8px; border-radius:50%; background:var(--green); animation:pulse-dot 1.5s ease-in-out infinite; }
-    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+    /* ── Shell ── */
+    #layout { display: flex; height: 100vh; padding-top: var(--topbar-h); }
 
-    .main-vazia { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--muted); }
-    .main-vazia-icon  { font-size:48px; opacity:.25; }
-    .main-vazia-title { font-size:15px; font-weight:600; color:var(--text2); }
-    .main-vazia-sub   { font-size:13px; text-align:center; max-width:260px; line-height:1.6; }
+    /* ── Sidebar ── */
+    #sidebar {
+      width: var(--sidebar-w); min-width: var(--sidebar-w);
+      background: var(--s1); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; height: 100%; overflow: hidden;
+    }
+    .sb-head { padding: 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .sb-lbl  {
+      font-size: 10px; font-weight: 700; color: var(--text2);
+      text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px;
+    }
+    .sb-search { position: relative; margin-top: 8px; }
+    .sb-search .si {
+      position: absolute; left: 10px; top: 50%;
+      transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none;
+    }
+    .sb-search .input { padding-left: 30px; }
+    .sb-filters { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+    .f-chip {
+      padding: 3px 9px; border-radius: 20px;
+      border: 1px solid var(--border2); background: transparent; color: var(--text2);
+      font-family: var(--font-body); font-size: 10px; cursor: pointer; transition: all .15s;
+    }
+    .f-chip:hover, .f-chip.on {
+      background: var(--green-l); border-color: rgba(65,243,106,.3); color: var(--green);
+    }
+    .sb-list { flex: 1; overflow-y: auto; padding: 8px; }
 
-    /* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-       TELA 2 Ã¢â‚¬â€ PROCESSO ABERTO
-    Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-    #tela-processo { display:none; flex:1; flex-direction:column; overflow:hidden; }
-    #tela-processo.on { display:flex; }
-
-    /* Header do processo */
-    .proc-topbar { height:52px; min-height:52px; display:flex; align-items:center; gap:12px; padding:0 20px; background:var(--s1); border-bottom:1px solid var(--border); flex-shrink:0; }
-    .proc-topbar-meta { flex:1; min-width:0; display:flex; align-items:center; gap:12px; }
-    .proc-topbar-num { font-size:11px; font-weight:700; color:var(--text2); background:var(--s2); padding:3px 8px; border-radius:var(--r-sm); white-space:nowrap; }
-    .proc-topbar-obj { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:500px; }
-    .proc-topbar-acts { display:flex; gap:8px; flex-shrink:0; align-items:center; }
-
-    /* Layout interno do processo */
-    .proc-body { flex:1; display:flex; overflow:hidden; }
-
-    /* Stepper vertical Ã¢â‚¬â€ sÃƒÂ³ admin vÃƒÂª */
-    .stepper { width:52px; min-width:52px; background:var(--s1); border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; padding:12px 0; gap:4px; overflow-y:auto; }
-    .stepper.oculto { display:none; }
-    .step-item { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; cursor:pointer; transition:all .15s; background:var(--s3); color:var(--text2); position:relative; flex-shrink:0; }
-    .step-item:hover { background:var(--s2); color:var(--text); }
-    .step-item.ativo { background:var(--green); color:#000; }
-    .step-item.concluido { background:var(--green-l); color:var(--green); }
-    .step-item[title]:hover::after { content:attr(title); position:absolute; left:44px; top:50%; transform:translateY(-50%); background:var(--s1); border:1px solid var(--border2); color:var(--text); font-size:11px; font-weight:500; white-space:nowrap; padding:4px 10px; border-radius:var(--r-sm); z-index:100; pointer-events:none; box-shadow:var(--shadow); }
-
-    /* Split: formulÃƒÂ¡rio + preview */
-    .split { flex:1; display:grid; grid-template-columns:1fr 1fr; overflow:hidden; }
-
-    /* Painel formulÃƒÂ¡rio */
-    .form-panel { display:flex; flex-direction:column; overflow:hidden; border-right:1px solid var(--border); }
-    .form-panel-head { padding:14px 20px; border-bottom:1px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:space-between; }
-    .form-panel-title { font-size:14px; font-weight:700; }
-    .form-panel-sub   { font-size:11px; color:var(--text2); margin-top:2px; }
-    .form-panel-body  { flex:1; overflow-y:auto; padding:20px; }
-    .form-panel-foot  { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; flex-shrink:0; background:var(--s1); }
-
-    /* Indicador nÃƒÂ£o salvo */
-    .unsaved { display:none; align-items:center; gap:6px; font-size:11px; color:var(--orange); }
-    .unsaved.on { display:flex; }
-    .unsaved-dot { width:6px; height:6px; border-radius:50%; background:var(--orange); animation:pulse-dot 1.2s ease-in-out infinite; }
-
-    /* Painel preview */
-    .preview-panel { display:flex; flex-direction:column; overflow:hidden; background:#EDEAE4; }
-    .preview-head { padding:8px 16px; background:var(--s1); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
-    .preview-head-label { font-size:11px; color:var(--text2); }
-    .preview-body { flex:1; overflow-y:auto; padding:16px; }
-    .pdf-doc { background:#fff; border-radius:4px; box-shadow:0 2px 12px rgba(0,0,0,.15); padding:40px 36px; min-height:600px; font-family:'Times New Roman',Times,serif; font-size:11.5px; line-height:1.7; color:#111; }
-    .pdf-header { text-align:center; border-bottom:2.5px solid #000; padding-bottom:16px; margin-bottom:20px; }
-    .pdf-brasao { font-size:30px; margin-bottom:6px; }
-    .pdf-pref   { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
-    .pdf-cnpj   { font-size:10px; color:#666; margin-top:2px; }
-    .pdf-titulo { margin-top:12px; font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; }
-    .pdf-num    { font-size:10px; color:#888; margin-top:4px; }
-    .pdf-section { margin-bottom:14px; }
-    .pdf-section-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#555; margin-bottom:6px; border-bottom:1px solid #eee; padding-bottom:4px; }
-    .pdf-field  { margin-bottom:6px; line-height:1.6; }
-    .pdf-field-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:#666; }
-    .pdf-justificativa { text-align:justify; text-indent:1.25cm; margin-top:8px; }
-    .pdf-footer { margin-top:40px; padding-top:12px; border-top:1px solid #ddd; display:flex; justify-content:space-between; font-size:9px; color:#aaa; }
-    .pdf-hash { font-family:monospace; font-size:8px; word-break:break-all; max-width:55%; text-align:right; }
-    .pdf-assinatura { margin-top:48px; text-align:center; }
-    .pdf-assinatura-linha { border-top:1px solid #000; display:inline-block; width:280px; padding-top:6px; }
-    .pdf-assinatura-nome  { font-weight:700; font-size:12px; }
-    .pdf-assinatura-cargo { font-size:10px; color:#555; }
-
-    /* Etapa concluÃƒÂ­da */
-    .etapa-concluida { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center; padding:40px; }
-    .etapa-concluida-icon  { font-size:48px; }
-    .etapa-concluida-title { font-size:18px; font-weight:700; color:var(--green); font-family:var(--font-display); }
-    .etapa-concluida-sub   { font-size:14px; color:var(--text2); line-height:1.6; max-width:380px; }
-
-    /* Etapa bloqueada */
-    .etapa-bloqueada { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; padding:40px; }
-    .etapa-bloqueada-icon  { font-size:40px; opacity:.4; }
-    .etapa-bloqueada-title { font-size:15px; font-weight:600; color:var(--text2); }
-    .etapa-bloqueada-sub   { font-size:13px; color:var(--muted); line-height:1.6; max-width:320px; }
+    /* Process card */
+    .p-card {
+      padding: 11px 13px; border-radius: var(--r);
+      border: 1px solid transparent; margin-bottom: 3px;
+      cursor: pointer; transition: all .12s; position: relative;
+    }
+    .p-card:hover { background: var(--s2); border-color: var(--border); }
+    .p-card.on    { background: var(--green-l); border-color: rgba(65,243,106,.2); }
+    .p-card.on::before {
+      content: ''; position: absolute;
+      left: 0; top: 8px; bottom: 8px;
+      width: 3px; background: var(--green); border-radius: 0 2px 2px 0;
+    }
+    .pc-num {
+      font-family: var(--mono); font-size: 10px; font-weight: 500;
+      color: var(--green); margin-bottom: 4px;
+    }
+    .p-card.on .pc-num { color: var(--teal); }
+    .pc-obj {
+      font-size: 12px; color: var(--text2); line-height: 1.4; margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .p-card.on .pc-obj { color: var(--text); }
+    .pc-foot { display: flex; align-items: center; justify-content: space-between; }
+    .pc-dots { display: flex; gap: 3px; }
+    .pd      { width: 6px; height: 6px; border-radius: 50%; background: var(--s3); }
+    .pd.done { background: var(--green); }
+    .pd.cur  { background: var(--gold);  }
 
     /* Skeleton */
-    .sk { background:var(--s2); border-radius:var(--r-sm); animation:sk-pulse 1.4s ease-in-out infinite; margin-bottom:8px; }
-    .sk-card { height:72px; }
-    @keyframes sk-pulse { 0%,100%{opacity:.4} 50%{opacity:.8} }
+    .sk {
+      background: linear-gradient(90deg, var(--s2) 25%, var(--s3) 50%, var(--s2) 75%);
+      background-size: 200% 100%; animation: sh 1.2s infinite; border-radius: var(--r);
+    }
+    @keyframes sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .sk-c { height: 72px; margin-bottom: 3px; }
+
+    /* ── Main ── */
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+
+    /* Empty state */
+    #empty-st {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+    }
+    .es-icon  { font-size: 40px; opacity: .2; }
+    .es-title { font-size: 15px; font-weight: 600; font-family: var(--font-display); color: var(--text2); }
+    .es-sub   { font-size: 12px; color: var(--muted); text-align: center; max-width: 240px; line-height: 1.5; }
+
+    /* Process view */
+    #pv    { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+    #pv.on { display: flex; }
+
+    .pv-head {
+      background: var(--s1); border-bottom: 1px solid var(--border2);
+      padding: 14px 20px; display: flex; align-items: flex-start; gap: 14px; flex-shrink: 0;
+    }
+    .pv-num {
+      font-family: var(--mono); font-size: 12px; color: var(--text2);
+      background: var(--s2); border: 1px solid var(--border);
+      padding: 4px 10px; border-radius: var(--r-sm); white-space: nowrap;
+    }
+    .pv-meta { flex: 1; min-width: 0; }
+    .pv-obj  { font-size: 14px; font-weight: 700; font-family: var(--font-display); color: var(--text); margin-bottom: 4px; }
+    .pv-info { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .pv-tipo { font-size: 11px; color: var(--text2); }
+    .pv-acts { display: flex; gap: 8px; flex-shrink: 0; }
+
+    /* Body */
+    .pv-body { flex: 1; display: flex; overflow: hidden; }
+
+    /* ── Etapas nav (stepper lateral) ── */
+    #etapas-nav {
+      width: var(--etapas-w); min-width: var(--etapas-w);
+      background: var(--s1); border-right: 1px solid var(--border);
+      overflow-y: auto; padding: 14px 0;
+    }
+    .en-lbl {
+      font-size: 10px; font-weight: 700; color: var(--text2);
+      text-transform: uppercase; letter-spacing: .1em; padding: 0 14px; margin-bottom: 10px;
+    }
+    .e-item {
+      display: flex; align-items: flex-start; gap: 9px;
+      padding: 9px 14px; cursor: pointer; transition: background .1s; position: relative;
+    }
+    .e-item + .e-item::before {
+      content: ''; position: absolute;
+      left: 25px; top: -9px; height: 9px; width: 2px; background: var(--border2);
+    }
+    .e-item:hover:not(.locked) { background: var(--s2); }
+    .e-item.cur { background: rgba(65,243,106,.07); }
+    .e-step {
+      width: 22px; height: 22px; min-width: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      background: var(--s3); color: var(--text2); position: relative; z-index: 1;
+    }
+    .e-item.done   .e-step { background: var(--green); color: #000; }
+    .e-item.cur    .e-step { background: var(--green); color: #000; box-shadow: 0 0 0 3px var(--green-l); }
+    .e-item.locked .e-step { background: var(--s2); color: var(--muted); }
+    .e-name { font-size: 11px; font-weight: 500; color: var(--text); line-height: 1.35; }
+    .e-item.locked .e-name { color: var(--muted); }
+    .e-item.cur    .e-name { color: var(--green); font-weight: 600; }
+    .e-item.done   .e-name { color: var(--text2); }
+    .e-who  { font-size: 10px; color: var(--muted); margin-top: 2px; }
+    .e-date { font-size: 10px; color: var(--green); margin-top: 2px; }
+
+    /* ── Etapa content ── */
+    #etapa-ct   { flex: 1; display: flex; overflow: hidden; }
+    .form-panel { flex: 1; overflow-y: auto; padding: 20px 24px; }
+
+    .fp-head {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; margin-bottom: 20px; gap: 12px;
+    }
+    .fp-title { font-size: 15px; font-weight: 700; font-family: var(--font-display); color: var(--text); }
+    .fp-sub   { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+    /* View toggle */
+    .view-tog {
+      display: flex; border: 1px solid var(--border2);
+      border-radius: var(--r-sm); overflow: hidden; flex-shrink: 0;
+    }
+    .vbtn {
+      padding: 5px 10px; font-family: var(--font-body); font-size: 11px; font-weight: 500;
+      border: none; background: transparent; color: var(--text2); cursor: pointer; transition: all .1s;
+    }
+    .vbtn + .vbtn { border-left: 1px solid var(--border2); }
+    .vbtn.on      { background: var(--green); color: #000; font-weight: 700; }
+    .vbtn:not(.on):hover { background: var(--s3); }
+
+    /* Etapa bloqueada */
+    .e-blocked { text-align: center; padding: 56px 24px; }
+    .e-blocked .icon { font-size: 36px; margin-bottom: 10px; opacity: .3; }
+    .e-blocked p     { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
+    .e-blocked small { font-size: 11px; color: var(--muted); }
+
+    /* Etapa concluída banner */
+    .done-banner {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px; margin-bottom: 16px;
+      background: var(--green-l); border: 1px solid rgba(65,243,106,.2);
+      border-radius: var(--r-sm); font-size: 12px; color: var(--green);
+    }
+
+    /* Ações do form */
+    .form-acts {
+      display: flex; justify-content: flex-end; gap: 8px;
+      padding-top: 16px; border-top: 1px solid var(--border); margin-top: 20px;
+    }
+
+    /* ── Preview panel ── */
+    #preview-panel {
+      width: 44%; min-width: 300px;
+      background: var(--s2); border-left: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    #preview-panel.hidden { display: none; }
+    .prev-toolbar {
+      padding: 9px 14px; background: var(--s1); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .prev-lbl { font-size: 11px; color: var(--text2); }
+    .prev-body { flex: 1; overflow-y: auto; padding: 14px; }
+
+    /* PDF mock — fundo branco porque simula papel impresso */
+    .pdf-doc {
+      background: #fff; border-radius: var(--r-sm); box-shadow: var(--shadow);
+      padding: 36px 32px; min-height: 500px;
+      font-size: 11.5px; line-height: 1.65; color: #111;
+    }
+    .pdf-head {
+      text-align: center; border-bottom: 2px solid #0d1b2a;
+      padding-bottom: 14px; margin-bottom: 18px;
+    }
+    .pdf-brasao { font-size: 28px; margin-bottom: 4px; }
+    .pdf-pref   { font-size: 12px; font-weight: 700; color: #0d1b2a; }
+    .pdf-sec    { font-size: 10px; color: #64748b; }
+    .pdf-dtitle { margin-top: 10px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #0d1b2a; }
+    .pdf-dnum   { font-family: var(--mono); font-size: 10px; color: #94a3b8; margin-top: 3px; }
+    .pdf-body p { margin-bottom: 8px; }
+    .pdf-fl     { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: #64748b; }
+    .pdf-foot   {
+      margin-top: 28px; padding-top: 10px; border-top: 1px solid #e2e8f0;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      font-size: 9px; color: #94a3b8;
+    }
+    .pdf-hash { font-family: var(--mono); font-size: 8px; word-break: break-all; max-width: 55%; text-align: right; }
   </style>
 </head>
 <body>
-<div class="app-shell">
 
-  <!-- Topbar global -->
-  <header class="topbar">
-    <div class="brand-icon" style="width:28px;height:28px;font-size:12px">C</div>
-    <div><div class="brand-name" style="font-size:14px">Centurion</div></div>
-    <div class="topbar-sep"></div>
-    <span class="topbar-mun">MunicÃƒÂ­pio: <strong id="tb-municipio">Ã¢â‚¬â€</strong></span>
-    <div class="topbar-spacer"></div>
-    <div class="topbar-user">
-      <div class="user-avatar" id="tb-avatar">Ã¢â‚¬â€</div>
-      <div>
-        <div class="user-nome"   id="tb-nome">Carregando...</div>
-        <div class="user-perfil" id="tb-perfil">Ã¢â‚¬â€</div>
-      </div>
-      <button class="btn btn-ghost btn-sm" id="btn-admin" style="display:none">Ã¢Å¡â„¢ Admin</button>
-      <button class="btn btn-ghost btn-sm" id="btn-logout">Sair</button>
+<!-- ── TOPBAR ── -->
+<header id="topbar">
+  <a href="#" class="tb-brand">
+    <div class="brand-icon">C</div>
+    <div>
+      <div class="brand-name">CENTURION</div>
+      <div class="tb-sub">Gestão Licitatória</div>
     </div>
-  </header>
-
-  <!-- Ã¢â€¢ÂÃ¢â€¢Â TELA 1: LISTA Ã¢â€¢ÂÃ¢â€¢Â -->
-  <div id="tela-lista">
-    <aside class="sidebar">
-      <div class="sidebar-head">
-        <div class="sidebar-label">Processos LicitatÃƒÂ³rios</div>
-        <button class="btn btn-primary btn-sm" id="btn-novo" style="width:100%;justify-content:center">+ Novo Processo</button>
-        <div class="sidebar-search">
-          <span class="sidebar-search-icon">Ã°Å¸â€Â</span>
-          <input class="input" type="text" id="sb-busca" placeholder="NÃƒÂºmero ou objeto...">
-        </div>
-        <div class="sidebar-filters">
-          <button class="filter-chip on" data-filtro="todos">Todos</button>
-          <button class="filter-chip" data-filtro="andamento">Andamento</button>
-          <button class="filter-chip" data-filtro="concluido">ConcluÃƒÂ­dos</button>
-          <button class="filter-chip" data-filtro="rascunho">Rascunho</button>
-        </div>
-      </div>
-      <div class="sidebar-list" id="sb-lista"></div>
-    </aside>
-
-    <div class="main-vazia">
-      <div class="main-vazia-icon">Ã°Å¸â€œâ€¹</div>
-      <div class="main-vazia-title">Selecione um processo</div>
-      <div class="main-vazia-sub">Escolha um processo licitatÃƒÂ³rio na lista ao lado para comeÃƒÂ§ar.</div>
+  </a>
+  <div class="tb-sep"></div>
+  <div class="tb-mun">Município: <strong id="tb-mun">—</strong></div>
+  <div class="tb-spacer"></div>
+  <div class="tb-user">
+    <div class="tb-avatar" id="tb-avatar">—</div>
+    <div>
+      <div class="tb-uname"   id="tb-nome">Carregando...</div>
+      <div class="tb-uperfil" id="tb-perfil">—</div>
     </div>
+    <button class="btn btn-icon btn-ghost" id="btn-logout" title="Sair">↩</button>
   </div>
+</header>
 
-  <!-- Ã¢â€¢ÂÃ¢â€¢Â TELA 2: PROCESSO ABERTO Ã¢â€¢ÂÃ¢â€¢Â -->
-  <div id="tela-processo">
+<!-- ── LAYOUT ── -->
+<div id="layout">
 
-    <!-- Header do processo -->
-    <div class="proc-topbar">
-      <button class="btn btn-ghost btn-sm" id="btn-voltar">Ã¢â€ Â Voltar</button>
-      <div class="topbar-sep"></div>
-      <div class="proc-topbar-meta">
-        <span class="proc-topbar-num" id="pv-num">Ã¢â‚¬â€</span>
-        <span class="proc-topbar-obj" id="pv-obj">Ã¢â‚¬â€</span>
-        <span id="pv-badge"></span>
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sb-head">
+      <div class="sb-lbl">Processos Licitatórios</div>
+      <button class="btn btn-primary w-full" id="btn-novo">+ Novo Processo</button>
+      <div class="sb-search mt-8">
+        <span class="si">🔍</span>
+        <input type="text" id="sb-search" class="input" placeholder="Número ou objeto..." />
       </div>
-      <div class="proc-topbar-acts">
-        <div class="unsaved" id="unsaved-indicator">
-          <div class="unsaved-dot"></div>
-          <span>NÃƒÂ£o salvo</span>
-        </div>
+      <div class="sb-filters mt-8">
+        <button class="f-chip on" data-f="todos">Todos</button>
+        <button class="f-chip" data-f="andamento">Em andamento</button>
+        <button class="f-chip" data-f="aguardando">Aguardando</button>
+        <button class="f-chip" data-f="concluido">Concluídos</button>
       </div>
     </div>
+    <div class="sb-list" id="sb-list"></div>
+  </aside>
 
-    <div class="proc-body">
+  <!-- MAIN -->
+  <main id="main">
 
-      <!-- Stepper (sÃƒÂ³ admin) -->
-      <div class="stepper oculto" id="stepper"></div>
+    <div id="empty-st">
+      <div class="es-icon">📋</div>
+      <div class="es-title">Selecione um processo</div>
+      <div class="es-sub">Escolha um processo licitatório na lista ao lado para ver suas etapas e documentos.</div>
+    </div>
 
-      <!-- Split -->
-      <div class="split">
+    <div id="pv">
 
-        <!-- FormulÃƒÂ¡rio -->
-        <div class="form-panel">
-          <div class="form-panel-head">
-            <div>
-              <div class="form-panel-title" id="fp-titulo">Ã¢â‚¬â€</div>
-              <div class="form-panel-sub"   id="fp-sub">Ã¢â‚¬â€</div>
+      <div class="pv-head">
+        <div class="pv-num" id="pv-num">—</div>
+        <div class="pv-meta">
+          <div class="pv-obj"  id="pv-obj">—</div>
+          <div class="pv-info">
+            <span class="pv-tipo" id="pv-tipo">—</span>
+            <span id="pv-badge"></span>
+          </div>
+        </div>
+        <div class="pv-acts">
+          <button class="btn btn-ghost btn-sm"     id="btn-hist">📜 Histórico</button>
+          <button class="btn btn-secondary btn-sm" id="btn-dossie">📄 Dossiê</button>
+        </div>
+      </div>
+
+      <div class="pv-body">
+
+        <nav id="etapas-nav"><div class="en-lbl">Etapas</div></nav>
+
+        <div id="etapa-ct">
+
+          <div class="form-panel" id="form-panel">
+            <div class="fp-head">
+              <div>
+                <div class="fp-title" id="fp-title">—</div>
+                <div class="fp-sub"   id="fp-sub">—</div>
+              </div>
+              <div class="view-tog">
+                <button class="vbtn on" id="vbtn-form">✏ Form</button>
+                <button class="vbtn"    id="vbtn-prev">📄 Preview</button>
+                <button class="vbtn"    id="vbtn-split">⊟ Split</button>
+              </div>
+            </div>
+            <div id="form-ct"></div>
+          </div>
+
+          <div id="preview-panel" class="hidden">
+            <div class="prev-toolbar">
+              <span class="prev-lbl" id="prev-lbl">Preview do Documento</span>
+              <button class="btn btn-ghost btn-sm" id="btn-dl-pdf">⬇ PDF</button>
+            </div>
+            <div class="prev-body">
+              <div class="pdf-doc" id="pdf-doc"></div>
             </div>
           </div>
-          <div class="form-panel-body" id="form-ct"></div>
-          <div class="form-panel-foot" id="form-foot" style="display:none">
-            <button class="btn btn-ghost btn-sm" id="btn-rascunho">Ã°Å¸â€™Â¾ Salvar rascunho</button>
-            <button class="btn btn-primary"      id="btn-concluir">Ã¢Å“â€¦ Concluir etapa</button>
-          </div>
-        </div>
 
-        <!-- Preview -->
-        <div class="preview-panel">
-          <div class="preview-head">
-            <span class="preview-head-label">PrÃƒÂ©-visualizaÃƒÂ§ÃƒÂ£o do documento</span>
-            <button class="btn btn-ghost btn-sm" id="btn-pdf">Ã¢Â¬â€¡ PDF</button>
-          </div>
-          <div class="preview-body">
-            <div class="pdf-doc" id="pdf-doc"></div>
-          </div>
         </div>
-
       </div>
     </div>
-  </div>
-
+  </main>
 </div>
 
-<!-- Modal: Novo Processo -->
-<div class="modal-overlay" id="modal-novo" style="display:none">
+<!-- ── MODAL: Novo Processo ── -->
+<div class="modal-overlay" id="modal-novo">
   <div class="modal">
     <div class="modal-header">
       <div>
-        <div class="modal-title">Novo Processo LicitatÃƒÂ³rio</div>
-        <div class="modal-subtitle">Preencha os dados bÃƒÂ¡sicos para iniciar.</div>
+        <div class="modal-title">Novo Processo Licitatório</div>
+        <div class="modal-subtitle">Preencha os dados iniciais para abrir o processo.</div>
       </div>
-      <button class="btn btn-icon btn-ghost" id="modal-fechar">Ã¢Å“â€¢</button>
+      <button class="btn btn-icon btn-ghost" id="mnovo-close">✕</button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
         <div class="field col-full">
-          <label class="label required">Objeto da contrataÃƒÂ§ÃƒÂ£o</label>
-          <input class="input" type="text" id="np-objeto" placeholder="Ex: AquisiÃƒÂ§ÃƒÂ£o de medicamentos para a rede municipal">
+          <label class="label required" for="np-obj">Objeto</label>
+          <input type="text" id="np-obj" class="input" placeholder="Ex: Aquisição de medicamentos para a rede municipal" />
         </div>
         <div class="field">
-          <label class="label required">Tipo de contrataÃƒÂ§ÃƒÂ£o</label>
-          <select class="select" id="np-tipo">
+          <label class="label required" for="np-tipo">Modalidade</label>
+          <select id="np-tipo" class="select">
             <option value="">Selecione...</option>
-            <option value="AquisiÃƒÂ§ÃƒÂ£o de Bens">AquisiÃƒÂ§ÃƒÂ£o de Bens</option>
-            <option value="ServiÃƒÂ§os Comuns">ServiÃƒÂ§os Comuns</option>
-            <option value="Obras e Engenharia">Obras e Engenharia</option>
-            <option value="LocaÃƒÂ§ÃƒÂ£o">LocaÃƒÂ§ÃƒÂ£o</option>
-            <option value="Dispensa de LicitaÃƒÂ§ÃƒÂ£o">Dispensa de LicitaÃƒÂ§ÃƒÂ£o</option>
-            <option value="Inexigibilidade">Inexigibilidade</option>
+            <option>Pregão Eletrônico</option>
+            <option>Pregão Presencial</option>
+            <option>Concorrência</option>
+            <option>Tomada de Preços</option>
+            <option>Convite</option>
+            <option>Dispensa de Licitação</option>
+            <option>Inexigibilidade</option>
+            <option>RDC</option>
           </select>
         </div>
         <div class="field">
-          <label class="label required">Setor requisitante</label>
-          <input class="input" type="text" id="np-setor" placeholder="Ex: Secretaria Municipal de SaÃƒÂºde">
+          <label class="label required" for="np-sec">Secretaria Requisitante</label>
+          <input type="text" id="np-sec" class="input" placeholder="Ex: Secretaria Municipal de Saúde" />
+        </div>
+        <div class="field">
+          <label class="label" for="np-val">Valor Estimado (R$)</label>
+          <input type="text" id="np-val" class="input" placeholder="0,00" />
         </div>
         <div class="field col-full">
-          <label class="label">Valor estimado (R$)</label>
-          <input class="input" type="text" id="np-valor" placeholder="0,00">
+          <label class="label" for="np-obj-det">Descrição Complementar</label>
+          <textarea id="np-obj-det" placeholder="Detalhes adicionais sobre o objeto..."></textarea>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-ghost" id="modal-cancelar">Cancelar</button>
-      <button class="btn btn-primary" id="modal-criar">Criar Processo</button>
+      <button class="btn btn-ghost"   id="mnovo-cancel">Cancelar</button>
+      <button class="btn btn-primary" id="mnovo-salvar">Criar Processo</button>
     </div>
   </div>
 </div>
 
-<div id="toast-container"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 <script type="module">
-import { sb }                          from '../src/services/supabase.js';
-import { iniciarSessao, logout, isAdmin } from '../src/services/auth.js';
-import { state, setState }             from '../src/services/state.js';
-import { toast, confirmar }            from '../src/utils/ui.js';
-import { esc, data, dataExtenso, moeda } from '../src/utils/format.js';
+import { sb as supabase }                               from '../src/services/supabase.js';
+import { iniciarSessao as getSession, logout }           from '../src/services/auth.js';
+import { toast, confirmar }                             from '../src/utils/ui.js';
+import { data as formatData, moeda as formatMoeda, esc } from '../src/utils/format.js';
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   CONFIGURAÃƒâ€¡ÃƒÆ’O
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
+/* ── ETAPAS CONFIG ── */
 const ETAPAS = [
-  { n:1,  id:'DFD',        nome:'DFD',               label:'Documento de FormalizaÃƒÂ§ÃƒÂ£o de Demanda',      perfil:'requisitante'  },
-  { n:2,  id:'Protocolo',  nome:'Protocolo',          label:'Registro e Protocolo',                      perfil:'protocolo'     },
-  { n:3,  id:'ETP',        nome:'ETP + TR',           label:'Estudo TÃƒÂ©cnico Preliminar + Termo de Ref.', perfil:'requisitante'  },
-  { n:4,  id:'PP',         nome:'Pesquisa de PreÃƒÂ§os', label:'Pesquisa de PreÃƒÂ§os de Mercado',             perfil:'compras'       },
-  { n:5,  id:'Dotacao',    nome:'DotaÃƒÂ§ÃƒÂ£o OrÃƒÂ§.',       label:'DotaÃƒÂ§ÃƒÂ£o OrÃƒÂ§amentÃƒÂ¡ria',                      perfil:'contabilidade' },
-  { n:6,  id:'Autorizacao',nome:'AutorizaÃƒÂ§ÃƒÂ£o',        label:'AutorizaÃƒÂ§ÃƒÂ£o do Gestor',                     perfil:'secretaria'    },
-  { n:7,  id:'Minuta',     nome:'Minuta Edital',      label:'ElaboraÃƒÂ§ÃƒÂ£o da Minuta do Edital',            perfil:'licitacao'     },
-  { n:8,  id:'Parecer',    nome:'Parecer',            label:'Parecer JurÃƒÂ­dico',                          perfil:'juridico'      },
-  { n:9,  id:'Edital',     nome:'Edital Final',       label:'Edital Final e AprovaÃƒÂ§ÃƒÂ£o',                  perfil:'licitacao'     },
-  { n:10, id:'Publicacao', nome:'PublicaÃƒÂ§ÃƒÂ£o',         label:'PublicaÃƒÂ§ÃƒÂ£o e Abertura',                     perfil:'licitacao'     },
+  { n:1,  nome:'DFD',                label:'Documento de Formalização de Demanda',     perfil:'requisitante'  },
+  { n:2,  nome:'Protocolo',          label:'Registro de Protocolo',                    perfil:'protocolo'     },
+  { n:3,  nome:'ETP + TR',           label:'Estudo Técnico Preliminar + Termo de Ref.',perfil:'requisitante'  },
+  { n:4,  nome:'Pesquisa de Preços', label:'Pesquisa de Preços de Mercado',            perfil:'compras'       },
+  { n:5,  nome:'Dotação',            label:'Dotação Orçamentária',                     perfil:'contabilidade' },
+  { n:6,  nome:'Autorização',        label:'Autorização da Secretaria',                perfil:'secretaria'    },
+  { n:7,  nome:'Minuta do Edital',   label:'Elaboração da Minuta do Edital',           perfil:'licitacao'     },
+  { n:8,  nome:'Parecer Jurídico',   label:'Parecer Jurídico',                         perfil:'juridico'      },
+  { n:9,  nome:'Edital Final',       label:'Edital Final e Aprovação',                 perfil:'licitacao'     },
+  { n:10, nome:'Publicação',         label:'Publicação e Abertura',                    perfil:'licitacao'     },
 ];
 
-const PERFIL_LABEL = { requisitante:'Requisitante', protocolo:'Protocolo', compras:'Compras', contabilidade:'Contabilidade', secretaria:'Secretaria', licitacao:'LicitaÃƒÂ§ÃƒÂ£o', juridico:'JurÃƒÂ­dico', admin:'Administrador' };
-const STATUS_BADGE = { rascunho:'badge badge-gray', andamento:'badge badge-blue', aguardando:'badge badge-gold', concluido:'badge badge-green', suspenso:'badge badge-red' };
-const STATUS_LABEL = { rascunho:'Rascunho', andamento:'Em andamento', aguardando:'Aguardando', concluido:'ConcluÃƒÂ­do', suspenso:'Suspenso' };
+const PERFIL_LABEL = {
+  requisitante:'Requisitante', protocolo:'Protocolo',
+  compras:'Compras',           contabilidade:'Contabilidade',
+  secretaria:'Secretaria',     licitacao:'Licitação',
+  juridico:'Jurídico',
+};
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   ESTADO LOCAL
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-let processos = [], docsAbertos = [], etapaAtual = null;
-let filtroAtivo = 'todos', buscaQuery = '';
-let naoSalvo = false;
-let autoSaveTimer = null;
+/* Mapeamento para classes de badge do style.css */
+const STATUS_BADGE = {
+  rascunho:'badge-gray', andamento:'badge-blue',
+  aguardando:'badge-gold', concluido:'badge-green', suspenso:'badge-red',
+};
+const STATUS_LABEL = {
+  rascunho:'Rascunho', andamento:'Em andamento',
+  aguardando:'Aguardando', concluido:'Concluído', suspenso:'Suspenso',
+};
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   BOOT
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-async function init() {
-  const usuario = await iniciarSessao();
-  if (!usuario) return;
+/* ── STATE ── */
+let session      = null;
+let processos    = [];
+let procAtivo    = null;
+let etapasAtivas = [];
+let etapaAtiva   = null;
+let filtroStatus = 'todos';
+let searchQ      = '';
 
-  const nome = usuario.nome || usuario.email || 'UsuÃƒÂ¡rio';
-  const ini  = nome.trim().split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
-  document.getElementById('tb-avatar').textContent    = ini;
-  document.getElementById('tb-nome').textContent      = nome;
-  document.getElementById('tb-perfil').textContent    = PERFIL_LABEL[usuario.perfil] || usuario.perfil || 'Ã¢â‚¬â€';
-  document.getElementById('tb-municipio').textContent = usuario.prefeituras?.municipio || 'Ã¢â‚¬â€';
+/* ── BOOT ── */
 
-  if (isAdmin()) {
-    document.getElementById('btn-admin').style.display = '';
+/* Calcula etapa atual com base nos documentos concluídos */
+function calcularEtapaAtual(docs) {
+  for (let i = 1; i <= 10; i++) {
+    const doc = docs.find(d => d.tipo === ETAPAS[i-1]?.id);
+    if (!doc || doc.status !== 'concluido') return i;
   }
+  return 10;
+}
 
-  await carregarProcessos();
+async function init() {
+  session = await getSession();
+  if (!session) { window.location.href = '/login.html'; return; }
+  renderUser();
+  await loadProcessos();
   bindListeners();
 }
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   LISTA DE PROCESSOS
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-async function carregarProcessos() {
-  const lista = document.getElementById('sb-lista');
-  lista.innerHTML = Array(4).fill('<div class="sk sk-card"></div>').join('');
+function renderUser() {
+  
+  const nome     = session.nome || session.email || 'Usuário';
+  const initials = nome.trim().split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
+  document.getElementById('tb-avatar').textContent  = initials;
+  document.getElementById('tb-nome').textContent    = nome;
+  document.getElementById('tb-perfil').textContent  = PERFIL_LABEL[session.perfil] || session.perfil || '—';
+  document.getElementById('tb-mun').textContent     = session.prefeituras?.nome || '—';
+}
 
-  const { data: rows, error } = await sb
+/* ── PROCESSOS ── */
+async function loadProcessos() {
+  const list = document.getElementById('sb-list');
+  list.innerHTML = Array(5).fill('<div class="sk sk-c"></div>').join('');
+
+  const { data, error } = await supabase
     .from('processos')
-    .select('*, documentos(tipo, status)')
-    .eq('prefeitura_id', state.prefeitura?.id)
-    .order('created_at', { ascending: false })
-    .range(0, 49);
+    .select('*, etapas(numero_etapa, status)')
+    .order('created_at', { ascending: false });
 
-  if (error) { toast('Erro ao carregar processos.', 'error'); return; }
-  processos = rows || [];
+  if (error) {
+    toast('Erro ao carregar processos.', 'error');
+    list.innerHTML = `<div class="text-muted text-sm" style="padding:20px;text-align:center">Erro ao carregar</div>`;
+    return;
+  }
+  processos = data || [];
   renderSidebar();
 }
 
 function renderSidebar() {
-  const lista = document.getElementById('sb-lista');
-  const usuario = state.usuario;
+  const list = document.getElementById('sb-list');
   let rows = processos;
-
-  if (filtroAtivo !== 'todos') rows = rows.filter(p => p.status === filtroAtivo);
-  if (buscaQuery) {
-    const q = buscaQuery.toLowerCase();
+  if (filtroStatus !== 'todos') rows = rows.filter(p => p.status === filtroStatus);
+  if (searchQ) {
+    const q = searchQ.toLowerCase();
     rows = rows.filter(p => p.numero?.toLowerCase().includes(q) || p.objeto?.toLowerCase().includes(q));
   }
-
   if (!rows.length) {
-    lista.innerHTML = '<div style="padding:24px;font-size:12px;color:var(--muted);text-align:center">Nenhum processo encontrado.</div>';
+    list.innerHTML = `<div class="text-muted text-sm" style="padding:24px;text-align:center">Nenhum processo encontrado</div>`;
     return;
   }
-
-  // Etapas que este perfil ÃƒÂ© responsÃƒÂ¡vel
-  const minhasEtapas = ETAPAS.filter(e => e.perfil === usuario?.perfil).map(e => e.id);
-
-  lista.innerHTML = rows.map(p => {
-    const docs  = p.documentos || [];
-    const dots  = ETAPAS.map(e => {
-      const doc = docs.find(d => d.tipo === e.id);
-      const cls = doc?.status === 'concluido' ? 'done' : (p.etapa_atual === e.n ? 'cur' : '');
-      return `<div class="proc-dot ${cls}"></div>`;
+  list.innerHTML = rows.map(p => {
+    const etapas = p.etapas || [];
+    const dots   = Array(10).fill(0).map((_,i) => {
+      const e = etapas.find(x => x.numero_etapa === i+1);
+      const c = !e ? '' : e.status === 'concluida' ? 'done' : e.status === 'ativa' ? 'cur' : '';
+      return `<div class="pd ${c}"></div>`;
     }).join('');
-
-    // Aguardando este usuÃƒÂ¡rio?
-    const etapaAtualCfg = ETAPAS.find(e => e.n === p.etapa_atual);
-    const aguardandoEu  = !isAdmin() && etapaAtualCfg && minhasEtapas.includes(etapaAtualCfg.id);
-    const docAtual      = docs.find(d => d.tipo === etapaAtualCfg?.id);
-    const aguardandoEuReal = aguardandoEu && (!docAtual || docAtual.status === 'rascunho');
-
-    const bc = STATUS_BADGE[p.status] || 'badge badge-gray';
+    const bc = STATUS_BADGE[p.status] || 'badge-gray';
     const bl = STATUS_LABEL[p.status] || p.status;
-
     return `
-      <div class="proc-card" data-id="${p.id}">
-        ${aguardandoEuReal ? '<div class="proc-aguardando" title="Aguardando sua aÃƒÂ§ÃƒÂ£o"></div>' : ''}
-        <div class="proc-card-num">${esc(p.numero_protocolo || 'Ã¢â‚¬â€')}</div>
-        <div class="proc-card-obj">${esc(p.objeto || 'Ã¢â‚¬â€')}</div>
-        <div class="proc-card-footer">
-          <div class="proc-dots">${dots}</div>
-          <span class="${bc}" style="font-size:10px">${bl}</span>
+      <div class="p-card ${procAtivo?.id===p.id?'on':''}" data-id="${p.id}">
+        <div class="pc-num">${esc(p.numero||'—')}</div>
+        <div class="pc-obj">${esc(p.objeto||'—')}</div>
+        <div class="pc-foot">
+          <div class="pc-dots">${dots}</div>
+          <span class="badge ${bc}">${bl}</span>
         </div>
       </div>`;
   }).join('');
 
-  lista.querySelectorAll('.proc-card').forEach(card => {
+  list.querySelectorAll('.p-card').forEach(card => {
     card.addEventListener('click', () => {
       const p = processos.find(x => x.id === card.dataset.id);
-      if (p) abrirProcesso(p);
+      if (p) selectProcesso(p);
     });
   });
 }
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   ABRIR PROCESSO
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-async function abrirProcesso(proc) {
-  setState('processoAtual', proc);
-  etapaAtual = null;
+/* ── PROCESSO ── */
+async function selectProcesso(p) {
+  procAtivo  = p;
+  etapaAtiva = null;
+  renderSidebar();
 
-  // Troca de tela
-  document.getElementById('tela-lista').style.display    = 'none';
-  document.getElementById('tela-processo').classList.add('on');
+  document.getElementById('empty-st').style.display = 'none';
+  document.getElementById('pv').classList.add('on');
 
-  // Popula header
-  document.getElementById('pv-num').textContent = proc.numero || 'Ã¢â‚¬â€';
-  document.getElementById('pv-obj').textContent = proc.objeto || 'Ã¢â‚¬â€';
-  const bc = STATUS_BADGE[proc.status] || 'badge badge-gray';
-  const bl = STATUS_LABEL[proc.status] || proc.status;
-  document.getElementById('pv-badge').innerHTML = `<span class="${bc}" style="font-size:11px">${bl}</span>`;
+  document.getElementById('pv-num').textContent  = p.numero || '—';
+  document.getElementById('pv-obj').textContent  = p.objeto || '—';
+  document.getElementById('pv-tipo').textContent = p.tipo   || '—';
+  const bc = STATUS_BADGE[p.status] || 'badge-gray';
+  const bl = STATUS_LABEL[p.status] || p.status;
+  document.getElementById('pv-badge').innerHTML = `<span class="badge ${bc}">${bl}</span>`;
 
-  // Busca documentos
-  const { data: docs } = await sb.from('documentos').select('*').eq('processo_id', proc.id);
-  docsAbertos = docs || [];
-
-  // Stepper Ã¢â‚¬â€ sÃƒÂ³ admin
-  const admin = isAdmin();
-  const stepper = document.getElementById('stepper');
-  if (admin) {
-    stepper.classList.remove('oculto');
-    renderStepper();
-  } else {
-    stepper.classList.add('oculto');
-  }
-
-  // Carrega etapa correta
-  const usuario = state.usuario;
-  if (admin) {
-    // Admin vai para a etapa atual do processo
-    carregarEtapa(proc.etapa_atual || 1);
-  } else {
-    // UsuÃƒÂ¡rio vai para a etapa que ÃƒÂ© dele
-    const minhaEtapa = ETAPAS.find(e => e.perfil === usuario?.perfil);
-    if (minhaEtapa) {
-      carregarEtapa(minhaEtapa.n);
-    } else {
-      document.getElementById('form-ct').innerHTML = `
-        <div class="etapa-bloqueada">
-          <div class="etapa-bloqueada-icon">Ã°Å¸â€â€™</div>
-          <div class="etapa-bloqueada-title">Sem etapas atribuÃƒÂ­das</div>
-          <div class="etapa-bloqueada-sub">Seu perfil nÃƒÂ£o possui etapas neste processo.</div>
-        </div>`;
-    }
-  }
+  await loadEtapas(p.id);
 }
 
-function voltarParaLista() {
-  // Confirma se tem alteraÃƒÂ§ÃƒÂµes nÃƒÂ£o salvas
-  if (naoSalvo) {
-    if (!confirm('HÃƒÂ¡ alteraÃƒÂ§ÃƒÂµes nÃƒÂ£o salvas. Deseja sair mesmo assim?')) return;
-  }
-  document.getElementById('tela-processo').classList.remove('on');
-  document.getElementById('tela-lista').style.display = 'flex';
-  setState('processoAtual', null);
-  naoSalvo = false;
-  document.getElementById('unsaved-indicator').classList.remove('on');
-  carregarProcessos(); // Atualiza a lista
+/* ── ETAPAS ── */
+async function loadEtapas(processoId) {
+  const { data, error } = await supabase
+    .from('etapas').select('*')
+    .eq('processo_id', processoId).order('numero_etapa');
+
+  if (error) { toast('Erro ao carregar etapas.', 'error'); return; }
+  etapasAtivas = data || [];
+  renderEtapasNav();
+
+  const ativa = etapasAtivas.find(e => e.status === 'ativa');
+  if (ativa)               selectEtapa(ativa.numero_etapa);
+  else if (etapasAtivas.length) selectEtapa(etapasAtivas[0].numero_etapa);
+  else showEtapaPlaceholder();
 }
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   STEPPER (admin)
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-function renderStepper() {
-  const proc    = state.processoAtual;
-  const stepper = document.getElementById('stepper');
-  stepper.innerHTML = '';
-
+function renderEtapasNav() {
+  const nav = document.getElementById('etapas-nav');
+  nav.innerHTML = '<div class="en-lbl">Etapas</div>';
   ETAPAS.forEach(cfg => {
-    const doc       = docsAbertos.find(d => d.tipo === cfg.id);
-    const concluida = doc?.status === 'concluido';
-    const ativa     = cfg.n === (etapaAtual?.n || proc?.etapa_atual);
-    const cls       = ativa ? 'ativo' : (concluida ? 'concluido' : '');
-    const num       = concluida ? 'Ã¢Å“â€œ' : cfg.n;
-
-    const el = document.createElement('div');
-    el.className = `step-item ${cls}`;
-    el.textContent = num;
-    el.title = cfg.nome;
-    el.addEventListener('click', () => carregarEtapa(cfg.n));
-    stepper.appendChild(el);
+    const e     = etapasAtivas.find(x => x.numero_etapa === cfg.n);
+    const st    = e?.status || 'bloqueada';
+    const isCur = etapaAtiva?.numero_etapa === cfg.n;
+    let cls = 'e-item';
+    if (isCur)             cls += ' cur';
+    else if (st==='concluida') cls += ' done';
+    else if (!e)           cls += ' locked';
+    const step = st==='concluida' ? '✓' : cfg.n;
+    const dStr = e?.data_conclusao ? `<div class="e-date">${formatData(e.data_conclusao)}</div>` : '';
+    nav.innerHTML += `
+      <div class="${cls}" data-n="${cfg.n}">
+        <div class="e-step">${step}</div>
+        <div>
+          <div class="e-name">${esc(cfg.nome)}</div>
+          <div class="e-who">${PERFIL_LABEL[cfg.perfil]}</div>
+          ${dStr}
+        </div>
+      </div>`;
+  });
+  nav.querySelectorAll('.e-item:not(.locked)').forEach(el => {
+    el.addEventListener('click', () => selectEtapa(parseInt(el.dataset.n)));
   });
 }
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   CARREGAR ETAPA
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-function carregarEtapa(n) {
-  const cfg = ETAPAS.find(e => e.n === n);
+function selectEtapa(n) {
+  etapaAtiva = etapasAtivas.find(e => e.numero_etapa === n) || null;
+  const cfg  = ETAPAS.find(e => e.n === n);
   if (!cfg) return;
-  etapaAtual = cfg;
+  renderEtapasNav();
 
-  if (isAdmin()) renderStepper();
+  document.getElementById('fp-title').textContent = `${cfg.n}. ${cfg.label}`;
+  document.getElementById('fp-sub').textContent   = `Responsável: ${PERFIL_LABEL[cfg.perfil]}`;
+  document.getElementById('prev-lbl').textContent = `Preview — ${cfg.nome}`;
 
-  document.getElementById('fp-titulo').textContent = `${cfg.n}. ${cfg.label}`;
-  document.getElementById('fp-sub').textContent    = `ResponsÃƒÂ¡vel: ${PERFIL_LABEL[cfg.perfil]}`;
+  const perfil  = session.perfil;
+  const canEdit = cfg.perfil === perfil || perfil === 'admin';
+  const isConcl = etapaAtiva?.status === 'concluida';
+  const ct      = document.getElementById('form-ct');
 
-  const usuario    = state.usuario;
-  const podeEditar = isAdmin() ? false : cfg.perfil === usuario?.perfil; // Admin sÃƒÂ³ observa
-  const doc        = docsAbertos.find(d => d.tipo === cfg.id);
-  const concluida  = doc?.status === 'concluido';
-
-  // Etapa concluÃƒÂ­da
-  if (concluida && !isAdmin()) {
-    document.getElementById('form-ct').innerHTML = `
-      <div class="etapa-concluida">
-        <div class="etapa-concluida-icon">Ã¢Å“â€¦</div>
-        <div class="etapa-concluida-title">Etapa concluÃƒÂ­da!</div>
-        <div class="etapa-concluida-sub">
-          Esta etapa foi concluÃƒÂ­da em ${data(doc.updated_at)}.<br>
-          O processo avanÃƒÂ§ou para a prÃƒÂ³xima fase.
-        </div>
-        <button class="btn btn-ghost btn-sm" onclick="voltarParaListaGlobal()">Ã¢â€ Â Voltar para a lista</button>
+  if (!canEdit && !isConcl) {
+    ct.innerHTML = `
+      <div class="e-blocked">
+        <div class="icon">🔒</div>
+        <p>Esta etapa é responsabilidade do perfil <strong>${PERFIL_LABEL[cfg.perfil]}</strong>.</p>
+        <small>Você está conectado como <strong>${PERFIL_LABEL[perfil]||perfil}</strong>.</small>
       </div>`;
-    document.getElementById('form-foot').style.display = 'none';
-    renderPreview(cfg, doc?.dados || {});
     return;
   }
+  renderForm(cfg, etapaAtiva, canEdit && !isConcl);
+  renderPreview(cfg, etapaAtiva?.dados || {});
+}
 
-  // Etapa bloqueada (nÃƒÂ£o ÃƒÂ© a etapa deste usuÃƒÂ¡rio)
-  const proc = state.processoAtual;
-  if (!podeEditar && !isAdmin()) {
-    const etapaResponsavel = ETAPAS.find(e => e.perfil === usuario?.perfil);
-    const etapaAtualProc   = ETAPAS.find(e => e.n === proc?.etapa_atual);
-    document.getElementById('form-ct').innerHTML = `
-      <div class="etapa-bloqueada">
-        <div class="etapa-bloqueada-icon">Ã¢ÂÂ³</div>
-        <div class="etapa-bloqueada-title">Processo em tramitaÃƒÂ§ÃƒÂ£o</div>
-        <div class="etapa-bloqueada-sub">
-          Atualmente na etapa <strong>${etapaAtualProc?.nome || 'Ã¢â‚¬â€'}</strong>.<br>
-          Sua etapa ÃƒÂ© <strong>${etapaResponsavel?.nome || 'Ã¢â‚¬â€'}</strong> Ã¢â‚¬â€ vocÃƒÂª serÃƒÂ¡ notificado quando chegar.
-        </div>
-      </div>`;
-    document.getElementById('form-foot').style.display = 'none';
-    renderPreview(cfg, doc?.dados || {});
-    return;
+function showEtapaPlaceholder() {
+  document.getElementById('fp-title').textContent = 'Selecione uma etapa';
+  document.getElementById('fp-sub').textContent   = '';
+  document.getElementById('form-ct').innerHTML    = '';
+}
+
+/* ── FORM HELPERS (usam classes do style.css) ── */
+const fi  = (id, lbl, type='text', ph='', req=false, dis=false, val='') =>
+  `<div class="field">
+    <label class="label${req?' required':''}" for="${id}">${lbl}</label>
+    <input type="${type}" id="${id}" class="input" placeholder="${ph}" ${dis?'disabled':''} value="${esc(val??'')}" />
+  </div>`;
+
+const fsl = (id, lbl, opts, req=false, dis=false, val='') =>
+  `<div class="field">
+    <label class="label${req?' required':''}" for="${id}">${lbl}</label>
+    <select id="${id}" class="select" ${dis?'disabled':''}><option value="">Selecione...</option>
+      ${opts.map(o=>`<option value="${o.v}" ${val===o.v?'selected':''}>${o.l}</option>`).join('')}
+    </select>
+  </div>`;
+
+const fta = (id, lbl, ph='', req=false, dis=false, val='') =>
+  `<div class="field col-full">
+    <label class="label${req?' required':''}" for="${id}">${lbl}</label>
+    <textarea id="${id}" ${dis?'disabled':''}>${esc(val??'')}</textarea>
+  </div>`;
+
+/* ── FORMS POR ETAPA ── */
+const FORMS = {
+  1: (d,dis) => `
+    <div class="form-section"><div class="section-title">Identificação da Demanda</div>
+    <div class="form-grid">
+      ${fi('dfd-obj','Objeto da Demanda','text','Ex: Aquisição de medicamentos',true,dis,d.objeto)}
+      ${fi('dfd-setor','Setor Requisitante','text','Ex: Secretaria de Saúde',true,dis,d.setor)}
+      ${fi('dfd-qtd','Quantidade','number','0',true,dis,d.quantidade)}
+      ${fi('dfd-und','Unidade de Medida','text','Ex: unidade, kg, m²',true,dis,d.unidade)}
+      ${fi('dfd-val','Valor Estimado (R$)','text','0,00',false,dis,d.valor_estimado)}
+      ${fi('dfd-prazo','Prazo de Entrega Desejado','date','',false,dis,d.prazo)}
+      ${fta('dfd-just','Justificativa da Necessidade','Descreva a necessidade que motiva esta demanda...',true,dis,d.justificativa)}
+    </div></div>`,
+  2: (d,dis) => `
+    <div class="form-section"><div class="section-title">Dados do Protocolo</div>
+    <div class="form-grid">
+      ${fi('prot-num','Número de Protocolo','text','Ex: 0042/2026',true,dis,d.numero)}
+      ${fi('prot-data','Data de Protocolo','date','',true,dis,d.data)}
+      ${fi('prot-recv','Recebido por','text','Nome do servidor',true,dis,d.recebido_por)}
+      ${fi('prot-lot','Lotação','text','Setor / Secretaria',false,dis,d.lotacao)}
+      ${fta('prot-obs','Observações','',false,dis,d.obs)}
+    </div></div>`,
+  3: (d,dis) => `
+    <div class="form-section"><div class="section-title">Estudo Técnico Preliminar</div>
+    <div class="form-grid">
+      ${fta('etp-nec','Descrição da Necessidade','Descreva detalhadamente...',true,dis,d.necessidade)}
+      ${fta('etp-sol','Descrição da Solução Proposta','',true,dis,d.solucao)}
+      ${fta('etp-req','Requisitos da Contratação','',false,dis,d.requisitos)}
+    </div></div>
+    <div class="form-section"><div class="section-title">Termo de Referência</div>
+    <div class="form-grid">
+      ${fi('tr-obj','Objeto do TR','text','',true,dis,d.tr_objeto)}
+      ${fi('tr-prazo','Prazo de Execução (dias)','number','30',false,dis,d.prazo_execucao)}
+      ${fta('tr-esp','Especificações Técnicas','',true,dis,d.especificacoes)}
+      ${fta('tr-obr','Obrigações do Contratado','',false,dis,d.obrigacoes)}
+    </div></div>`,
+  4: (d,dis) => `
+    <div class="form-section"><div class="section-title">Cotações de Mercado</div>
+    <div class="form-grid">
+      ${fi('pp-f1','Fornecedor 1','text','Razão social',false,dis,d.forn1)}
+      ${fi('pp-v1','Valor (R$)','text','0,00',false,dis,d.val1)}
+      ${fi('pp-f2','Fornecedor 2','text','Razão social',false,dis,d.forn2)}
+      ${fi('pp-v2','Valor (R$)','text','0,00',false,dis,d.val2)}
+      ${fi('pp-f3','Fornecedor 3','text','Razão social',false,dis,d.forn3)}
+      ${fi('pp-v3','Valor (R$)','text','0,00',false,dis,d.val3)}
+      ${fi('pp-med','Valor Médio Apurado (R$)','text','0,00',false,dis,d.media)}
+      ${fi('pp-met','Método de Pesquisa','text','Ex: PNCP, Painel de Preços',false,dis,d.metodo)}
+      ${fta('pp-obs','Observações','',false,dis,d.obs)}
+    </div></div>`,
+  5: (d,dis) => `
+    <div class="form-section"><div class="section-title">Dotação Orçamentária</div>
+    <div class="form-grid">
+      ${fi('dot-dot','Dotação Orçamentária','text','Ex: 02.003.10.301.0001.2.003',true,dis,d.dotacao)}
+      ${fi('dot-fon','Fonte de Recurso','text','Ex: 101 — Recursos Próprios',true,dis,d.fonte)}
+      ${fi('dot-val','Valor a Empenhar (R$)','text','0,00',true,dis,d.valor)}
+      ${fi('dot-emp','Número do Empenho','text','',false,dis,d.empenho)}
+      ${fi('dot-exc','Exercício','number',String(new Date().getFullYear()),false,dis,d.exercicio)}
+      ${fta('dot-obs','Observações','',false,dis,d.obs)}
+    </div></div>`,
+  6: (d,dis) => `
+    <div class="form-section"><div class="section-title">Autorização da Secretaria</div>
+    <div class="form-grid">
+      ${fi('aut-aut','Autorizado por','text','Nome e cargo',true,dis,d.autorizado)}
+      ${fi('aut-dat','Data de Autorização','date','',true,dis,d.data)}
+      ${fsl('aut-dec','Decisão',[{v:'autorizado',l:'Autorizado'},{v:'indeferido',l:'Indeferido'},{v:'diligencia',l:'Diligência'}],true,dis,d.decisao)}
+      ${fta('aut-obs','Observações / Condicionantes','',false,dis,d.obs)}
+    </div></div>`,
+  7: (d,dis) => `
+    <div class="form-section"><div class="section-title">Minuta do Edital</div>
+    <div class="form-grid">
+      ${fsl('min-mod','Modalidade',[
+        {v:'pregao_eletronico',l:'Pregão Eletrônico'},{v:'pregao_presencial',l:'Pregão Presencial'},
+        {v:'concorrencia',l:'Concorrência'},{v:'tomada_precos',l:'Tomada de Preços'},
+        {v:'dispensa',l:'Dispensa de Licitação'},
+      ],true,dis,d.modalidade)}
+      ${fsl('min-cri','Critério de Julgamento',[
+        {v:'menor_preco',l:'Menor Preço'},{v:'melhor_tecnica',l:'Melhor Técnica'},
+        {v:'tecnica_preco',l:'Técnica e Preço'},{v:'maior_desconto',l:'Maior Desconto'},
+      ],true,dis,d.criterio)}
+      ${fi('min-pra','Prazo de Propostas (dias)','number','8',false,dis,d.prazo_proposta)}
+      ${fta('min-obj','Objeto no Edital','',true,dis,d.objeto_edital)}
+      ${fta('min-hab','Exigências de Habilitação','',false,dis,d.exigencias)}
+    </div></div>`,
+  8: (d,dis) => `
+    <div class="form-section"><div class="section-title">Parecer Jurídico</div>
+    <div class="form-grid">
+      ${fi('par-num','Número do Parecer','text','Ex: PAR-0042/2026',true,dis,d.numero)}
+      ${fi('par-dat','Data do Parecer','date','',true,dis,d.data)}
+      ${fi('par-adv','Procurador / Advogado','text','Nome e OAB',true,dis,d.advogado)}
+      ${fsl('par-con','Conclusão',[
+        {v:'aprovado',l:'Aprovado'},{v:'aprovado_ressalvas',l:'Aprovado com Ressalvas'},
+        {v:'rejeitado',l:'Rejeitado'},{v:'diligencia',l:'Necessita Diligência'},
+      ],true,dis,d.conclusao)}
+      ${fta('par-fun','Fundamentação Legal','Lei 14.133/2021, art...',true,dis,d.fundamentacao)}
+      ${fta('par-obs','Considerações e Ressalvas','',false,dis,d.obs)}
+    </div></div>`,
+  9: (d,dis) => `
+    <div class="form-section"><div class="section-title">Edital Final</div>
+    <div class="form-grid">
+      ${fi('ef-num','Número do Edital','text','Ex: 0042/2026',true,dis,d.numero)}
+      ${fi('ef-dpub','Data de Publicação Prevista','date','',true,dis,d.data_publicacao)}
+      ${fi('ef-dses','Data da Sessão Pública','date','',true,dis,d.data_sessao)}
+      ${fi('ef-hora','Hora da Sessão','time','09:00',false,dis,d.hora_sessao)}
+      ${fta('ef-obs','Observações Finais','',false,dis,d.obs)}
+    </div></div>`,
+  10: (d,dis) => `
+    <div class="form-section"><div class="section-title">Publicação</div>
+    <div class="form-grid">
+      ${fi('pub-vei','Veículo de Publicação','text','Ex: PNCP, Diário Oficial GO',true,dis,d.veiculo)}
+      ${fi('pub-dat','Data de Publicação','date','',true,dis,d.data)}
+      ${fi('pub-nav','Número do Aviso','text','',false,dis,d.numero_aviso)}
+      ${fi('pub-lnk','Link da Publicação','url','https://...',false,dis,d.link)}
+      ${fta('pub-obs','Observações','',false,dis,d.obs)}
+    </div></div>`,
+};
+
+function renderForm(cfg, etapa, editable) {
+  const d   = etapa?.dados || {};
+  const dis = !editable;
+  const formHtml = FORMS[cfg.n]?.(d, dis) || '';
+
+  const doneBanner = !editable && etapa?.status === 'concluida'
+    ? `<div class="done-banner">✓ Etapa concluída em ${formatData(etapa.data_conclusao)}</div>` : '';
+
+  const acts = editable ? `
+    <div class="form-acts">
+      <button class="btn btn-ghost btn-sm"   id="btn-rascunho">💾 Salvar Rascunho</button>
+      <button class="btn btn-primary btn-sm" id="btn-concluir">✅ Concluir Etapa</button>
+    </div>` : '';
+
+  document.getElementById('form-ct').innerHTML = doneBanner + formHtml + acts;
+
+  if (editable) {
+    document.getElementById('btn-rascunho')?.addEventListener('click', () => salvarEtapa(cfg, false));
+    document.getElementById('btn-concluir')?.addEventListener('click', () => salvarEtapa(cfg, true));
   }
-
-  // Renderiza formulÃƒÂ¡rio
-  renderForm(cfg, doc, podeEditar || isAdmin());
-  renderPreview(cfg, doc?.dados || {});
-
-  // Mostra/oculta rodapÃƒÂ© de aÃƒÂ§ÃƒÂµes
-  document.getElementById('form-foot').style.display = (podeEditar && !concluida) ? 'flex' : 'none';
-
-  // Auto-preview em tempo real
-  iniciarAutoPreview(cfg);
 }
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   FORMULÃƒÂRIOS
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-function renderForm(cfg, doc, editavel) {
-  const d   = doc?.dados || {};
-  const dis = !editavel;
-
-  const f  = (id, lbl, tipo='text', ph='', req=false, val='') =>
-    `<div class="field">
-      <label class="label${req?' required':''}">${lbl}</label>
-      <input class="input" type="${tipo}" id="${id}" placeholder="${ph}" ${dis?'disabled':''} value="${esc(val??'')}">
-    </div>`;
-
-  const ft = (id, lbl, ph='', req=false, val='', min=0) =>
-    `<div class="field col-full">
-      <label class="label${req?' required':''}">${lbl}</label>
-      <textarea class="input" id="${id}" rows="4" ${dis?'disabled':''}>${esc(val??'')}</textarea>
-      ${min > 0 ? `<div class="field-hint"><span id="${id}-wc">0</span> palavras${!dis?' Ã¢â‚¬â€ mÃƒÂ­nimo recomendado: '+min:''}.</div>` : ''}
-    </div>`;
-
-  const fs = (id, lbl, opts, req=false, val='') =>
-    `<div class="field">
-      <label class="label${req?' required':''}">${lbl}</label>
-      <select class="select" id="${id}" ${dis?'disabled':''}>
-        <option value="">Selecione...</option>
-        ${opts.map(o=>`<option value="${o.v}"${val===o.v?' selected':''}>${o.l}</option>`).join('')}
-      </select>
-    </div>`;
-
-  const FORMS = {
-    1: () => `
-      <div class="form-section">
-        <div class="section-title">IdentificaÃƒÂ§ÃƒÂ£o</div>
-        <div class="form-grid">
-          ${f('dfd-obj','Objeto da contrataÃƒÂ§ÃƒÂ£o','text','Descreva o objeto',true,d.objeto)}
-          ${f('dfd-setor','Setor requisitante','text','Ex: Secretaria de SaÃƒÂºde',true,d.setor)}
-          ${f('dfd-qtd','Quantidade','number','0',true,d.quantidade)}
-          ${f('dfd-und','Unidade de medida','text','UN, KG, MÃ‚Â²...',true,d.unidade)}
-          ${f('dfd-val','Valor estimado (R$)','text','0,00',false,d.valor_estimado)}
-          ${f('dfd-prazo','Prazo desejado','date','',false,d.prazo)}
-        </div>
-      </div>
-      <div class="form-section">
-        <div class="section-title">Justificativa</div>
-        <div class="form-grid">
-          ${ft('dfd-just','Justificativa da necessidade','Descreva a necessidade que motiva esta contrataÃƒÂ§ÃƒÂ£o...',true,d.justificativa,80)}
-        </div>
-      </div>
-      <div class="form-section">
-        <div class="section-title">ResponsÃƒÂ¡vel</div>
-        <div class="form-grid">
-          ${f('dfd-resp','Nome do responsÃƒÂ¡vel','text','Nome completo',true,d.responsavel)}
-          ${f('dfd-cargo','Cargo','text','',true,d.cargo)}
-        </div>
-      </div>`,
-
-    2: () => `
-      <div class="form-section">
-        <div class="section-title">Dados do Protocolo</div>
-        <div class="form-grid">
-          ${f('prot-num','NÃƒÂºmero no livro','text','0154/2026',false,d.numero)}
-          ${f('prot-data','Data de entrada','date','',false,d.data_entrada)}
-          ${f('prot-recv','Recebido por','text','Nome do servidor',false,d.recebido_por)}
-          ${f('prot-dest','Setor de destino','text','',false,d.setor_destino)}
-          ${ft('prot-obs','ObservaÃƒÂ§ÃƒÂµes','',false,d.obs)}
-        </div>
-      </div>`,
-
-    3: () => `
-      <div class="form-section">
-        <div class="section-title">Estudo TÃƒÂ©cnico Preliminar</div>
-        <div class="form-grid">
-          ${ft('etp-nec','DescriÃƒÂ§ÃƒÂ£o da necessidade','',true,d.necessidade,60)}
-          ${ft('etp-sol','DescriÃƒÂ§ÃƒÂ£o da soluÃƒÂ§ÃƒÂ£o proposta','',true,d.solucao)}
-          ${ft('etp-req','Requisitos da contrataÃƒÂ§ÃƒÂ£o','',false,d.requisitos)}
-          ${ft('etp-fund','FundamentaÃƒÂ§ÃƒÂ£o legal','Art. 6Ã‚Âº, 11, 18, 40 da Lei 14.133/2021',false,d.fund_legal)}
-        </div>
-      </div>
-      <div class="form-section">
-        <div class="section-title">Termo de ReferÃƒÂªncia</div>
-        <div class="form-grid">
-          ${ft('tr-obj','Objeto do TR','',true,d.tr_objeto)}
-          ${f('tr-prazo','Prazo de entrega (dias)','number','30',true,d.prazo_execucao)}
-          ${ft('tr-esp','EspecificaÃƒÂ§ÃƒÂµes tÃƒÂ©cnicas','',true,d.especificacoes)}
-          ${ft('tr-obr','ObrigaÃƒÂ§ÃƒÂµes da contratada','',false,d.obrigacoes)}
-        </div>
-      </div>`,
-
-    4: () => `
-      <div class="form-section">
-        <div class="section-title">CotaÃƒÂ§ÃƒÂµes de Mercado</div>
-        <div class="form-grid">
-          ${f('pp-f1','Fornecedor 1','text','RazÃƒÂ£o social',false,d.forn1)}
-          ${f('pp-v1','Valor R$','text','0,00',false,d.val1)}
-          ${f('pp-f2','Fornecedor 2','text','',false,d.forn2)}
-          ${f('pp-v2','Valor R$','text','',false,d.val2)}
-          ${f('pp-f3','Fornecedor 3','text','',false,d.forn3)}
-          ${f('pp-v3','Valor R$','text','',false,d.val3)}
-          ${f('pp-med','Valor mÃƒÂ©dio apurado R$','text','',false,d.media)}
-          ${f('pp-met','MÃƒÂ©todo de pesquisa','text','PNCP, Painel de PreÃƒÂ§os...',false,d.metodo)}
-          ${ft('pp-obs','ObservaÃƒÂ§ÃƒÂµes','',false,d.obs)}
-        </div>
-      </div>`,
-
-    5: () => `
-      <div class="form-section">
-        <div class="section-title">DotaÃƒÂ§ÃƒÂ£o OrÃƒÂ§amentÃƒÂ¡ria</div>
-        <div class="form-grid">
-          ${f('dot-dot','DotaÃƒÂ§ÃƒÂ£o','text','02.003.10.301.0001',true,d.dotacao)}
-          ${f('dot-fon','Fonte de recurso','text','101 Ã¢â‚¬â€œ Recursos PrÃƒÂ³prios',true,d.fonte)}
-          ${f('dot-val','Valor a empenhar R$','text','0,00',true,d.valor)}
-          ${f('dot-emp','NÃƒÂºmero do empenho','text','',false,d.empenho)}
-          ${ft('dot-obs','ObservaÃƒÂ§ÃƒÂµes','',false,d.obs)}
-        </div>
-      </div>`,
-
-    6: () => `
-      <div class="form-section">
-        <div class="section-title">AutorizaÃƒÂ§ÃƒÂ£o</div>
-        <div class="form-grid">
-          ${f('aut-aut','Autorizado por','text','Nome e cargo',true,d.autorizado_por)}
-          ${f('aut-dat','Data','date','',true,d.data)}
-          ${fs('aut-dec','DecisÃƒÂ£o',[{v:'autorizado',l:'Autorizado'},{v:'indeferido',l:'Indeferido'},{v:'diligencia',l:'Em diligÃƒÂªncia'}],true,d.decisao)}
-          ${ft('aut-obs','Despacho / motivaÃƒÂ§ÃƒÂ£o','',true,d.despacho)}
-        </div>
-      </div>`,
-
-    7: () => `
-      <div class="form-section">
-        <div class="section-title">Minuta do Edital</div>
-        <div class="form-grid">
-          ${fs('min-mod','Modalidade',[{v:'pregao_eletronico',l:'PregÃƒÂ£o EletrÃƒÂ´nico'},{v:'concorrencia',l:'ConcorrÃƒÂªncia'},{v:'dispensa',l:'Dispensa'}],true,d.modalidade)}
-          ${fs('min-cri','CritÃƒÂ©rio',[{v:'menor_preco',l:'Menor PreÃƒÂ§o'},{v:'tecnica_preco',l:'TÃƒÂ©cnica e PreÃƒÂ§o'}],true,d.criterio)}
-          ${ft('min-obj','Objeto no edital','',true,d.objeto_edital)}
-          ${ft('min-hab','ExigÃƒÂªncias de habilitaÃƒÂ§ÃƒÂ£o','',false,d.exigencias)}
-        </div>
-      </div>`,
-
-    8: () => `
-      <div class="form-section">
-        <div class="section-title">Parecer JurÃƒÂ­dico</div>
-        <div class="form-grid">
-          ${f('par-num','NÃƒÂºmero do parecer','text','PAR-0042/2026',true,d.numero)}
-          ${f('par-dat','Data','date','',true,d.data)}
-          ${f('par-adv','Procurador / Advogado','text','Nome e OAB',true,d.advogado)}
-          ${fs('par-con','ConclusÃƒÂ£o',[{v:'aprovado',l:'Aprovado'},{v:'ressalvas',l:'Com ressalvas'},{v:'rejeitado',l:'Rejeitado'}],true,d.conclusao)}
-          ${ft('par-fund','FundamentaÃƒÂ§ÃƒÂ£o legal','',true,d.fundamentacao)}
-          ${ft('par-obs','Ressalvas e consideraÃƒÂ§ÃƒÂµes','',false,d.obs)}
-        </div>
-      </div>`,
-
-    9: () => `
-      <div class="form-section">
-        <div class="section-title">Edital Final</div>
-        <div class="form-grid">
-          ${f('ef-num','NÃƒÂºmero do edital','text','0042/2026',true,d.numero)}
-          ${f('ef-dpub','Data de publicaÃƒÂ§ÃƒÂ£o prevista','date','',true,d.data_publicacao)}
-          ${f('ef-dses','Data da sessÃƒÂ£o pÃƒÂºblica','date','',true,d.data_sessao)}
-          ${f('ef-hora','Hora da sessÃƒÂ£o','time','09:00',false,d.hora_sessao)}
-          ${ft('ef-obs','ObservaÃƒÂ§ÃƒÂµes finais','',false,d.obs)}
-        </div>
-      </div>`,
-
-    10: () => `
-      <div class="form-section">
-        <div class="section-title">PublicaÃƒÂ§ÃƒÂ£o</div>
-        <div class="form-grid">
-          ${f('pub-vei','VeÃƒÂ­culo de publicaÃƒÂ§ÃƒÂ£o','text','PNCP, DiÃƒÂ¡rio Oficial GO',true,d.veiculo)}
-          ${f('pub-dat','Data de publicaÃƒÂ§ÃƒÂ£o','date','',true,d.data)}
-          ${f('pub-nav','NÃƒÂºmero do aviso','text','',false,d.numero_aviso)}
-          ${f('pub-lnk','Link da publicaÃƒÂ§ÃƒÂ£o','url','https://',false,d.link)}
-        </div>
-      </div>`,
-  };
-
-  const concluida = doc?.status === 'concluido';
-  const banner = concluida
-    ? `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--green-l);border:1px solid rgba(65,243,106,.2);border-radius:var(--r-sm);font-size:12px;color:var(--green);margin-bottom:16px">Ã¢Å“â€œ Etapa concluÃƒÂ­da em ${data(doc.updated_at)}</div>`
-    : '';
-
-  document.getElementById('form-ct').innerHTML = banner + (FORMS[cfg.n]?.() || `<div style="padding:20px;color:var(--muted)">FormulÃƒÂ¡rio em construÃƒÂ§ÃƒÂ£o.</div>`);
-
-  // Contador de palavras
-  document.querySelectorAll('[id$="-wc"]').forEach(el => {
-    const fieldId = el.id.replace('-wc', '');
-    const field   = document.getElementById(fieldId);
-    if (!field) return;
-    const atualizar = () => {
-      const qtd = field.value.trim().split(/\s+/).filter(Boolean).length;
-      el.textContent = qtd;
-      el.style.color = qtd >= 80 ? 'var(--green)' : qtd > 0 ? 'var(--gold)' : 'var(--muted)';
-    };
-    atualizar();
-    field.addEventListener('input', atualizar);
-  });
-}
-
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   COLETA DE DADOS DO FORMULÃƒÂRIO
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
+/* ── COLETAR DADOS DO FORM ── */
 function coletarForm(n) {
   const g = id => document.getElementById(id)?.value ?? '';
-  const mapas = {
-    1:  () => ({ objeto:g('dfd-obj'), setor:g('dfd-setor'), quantidade:g('dfd-qtd'), unidade:g('dfd-und'), valor_estimado:g('dfd-val'), prazo:g('dfd-prazo'), justificativa:g('dfd-just'), responsavel:g('dfd-resp'), cargo:g('dfd-cargo') }),
-    2:  () => ({ numero:g('prot-num'), data_entrada:g('prot-data'), recebido_por:g('prot-recv'), setor_destino:g('prot-dest'), obs:g('prot-obs') }),
-    3:  () => ({ necessidade:g('etp-nec'), solucao:g('etp-sol'), requisitos:g('etp-req'), fund_legal:g('etp-fund'), tr_objeto:g('tr-obj'), prazo_execucao:g('tr-prazo'), especificacoes:g('tr-esp'), obrigacoes:g('tr-obr') }),
-    4:  () => ({ forn1:g('pp-f1'), val1:g('pp-v1'), forn2:g('pp-f2'), val2:g('pp-v2'), forn3:g('pp-f3'), val3:g('pp-v3'), media:g('pp-med'), metodo:g('pp-met'), obs:g('pp-obs') }),
-    5:  () => ({ dotacao:g('dot-dot'), fonte:g('dot-fon'), valor:g('dot-val'), empenho:g('dot-emp'), obs:g('dot-obs') }),
-    6:  () => ({ autorizado_por:g('aut-aut'), data:g('aut-dat'), decisao:g('aut-dec'), despacho:g('aut-obs') }),
-    7:  () => ({ modalidade:g('min-mod'), criterio:g('min-cri'), objeto_edital:g('min-obj'), exigencias:g('min-hab') }),
-    8:  () => ({ numero:g('par-num'), data:g('par-dat'), advogado:g('par-adv'), conclusao:g('par-con'), fundamentacao:g('par-fund'), obs:g('par-obs') }),
-    9:  () => ({ numero:g('ef-num'), data_publicacao:g('ef-dpub'), data_sessao:g('ef-dses'), hora_sessao:g('ef-hora'), obs:g('ef-obs') }),
-    10: () => ({ veiculo:g('pub-vei'), data:g('pub-dat'), numero_aviso:g('pub-nav'), link:g('pub-lnk') }),
+  const maps = {
+    1:  () => ({objeto:g('dfd-obj'),setor:g('dfd-setor'),quantidade:g('dfd-qtd'),unidade:g('dfd-und'),valor_estimado:g('dfd-val'),prazo:g('dfd-prazo'),justificativa:g('dfd-just')}),
+    2:  () => ({numero:g('prot-num'),data:g('prot-data'),recebido_por:g('prot-recv'),lotacao:g('prot-lot'),obs:g('prot-obs')}),
+    3:  () => ({necessidade:g('etp-nec'),solucao:g('etp-sol'),requisitos:g('etp-req'),tr_objeto:g('tr-obj'),prazo_execucao:g('tr-prazo'),especificacoes:g('tr-esp'),obrigacoes:g('tr-obr')}),
+    4:  () => ({forn1:g('pp-f1'),val1:g('pp-v1'),forn2:g('pp-f2'),val2:g('pp-v2'),forn3:g('pp-f3'),val3:g('pp-v3'),media:g('pp-med'),metodo:g('pp-met'),obs:g('pp-obs')}),
+    5:  () => ({dotacao:g('dot-dot'),fonte:g('dot-fon'),valor:g('dot-val'),empenho:g('dot-emp'),exercicio:g('dot-exc'),obs:g('dot-obs')}),
+    6:  () => ({autorizado:g('aut-aut'),data:g('aut-dat'),decisao:g('aut-dec'),obs:g('aut-obs')}),
+    7:  () => ({modalidade:g('min-mod'),criterio:g('min-cri'),prazo_proposta:g('min-pra'),objeto_edital:g('min-obj'),exigencias:g('min-hab')}),
+    8:  () => ({numero:g('par-num'),data:g('par-dat'),advogado:g('par-adv'),conclusao:g('par-con'),fundamentacao:g('par-fun'),obs:g('par-obs')}),
+    9:  () => ({numero:g('ef-num'),data_publicacao:g('ef-dpub'),data_sessao:g('ef-dses'),hora_sessao:g('ef-hora'),obs:g('ef-obs')}),
+    10: () => ({veiculo:g('pub-vei'),data:g('pub-dat'),numero_aviso:g('pub-nav'),link:g('pub-lnk'),obs:g('pub-obs')}),
   };
-  return mapas[n]?.() || {};
+  return maps[n]?.() || {};
 }
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   SALVAR ETAPA
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-async function salvarEtapa(concluir = false) {
-  const cfg  = etapaAtual;
-  const proc = state.processoAtual;
-  if (!cfg || !proc) return;
-
+/* ── SALVAR ETAPA ── */
+async function salvarEtapa(cfg, concluir) {
   if (concluir) {
-    const ok = await confirmar(`Concluir a etapa "${cfg.nome}"?`, {
-      titulo: 'Confirmar conclusÃƒÂ£o',
-      labelSim: 'Concluir',
-      subtitulo: 'Esta aÃƒÂ§ÃƒÂ£o nÃƒÂ£o poderÃƒÂ¡ ser desfeita.'
-    });
+    const ok = await confirmar(
+      `Concluir a etapa "${cfg.nome}"?`,
+      'Esta ação bloqueia a edição. Confirme apenas se os dados estiverem corretos.'
+    );
     if (!ok) return;
   }
 
-  const btn = document.getElementById(concluir ? 'btn-concluir' : 'btn-rascunho');
-  if (btn) { btn.disabled = true; btn.textContent = 'Salvando...'; }
-
-  try {
-    const dados   = coletarForm(cfg.n);
-    const status  = concluir ? 'concluido' : 'rascunho';
-    const existente = docsAbertos.find(d => d.tipo === cfg.id);
-    const payload   = { processo_id: proc.id, tipo: cfg.id, dados, status, updated_at: new Date().toISOString() };
-
-    let error;
-    if (existente) {
-      ({ error } = await sb.from('documentos').update(payload).eq('id', existente.id));
-    } else {
-      ({ error } = await sb.from('documentos').insert(payload));
-    }
-    if (error) throw error;
-
-    // AvanÃƒÂ§a o processo
-    if (concluir) {
-      const proximaEtapa = cfg.n < 10 ? cfg.n + 1 : cfg.n;
-      const novoStatus   = cfg.n === 10 ? 'concluido' : 'andamento';
-      await sb.from('processos').update({ etapa_atual: proximaEtapa, status: novoStatus }).eq('id', proc.id);
-    }
-
-    // Atualiza estado local
-    const { data: docs } = await sb.from('documentos').select('*').eq('processo_id', proc.id);
-    docsAbertos = docs || [];
-
-    marcarSalvo();
-
-    if (concluir) {
-      toast(`"${cfg.nome}" concluÃƒÂ­da! Processo avanÃƒÂ§ou.`, 'success');
-      // UsuÃƒÂ¡rio comum volta para a lista apÃƒÂ³s concluir
-      if (!isAdmin()) {
-        setTimeout(() => voltarParaLista(), 2000);
-        carregarEtapa(cfg.n); // Mostra tela de concluÃƒÂ­da
-      } else {
-        carregarEtapa(Math.min(cfg.n + 1, 10));
-        if (isAdmin()) renderStepper();
-      }
-    } else {
-      toast('Rascunho salvo.', 'info');
-    }
-  } catch(e) {
-    toast('Erro ao salvar: ' + e.message, 'error');
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = concluir ? 'Ã¢Å“â€¦ Concluir etapa' : 'Ã°Å¸â€™Â¾ Salvar rascunho';
-    }
-  }
-}
-
-function marcarSalvo() {
-  naoSalvo = false;
-  document.getElementById('unsaved-indicator').classList.remove('on');
-}
-
-function marcarNaoSalvo() {
-  if (!naoSalvo) {
-    naoSalvo = true;
-    document.getElementById('unsaved-indicator').classList.add('on');
-  }
-  // Auto-save local a cada 30s
-  clearTimeout(autoSaveTimer);
-  autoSaveTimer = setTimeout(() => {
-    const proc = state.processoAtual;
-    const cfg  = etapaAtual;
-    if (proc && cfg) {
-      const dados = coletarForm(cfg.n);
-      localStorage.setItem(`draft_${proc.id}_${cfg.id}`, JSON.stringify({ dados, ts: Date.now() }));
-      toast('Rascunho salvo localmente.', 'info', 2000);
-      marcarSalvo();
-    }
-  }, 30000);
-}
-
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   PREVIEW AO VIVO
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
-function iniciarAutoPreview(cfg) {
-  const formCt = document.getElementById('form-ct');
-  if (!formCt) return;
-  formCt.querySelectorAll('input, textarea, select').forEach(el => {
-    el.addEventListener('input', () => {
-      marcarNaoSalvo();
-      renderPreview(cfg, coletarForm(cfg.n));
-    });
-    el.addEventListener('change', () => {
-      marcarNaoSalvo();
-      renderPreview(cfg, coletarForm(cfg.n));
-    });
-  });
-}
-
-function renderPreview(cfg, d) {
-  const pref = state.prefeitura || {};
-  const proc = state.processoAtual;
-  const hoje = dataExtenso();
-
-  const linhas = {
-    1:  [['Objeto',d.objeto],['Setor',d.setor],['Quantidade',d.quantidade && d.unidade ? `${d.quantidade} ${d.unidade}` : ''],['Valor estimado',d.valor_estimado ? 'R$ '+d.valor_estimado : '']],
-    2:  [['Protocolo nÃ‚Âº',d.numero],['Data de entrada',d.data_entrada],['Recebido por',d.recebido_por],['Setor de destino',d.setor_destino]],
-    3:  [['Objeto TR',d.tr_objeto],['Prazo de entrega',d.prazo_execucao ? d.prazo_execucao+' dias' : ''],['Necessidade',d.necessidade]],
-    4:  [['Fornecedor 1',d.forn1 ? `${d.forn1} Ã¢â‚¬â€ R$ ${d.val1}` : ''],['Fornecedor 2',d.forn2 ? `${d.forn2} Ã¢â‚¬â€ R$ ${d.val2}` : ''],['Fornecedor 3',d.forn3 ? `${d.forn3} Ã¢â‚¬â€ R$ ${d.val3}` : ''],['Valor mÃƒÂ©dio',d.media ? 'R$ '+d.media : '']],
-    5:  [['DotaÃƒÂ§ÃƒÂ£o',d.dotacao],['Fonte',d.fonte],['Valor a empenhar',d.valor ? 'R$ '+d.valor : ''],['Empenho',d.empenho]],
-    6:  [['Autorizado por',d.autorizado_por],['Data',d.data],['DecisÃƒÂ£o',d.decisao],['MotivaÃƒÂ§ÃƒÂ£o',d.despacho]],
-    7:  [['Modalidade',d.modalidade],['CritÃƒÂ©rio de julgamento',d.criterio],['Objeto',d.objeto_edital]],
-    8:  [['Parecer nÃ‚Âº',d.numero],['Procurador',d.advogado],['ConclusÃƒÂ£o',d.conclusao],['FundamentaÃƒÂ§ÃƒÂ£o',d.fundamentacao]],
-    9:  [['Edital nÃ‚Âº',d.numero],['Data de publicaÃƒÂ§ÃƒÂ£o',d.data_publicacao],['Data da sessÃƒÂ£o',d.data_sessao],['Hora',d.hora_sessao]],
-    10: [['VeÃƒÂ­culo',d.veiculo],['Data',d.data],['NÃ‚Âº do aviso',d.numero_aviso],['Link',d.link]],
+  const dados   = coletarForm(cfg.n);
+  const payload = {
+    processo_id: procAtivo.id, numero_etapa: cfg.n, dados,
+    status: concluir ? 'concluida' : 'ativa',
+    ...(concluir ? { data_conclusao: new Date().toISOString() } : {}),
   };
 
-  const campos = (linhas[cfg.n] || [])
+  const existing = etapasAtivas.find(e => e.numero_etapa === cfg.n);
+  let error;
+  if (existing) ({ error } = await supabase.from('etapas').update(payload).eq('id', existing.id));
+  else          ({ error } = await supabase.from('etapas').insert(payload));
+
+  if (error) { toast('Erro ao salvar etapa.', 'error'); return; }
+
+  if (concluir && cfg.n < 10) {
+    const jaExiste = etapasAtivas.find(e => e.numero_etapa === cfg.n + 1);
+    if (!jaExiste)
+      await supabase.from('etapas').insert({ processo_id: procAtivo.id, numero_etapa: cfg.n + 1, status: 'ativa', dados: {} });
+    await supabase.from('processos').update({ status: 'andamento' }).eq('id', procAtivo.id);
+  } else if (concluir && cfg.n === 10) {
+    await supabase.from('processos').update({ status: 'concluido' }).eq('id', procAtivo.id);
+  }
+
+  toast(concluir ? `"${cfg.nome}" concluída!` : 'Rascunho salvo.', concluir ? 'success' : 'info');
+  await loadProcessos();
+  await loadEtapas(procAtivo.id);
+}
+
+/* ── PDF PREVIEW ── */
+function renderPreview(cfg, d) {
+  const mun  = session.prefeituras?.nome || '—';
+  const rows = {
+    1:  [['Objeto',d.objeto],['Setor',d.setor],['Quantidade',`${d.quantidade||''} ${d.unidade||''}`],['Valor Estimado',d.valor_estimado?`R$ ${d.valor_estimado}`:''],['Justificativa',d.justificativa]],
+    2:  [['Número',d.numero],['Data',d.data],['Recebido por',d.recebido_por],['Observações',d.obs]],
+    3:  [['Objeto TR',d.tr_objeto],['Necessidade',d.necessidade],['Especificações',d.especificacoes]],
+    4:  [['Fornecedor 1',d.forn1?`${d.forn1} — R$ ${d.val1}`:''],['Fornecedor 2',d.forn2?`${d.forn2} — R$ ${d.val2}`:''],['Fornecedor 3',d.forn3?`${d.forn3} — R$ ${d.val3}`:''],['Valor Médio',d.media?`R$ ${d.media}`:'']],
+    5:  [['Dotação',d.dotacao],['Fonte',d.fonte],['Valor',d.valor?`R$ ${d.valor}`:''],['Empenho',d.empenho]],
+    6:  [['Autorizado por',d.autorizado],['Data',d.data],['Decisão',d.decisao],['Observações',d.obs]],
+    7:  [['Modalidade',d.modalidade],['Critério',d.criterio],['Objeto',d.objeto_edital]],
+    8:  [['Parecer nº',d.numero],['Procurador',d.advogado],['Conclusão',d.conclusao],['Fundamentação',d.fundamentacao]],
+    9:  [['Edital nº',d.numero],['Publicação prevista',d.data_publicacao],['Data da Sessão',d.data_sessao]],
+    10: [['Veículo',d.veiculo],['Data',d.data],['Nº Aviso',d.numero_aviso],['Link',d.link]],
+  };
+  const fieldRows = (rows[cfg.n]||[])
     .filter(([,v]) => v)
-    .map(([l,v]) => `<div class="pdf-field"><span class="pdf-field-label">${l}:</span> ${esc(String(v))}</div>`)
-    .join('') || '<div style="color:#aaa;font-style:italic;font-size:11px">Preencha os campos ao lado para ver o documento.</div>';
-
-  // Justificativa com parÃƒÂ¡grafo especial para DFD
-  const justificativa = cfg.n === 1 && d.justificativa
-    ? `<div class="pdf-section">
-        <div class="pdf-section-title">Justificativa</div>
-        <div class="pdf-justificativa">${esc(d.justificativa)}</div>
-       </div>` : '';
-
-  // Assinatura para etapas que tÃƒÂªm responsÃƒÂ¡vel
-  const responsavel = d.responsavel || d.autorizado_por || d.advogado || '';
-  const cargo       = d.cargo || '';
-  const assinatura  = responsavel ? `
-    <div class="pdf-assinatura">
-      <div class="pdf-assinatura-linha">
-        <div class="pdf-assinatura-nome">${esc(responsavel)}</div>
-        ${cargo ? `<div class="pdf-assinatura-cargo">${esc(cargo)}</div>` : ''}
-      </div>
-      <div style="font-size:10px;color:#888;margin-top:8px">${esc(pref.municipio || '')}, ${hoje}</div>
-    </div>` : '';
+    .map(([l,v]) => `<p><span class="pdf-fl">${l}:</span> ${esc(v)}</p>`)
+    .join('') || '<p style="color:#aaa;font-style:italic">Nenhum dado preenchido ainda.</p>';
 
   document.getElementById('pdf-doc').innerHTML = `
-    <div class="pdf-header">
-      <div class="pdf-brasao">Ã°Å¸Ââ€ºÃ¯Â¸Â</div>
-      <div class="pdf-pref">${esc(pref.nome || 'PREFEITURA MUNICIPAL')}</div>
-      <div class="pdf-cnpj">${pref.cnpj ? 'CNPJ: ' + esc(pref.cnpj) : ''} ${pref.municipio ? 'Ã‚Â· ' + esc(pref.municipio) : ''}${pref.uf ? '/' + esc(pref.uf) : ''}</div>
-      <div class="pdf-titulo">${esc(cfg.label)}</div>
-      <div class="pdf-num">Processo nÃ‚Âº ${esc(proc?.numero_protocolo || 'Ã¢â‚¬â€')} Ã‚Â· Etapa ${cfg.n}/10</div>
+    <div class="pdf-head">
+      <div class="pdf-brasao">🏛️</div>
+      <div class="pdf-pref">PREFEITURA MUNICIPAL DE ${mun.toUpperCase()}</div>
+      <div class="pdf-sec">Sistema Centurion — Gestão Licitatória Municipal</div>
+      <div class="pdf-dtitle">${cfg.label}</div>
+      <div class="pdf-dnum">Processo nº ${esc(procAtivo?.numero||'—')} — Etapa ${cfg.n} de 10</div>
     </div>
-    <div class="pdf-section">
-      <div class="pdf-section-title">Dados</div>
-      ${campos}
-    </div>
-    ${justificativa}
-    ${assinatura}
-    <div class="pdf-footer">
+    <div class="pdf-body">${fieldRows}</div>
+    <div class="pdf-foot">
       <div>
-        <div>Lei Federal nÃ‚Âº 14.133/2021 Ã‚Â· TCM-GO Ã‚Â· IN-009/2023</div>
-        <div>Gerado em ${new Date().toLocaleString('pt-BR')}</div>
+        <div>Lei Federal nº 14.133/2021 | TCM-GO</div>
+        <div>Emitido em: ${new Date().toLocaleDateString('pt-BR')}</div>
       </div>
-      <div class="pdf-hash">SHA-256: gerado ao concluir a etapa</div>
+      <div class="pdf-hash">SHA-256: pendente (gerado ao concluir)</div>
     </div>`;
 }
 
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   CRIAR PROCESSO
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
+/* ── VIEW MODE ── */
+function setView(mode) {
+  const fp = document.getElementById('form-panel');
+  const pp = document.getElementById('preview-panel');
+  document.getElementById('vbtn-form').classList.toggle('on',  mode==='form');
+  document.getElementById('vbtn-prev').classList.toggle('on',  mode==='preview');
+  document.getElementById('vbtn-split').classList.toggle('on', mode==='split');
+  fp.style.display = mode==='preview' ? 'none' : '';
+  pp.classList.toggle('hidden', mode==='form');
+}
+
+/* ── NOVO PROCESSO ── */
 async function criarProcesso() {
-  const objeto = document.getElementById('np-objeto').value.trim();
-  const tipo   = document.getElementById('np-tipo').value;
-  const setor  = document.getElementById('np-setor').value.trim();
-  const valor  = document.getElementById('np-valor').value;
+  const obj  = document.getElementById('np-obj').value.trim();
+  const tipo = document.getElementById('np-tipo').value;
+  const sec  = document.getElementById('np-sec').value.trim();
+  if (!obj || !tipo || !sec) { toast('Preencha os campos obrigatórios.', 'error'); return; }
 
-  if (!objeto || !tipo || !setor) { toast('Preencha os campos obrigatÃƒÂ³rios.', 'warning'); return; }
+  const prefeituraId = session.prefeitura_id || null;
+  const ano  = new Date().getFullYear();
+  const { count } = await supabase.from('processos')
+    .select('id', { count:'exact', head:true })
+    .eq('prefeitura_id', prefeituraId);
 
-  const btn = document.getElementById('modal-criar');
-  btn.disabled = true; btn.textContent = 'Criando...';
+  const numero = `${String((count||0)+1).padStart(4,'0')}/${ano}`;
+  const { data, error } = await supabase.from('processos').insert({
+    numero, objeto: obj, tipo, secretaria: sec,
+    valor_estimado: document.getElementById('np-val').value,
+    objeto_detalhado: document.getElementById('np-obj-det').value,
+    status: 'rascunho',
+    prefeitura_id: prefeituraId,
+    criado_por: session.id,
+  }).select().single();
 
-  try {
-    const pref = state.prefeitura;
-    const ano  = new Date().getFullYear();
-    const { count } = await sb.from('processos').select('*', { count:'exact', head:true }).eq('prefeitura_id', pref?.id);
-    const numero = `${String((count||0)+1).padStart(4,'0')}/${ano}`;
+  if (error) { toast('Erro ao criar processo.', 'error'); return; }
+  await supabase.from('etapas').insert({ processo_id: data.id, numero_etapa: 1, status: 'ativa', dados: {} });
 
-    const { data: proc, error } = await sb.from('processos').insert({
-      prefeitura_id: pref?.id,
-      numero: numero,
-      objeto, tipo: tipo,
-      secretaria: setor,
-      valor_estimado: valor,
-      etapa_atual: 1,
-      status: 'rascunho',
-    }).select().single();
-
-    if (error) throw error;
-
-    fecharModal();
-    toast(`Processo ${numero} criado!`);
-    await carregarProcessos();
-    abrirProcesso({ ...proc, documentos: [] });
-  } catch(e) {
-    toast('Erro ao criar processo: ' + e.message, 'error');
-  } finally {
-    btn.disabled = false; btn.textContent = 'Criar Processo';
-  }
+  fecharModal();
+  toast(`Processo ${numero} criado!`, 'success');
+  await loadProcessos();
+  selectProcesso({ ...data, etapas: [] });
 }
 
-function abrirModal()  { document.getElementById('modal-novo').style.display = 'flex'; }
+/* ── MODAL ── */
+const abrirModal  = () => document.getElementById('modal-novo').classList.add('open');
 function fecharModal() {
-  document.getElementById('modal-novo').style.display = 'none';
-  ['np-objeto','np-setor','np-valor'].forEach(id => { document.getElementById(id).value=''; });
+  document.getElementById('modal-novo').classList.remove('open');
+  ['np-obj','np-sec','np-obj-det'].forEach(id => { document.getElementById(id).value=''; });
   document.getElementById('np-tipo').value = '';
+  document.getElementById('np-val').value  = '';
 }
 
-// ExpÃƒÂµe globalmente para o onclick inline da etapa concluÃƒÂ­da
-window.voltarParaListaGlobal = voltarParaLista;
-
-/* Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
-   LISTENERS
-Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â */
+/* ── LISTENERS ── */
 function bindListeners() {
   document.getElementById('btn-logout').addEventListener('click', async () => {
-    if (await confirmar('Deseja sair do sistema?')) await logout();
+    if (await confirmar('Sair do sistema?','Você será desconectado.')) {
+      await logout(); window.location.href = '/login.html';
+    }
   });
-  document.getElementById('btn-admin').addEventListener('click', () => { window.location.href = '/admin.html'; });
   document.getElementById('btn-novo').addEventListener('click', abrirModal);
-  document.getElementById('modal-fechar').addEventListener('click', fecharModal);
-  document.getElementById('modal-cancelar').addEventListener('click', fecharModal);
-  document.getElementById('modal-criar').addEventListener('click', criarProcesso);
-  document.getElementById('modal-novo').addEventListener('click', e => { if (e.target === e.currentTarget) fecharModal(); });
+  document.getElementById('mnovo-close').addEventListener('click', fecharModal);
+  document.getElementById('mnovo-cancel').addEventListener('click', fecharModal);
+  document.getElementById('mnovo-salvar').addEventListener('click', criarProcesso);
+  document.getElementById('modal-novo').addEventListener('click', e => { if (e.target===e.currentTarget) fecharModal(); });
 
-  document.getElementById('btn-voltar').addEventListener('click', voltarParaLista);
-  document.getElementById('btn-rascunho').addEventListener('click', () => salvarEtapa(false));
-  document.getElementById('btn-concluir').addEventListener('click', () => salvarEtapa(true));
-  document.getElementById('btn-pdf').addEventListener('click', () => toast('GeraÃƒÂ§ÃƒÂ£o de PDF em implementaÃƒÂ§ÃƒÂ£o.', 'info'));
+  document.getElementById('vbtn-form').addEventListener('click',  () => setView('form'));
+  document.getElementById('vbtn-prev').addEventListener('click',  () => setView('preview'));
+  document.getElementById('vbtn-split').addEventListener('click', () => setView('split'));
 
-  document.getElementById('sb-busca').addEventListener('input', e => { buscaQuery = e.target.value; renderSidebar(); });
-
-  document.querySelectorAll('.filter-chip').forEach(chip => {
+  document.getElementById('sb-search').addEventListener('input', e => { searchQ = e.target.value; renderSidebar(); });
+  document.querySelectorAll('.f-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('on'));
+      document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('on'));
       chip.classList.add('on');
-      filtroAtivo = chip.dataset.filtro;
+      filtroStatus = chip.dataset.f;
       renderSidebar();
     });
   });
+  document.getElementById('btn-dossie').addEventListener('click', () => toast('Geração de dossiê em implementação.','info'));
+  document.getElementById('btn-hist').addEventListener('click',   () => toast('Histórico em implementação.','info'));
+  document.getElementById('btn-dl-pdf').addEventListener('click', () => toast('Download de PDF em implementação.','info'));
 }
 
-/* Ã¢â€â‚¬Ã¢â€â‚¬ Start Ã¢â€â‚¬Ã¢â€â‚¬ */
 init().catch(console.error);
 </script>
 </body>
