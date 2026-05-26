@@ -1,21 +1,21 @@
 /**
- * CENTURION — Serviço Supabase
+ * CENTURION â€” ServiÃ§o Supabase
  * Arquivo: src/services/supabase.js
- * Responsabilidade: ÚNICO arquivo que conhece URL e chave do banco.
+ * Responsabilidade: ÃšNICO arquivo que conhece URL e chave do banco.
  * Regra: nenhum outro arquivo cria um cliente Supabase.
- *        não contém lógica de negócio. não manipula DOM.
+ *        nÃ£o contÃ©m lÃ³gica de negÃ³cio. nÃ£o manipula DOM.
  */
 
 // Supabase vem do CDN carregado no HTML via <script>
-// NÃO usar import direto — o Vite não tem o pacote instalado
-const { createClient } = window.supabase;
+// NÃƒO usar import direto â€” o Vite nÃ£o tem o pacote instalado
+import { createClient } from '@supabase/supabase-js';
 
 const SUPA_URL = 'https://euxyecbhqxdinnczqzqz.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1eHllY2JocXhkaW5uY3pxenF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDUzODksImV4cCI6MjA5NTM4MTM4OX0.0V7n-l_5pvMwnRcmLXy8dzsW9ZbkdHPYs5FCxoJWkeI';
 
 export const sb = createClient(SUPA_URL, SUPA_KEY);
 
-/* ── Auth ── */
+/* â”€â”€ Auth â”€â”€ */
 
 export async function getUsuarioAtual() {
   const { data: { user }, error } = await sb.auth.getUser();
@@ -39,7 +39,7 @@ export async function logout() {
   window.location.href = '/login.html';
 }
 
-/* ── Prefeituras ── */
+/* â”€â”€ Prefeituras â”€â”€ */
 
 export async function listarPrefeituras() {
   const { data, error } = await sb.from('prefeituras').select('*').order('nome');
@@ -65,7 +65,7 @@ export async function criarPrefeitura(dados) {
   return data;
 }
 
-/* ── Usuários ── */
+/* â”€â”€ UsuÃ¡rios â”€â”€ */
 
 export async function listarUsuariosPrefeitura(prefeituraId) {
   const { data, error } = await sb.from('usuarios').select('*').eq('prefeitura_id', prefeituraId).order('nome');
@@ -79,7 +79,7 @@ export async function salvarUsuario(id, dados) {
   return data;
 }
 
-/* ── Processos ── */
+/* â”€â”€ Processos â”€â”€ */
 
 export async function listarProcessos(prefeituraId, limite = 50) {
   const { data, error } = await sb
@@ -113,7 +113,7 @@ export async function atualizarProcesso(id, dados) {
   return data;
 }
 
-/* ── Documentos de etapa ── */
+/* â”€â”€ Documentos de etapa â”€â”€ */
 
 export async function getDocumento(processoId, tipo) {
   const { data } = await sb.from('documentos').select('*').eq('processo_id', processoId).eq('tipo', tipo).single();
@@ -132,7 +132,7 @@ export async function salvarDocumento(processoId, tipo, dados) {
   return data;
 }
 
-/* ── Snapshots ── */
+/* â”€â”€ Snapshots â”€â”€ */
 
 export async function criarSnapshot({ processoId, tipo, dados, hash, criadoPor }) {
   const { count } = await sb
@@ -161,7 +161,7 @@ export async function getSnapshotPorHash(hash) {
   return data || null;
 }
 
-/* ── Auditoria ── */
+/* â”€â”€ Auditoria â”€â”€ */
 
 export async function registrarAudit({ processoId, userId, userName, action, campo, valorAntigo, valorNovo }) {
   try {
