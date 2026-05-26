@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centurion — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset e variáveis ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #06090F;
+      --s1:     #0B1018;
+      --s2:     #0F1620;
+      --border: rgba(255,255,255,0.07);
+      --text:   #EDF2F7;
+      --text2:  #8A9BAC;
+      --muted:  #4A5568;
+      --green:  #41F36A;
+      --teal:   #14D9B5;
+      --blue:   #1AB8FF;
+      --red:    #FF5C6A;
+      --red-l:  rgba(255,92,106,0.12);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ── */
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 480px;
+    }
+
+    /* ── Lado esquerdo — branding ── */
+    .lado-esquerdo {
+      background: var(--s1);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lado-esquerdo::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: -120px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(65,243,106,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .lado-esquerdo::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, rgba(26,184,255,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #41F36A, #14D9B5, #1AB8FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #000;
+    }
+
+    .brand-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      background: linear-gradient(90deg, var(--green), var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 16px;
+    }
+
+    .hero-titulo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 38px;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .hero-titulo span {
+      background: linear-gradient(90deg, var(--green), var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.7;
+      max-width: 420px;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text2);
+    }
+
+    .feature-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ── Lado direito — formulário ── */
+    .lado-direito {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: var(--bg);
+    }
+
+    .form-box {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .form-titulo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    .form-sub {
+      font-size: 14px;
+      color: var(--text2);
+      margin-bottom: 36px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--s1);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .field input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(65,243,106,0.08);
+    }
+
+    .field input::placeholder { color: var(--muted); }
+
+    .btn-entrar {
+      width: 100%;
+      padding: 13px;
+      background: var(--green);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity .15s, transform .1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-entrar:hover { opacity: .88; }
+    .btn-entrar:active { transform: scale(.98); }
+    .btn-entrar:disabled { opacity: .5; cursor: not-allowed; }
+
+    .erro-box {
+      background: var(--red-l);
+      border: 1px solid rgba(255,92,106,0.25);
+      color: #fca5a5;
+      padding: 11px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rodape-form {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Spinner inline no botão */
+    .spinner-btn {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsivo ── */
+    @media (max-width: 860px) {
+      .page { grid-template-columns: 1fr; }
+      .lado-esquerdo { display: none; }
+      .lado-direito { padding: 24px; min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Lado esquerdo: branding -->
+  <div class="lado-esquerdo">
+    <div class="brand">
+      <div class="brand-icon">C</div>
+      <div class="brand-name">Centurion</div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-label">Gestão Licitatória Municipal</div>
+      <h1 class="hero-titulo">
+        Conformidade total.<br>
+        <span>Lei 14.133/2021.</span>
+      </h1>
+      <p class="hero-desc">
+        Plataforma de formalização e governança de contratações públicas,
+        aderente ao TCM-GO e à Nova Lei de Licitações.
+      </p>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-dot"></div>
+        Geração automática de DFD, ETP, TR e Pesquisa de Preços
+      </div>
+      <div class="feature">
+        <div class="feature-dot"></div>
+        Versionamento imutável com hash SHA-256
+      </div>
+      <div class="feature">
+        <div class="feature-dot"></div>
+        Conformidade com as normas do TCM-GO e IN-009/2023
+      </div>
+      <div class="feature">
+        <div class="feature-dot"></div>
+        Auditoria completa de todas as alterações
+      </div>
+    </div>
+  </div>
+
+  <!-- Lado direito: formulário -->
+  <div class="lado-direito">
+    <div class="form-box">
+      <h2 class="form-titulo">Entrar</h2>
+      <p class="form-sub">Acesso exclusivo para prefeituras cadastradas.</p>
+
+      <div class="erro-box" id="erro">
+        <span>⚠</span>
+        <span id="erro-msg"></span>
+      </div>
+
+      <div class="field">
+        <label for="email">E-mail institucional</label>
+        <input
+          type="email"
+          id="email"
+          placeholder="servidor@prefeitura.go.gov.br"
+          autocomplete="email"
+        >
+      </div>
+
+      <div class="field">
+        <label for="senha">Senha</label>
+        <input
+          type="password"
+          id="senha"
+          placeholder="••••••••"
+          autocomplete="current-password"
+        >
+      </div>
+
+      <button class="btn-entrar" id="btn-entrar" onclick="entrar()">
+        <div class="spinner-btn" id="spinner"></div>
+        <span id="btn-texto">Entrar</span>
+      </button>
+
+      <div class="rodape-form">
+        Centurion © 2026 · Suporte: suporte@centurion.app
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Supabase via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+  // ── Conexão Supabase (inline no login — não tem módulos ainda) ──
+  const sb = supabase.createClient(
+    'https://vhgeibeudnshbrahsjui.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoZ2VpYmV1ZG5zaGJyYWhzanVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NTE5OTcsImV4cCI6MjA5NTEyNzk5N30.3EGjtjsNBT8Cc9JIIl6R9EphERIblxOpHjGyhFJeaPs'
+  );
+
+  // ── Se já tem sessão, redireciona direto ──
+  sb.auth.getUser().then(({ data, error }) => {
+    if (!error && data.user) {
+      verificarERedirecionarUsuario(data.user.id);
+    }
+  });
+
+  // ── Verificar erro na URL ──
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('erro') === 'inativo') mostrarErro('Usuário inativo. Entre em contato com o administrador.');
+  if (params.get('erro') === 'sessao')  mostrarErro('Sessão expirada. Faça login novamente.');
+
+  // ── Login ──
+  async function entrar() {
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('senha').value;
+
+    if (!email || !senha) {
+      mostrarErro('Preencha e-mail e senha.');
+      return;
+    }
+
+    setBotaoCarregando(true);
+    esconderErro();
+
+    try {
+      const { error: authErr } = await sb.auth.signInWithPassword({ email, password: senha });
+      if (authErr) throw new Error('E-mail ou senha incorretos.');
+
+      const { data: { user } } = await sb.auth.getUser();
+      await verificarERedirecionarUsuario(user.id);
+
+    } catch(e) {
+      mostrarErro(e.message || 'Erro ao entrar. Tente novamente.');
+      setBotaoCarregando(false);
+    }
+  }
+
+  async function verificarERedirecionarUsuario(userId) {
+    const { data: usuario } = await sb
+      .from('usuarios')
+      .select('*, prefeituras(*)')
+      .eq('id', userId)
+      .single();
+
+    if (!usuario) { mostrarErro('Usuário não encontrado na base.'); setBotaoCarregando(false); return; }
+    if (!usuario.ativo) {
+      await sb.auth.signOut();
+      mostrarErro('Usuário inativo. Entre em contato com o administrador.');
+      setBotaoCarregando(false);
+      return;
+    }
+
+    const pref = usuario.prefeituras;
+    if (pref && !pref.ativo) {
+      await sb.auth.signOut();
+      mostrarErro('Acesso bloqueado. Entre em contato com o suporte.');
+      setBotaoCarregando(false);
+      return;
+    }
+
+    // Redireciona conforme role
+    switch(usuario.role) {
+      case 'super_admin': window.location.href = '/superadmin.html'; break;
+      case 'admin':       window.location.href = '/admin.html';      break;
+      default:            window.location.href = '/app.html';
+    }
+  }
+
+  // ── Helpers ──
+  function mostrarErro(msg) {
+    const box = document.getElementById('erro');
+    document.getElementById('erro-msg').textContent = msg;
+    box.style.display = 'flex';
+  }
+
+  function esconderErro() {
+    document.getElementById('erro').style.display = 'none';
+  }
+
+  function setBotaoCarregando(sim) {
+    const btn    = document.getElementById('btn-entrar');
+    const spin   = document.getElementById('spinner');
+    const texto  = document.getElementById('btn-texto');
+    btn.disabled       = sim;
+    spin.style.display = sim ? 'block' : 'none';
+    texto.textContent  = sim ? 'Entrando...' : 'Entrar';
+  }
+
+  // ── Enter para submeter ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') entrar();
+  });
+</script>
+
+</body>
+</html>
