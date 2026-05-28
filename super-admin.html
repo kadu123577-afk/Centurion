@@ -167,6 +167,9 @@ import { sb, sessao, logout,
   getAdmin2DaPrefeitura, criarAdmin2, editarAdmin2
 } from './auth.js';
 
+// ── Utilitários — DEVE vir antes do guard ─────────────────────
+const g = id => document.getElementById(id);
+
 // ── Guarda de sessão ──────────────────────────────────────────
 const { data: { session } } = await sb.auth.getSession();
 if (!session) { window.location.href = 'login.html'; }
@@ -175,13 +178,10 @@ else {
   if (!u || u.role !== 'super_admin') { window.location.href = 'login.html'; }
   sessao.authUser = session.user;
   sessao.usuario  = u;
-  document.getElementById('topbar-user').textContent = u.nome || u.email;
+  g('topbar-user').textContent = u.nome || u.email;
   await renderPrefeituras();
-  document.getElementById('btn-nova-pref').addEventListener('click', () => window.abrirModalPrefeitura());
+  g('btn-nova-pref').addEventListener('click', () => window.abrirModalPrefeitura());
 }
-
-// ── Utilitários ───────────────────────────────────────────────
-const g = id => document.getElementById(id);
 
 function toast(msg, tipo='info', dur=3000) {
   const ct = g('toast-ct');
