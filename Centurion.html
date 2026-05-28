@@ -23785,9 +23785,9 @@ const TIPO_LABELS = {
 
 window.sair = async function sair() {
   if (!confirm('Deseja sair do Centurion?')) return;
-  await flushDados();
-  limparCache();
-  await logout();
+  try { await flushDados(); } catch(e) {}
+  try { limparCache(); } catch(e) {}
+  try { await sb.auth.signOut(); } catch(e) {}
   window.location.href = 'login.html';
 }
 
