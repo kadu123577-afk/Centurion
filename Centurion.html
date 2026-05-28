@@ -23786,9 +23786,11 @@ window.sair = async function sair() {
 
 window.limparTudo = async function limparTudo() {
   if (!confirm('Limpar todos os dados do processo atual? Esta ação não pode ser desfeita.')) return;
-  // Zera cache local imediatamente
+  // Cancela qualquer debounce pendente que poderia restaurar os dados
+  try { limparCache(); } catch(e) {}
+  // Zera cache local
   _dadosLocais = {};
-  // Persiste direto no Supabase (sem debounce) para garantir que foi salvo
+  // Persiste {} direto no Supabase sem debounce
   try {
     const userId = sessao.authUser?.id;
     if (userId) {
@@ -23798,6 +23800,8 @@ window.limparTudo = async function limparTudo() {
       );
     }
   } catch(e) { console.error('Erro ao limpar:', e); }
+  // Pequena pausa para garantir que o upsert foi concluído
+  await new Promise(r => setTimeout(r, 500));
   location.reload();
 }
 
