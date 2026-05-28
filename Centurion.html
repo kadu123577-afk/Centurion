@@ -21607,6 +21607,7 @@ function salvarDFD() {
     itens: getDFDItens(),
   };
   salvar({ dfd: d });
+  incrementarContador('dfd');
   toast('DFD salvo!', 'success');
   dfdPreview();
 }
@@ -22320,6 +22321,7 @@ function salvarETP() {
   dados.responsavel = gv('etp-responsavel');
   dados.riscos = getRiscos();
   salvar({ etp: dados });
+  incrementarContador('etp');
   toast('ETP salvo!', 'success');
 }
 
@@ -22606,6 +22608,7 @@ function salvarTR() {
     itens: JSON.parse(gv('tr-itens-json')||'[]'),
   };
   salvar({ tr: dados });
+  incrementarContador('tr');
   toast('TR salvo!', 'success');
 }
 
@@ -23853,6 +23856,22 @@ async function iniciarApp() {
 
   dfdPreview();
 }
+// ══════════════════════════════════════════════════════════════
+//  CONTADOR DE DOCUMENTOS
+// ══════════════════════════════════════════════════════════════
+async function incrementarContador(campo) {
+  try {
+    const userId = sessao.authUser?.id;
+    if (!userId) return;
+    // Upsert garante que a linha existe, depois incrementa
+    await sb.from('contadores').upsert(
+      { user_id: userId, dfd: 0, etp: 0, tr: 0 },
+      { onConflict: 'user_id', ignoreDuplicates: true }
+    );
+    await sb.rpc('incrementar_contador', { p_user_id: userId, p_campo: campo });
+  } catch(e) { console.warn('Contador:', e.message); }
+}
+
 // ══════════════════════════════════════════════════════════════
 //  EXPOR FUNÇÕES PARA O ESCOPO GLOBAL (necessário em ES modules)
 // ══════════════════════════════════════════════════════════════

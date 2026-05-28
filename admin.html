@@ -302,6 +302,12 @@ async function renderUsuarios() {
     g('alert-cheio').classList.toggle('on', cheio);
     g('btn-novo-usuario').disabled = cheio;
 
+    // Busca contadores
+    const ids = _usuarios.map(u => u.id);
+    const { data: _contData } = await sb.from('contadores').select('user_id,dfd,etp,tr').in('user_id', ids);
+    window._contMap = {};
+    (_contData || []).forEach(c => { window._contMap[c.user_id] = c; });
+
     if (!_usuarios.length) {
       container.innerHTML = '<div class="empty">Nenhum usuário cadastrado. Clique em "+ Novo Usuário".</div>';
       return;
@@ -309,29 +315,43 @@ async function renderUsuarios() {
 
     container.innerHTML = `
       <table class="tabela">
+        <colgroup>
+          <col style="width:20%"><col style="width:25%">
+          <col style="width:6%"><col style="width:6%"><col style="width:6%">
+          <col style="width:9%"><col style="width:28%">
+        </colgroup>
         <thead><tr>
           <th>Nome</th>
           <th>E-mail</th>
+          <th style="text-align:center">DFD</th>
+          <th style="text-align:center">ETP</th>
+          <th style="text-align:center">TR</th>
           <th>Status</th>
           <th>Ações</th>
         </tr></thead>
         <tbody>
-          ${_usuarios.map(u => `<tr>
-            <td><strong>${u.nome}</strong></td>
-            <td style="color:var(--text2);">${u.email}</td>
-            <td><span class="badge ${u.ativo?'badge-on':'badge-off'}">${u.ativo?'Ativo':'Inativo'}</span></td>
-            <td>
-              <div class="btn-group">
-                <button class="btn btn-ghost btn-sm" onclick="editarUsuarioModal('${u.id}')">✎ Editar</button>
-                <button class="btn btn-sm ${u.ativo?'btn-danger':'btn-ghost'}"
-                  onclick="alternarUsuario('${u.id}',${!u.ativo})"
-                  ${!u.ativo && cheio ? 'disabled title="Limite atingido"' : ''}>
-                  ${u.ativo?'⊘ Desativar':'✓ Ativar'}
-                </button>
-                <button class="btn btn-danger btn-sm" onclick="removerUsuario('${u.id}','${u.nome.replace(/'/g,"\\'")}')">✕</button>
-              </div>
-            </td>
-          </tr>`).join('')}
+          ${_usuarios.map(u => {
+            const c = (_contMap && _contMap[u.id]) || {dfd:0, etp:0, tr:0};
+            return `<tr>
+              <td style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0"><strong>${u.nome}</strong></td>
+              <td style="color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0">${u.email}</td>
+              <td style="text-align:center;font-weight:700;color:var(--teal)">${c.dfd}</td>
+              <td style="text-align:center;font-weight:700;color:var(--teal)">${c.etp}</td>
+              <td style="text-align:center;font-weight:700;color:var(--teal)">${c.tr}</td>
+              <td><span class="badge ${u.ativo?'badge-on':'badge-off'}">${u.ativo?'Ativo':'Inativo'}</span></td>
+              <td>
+                <div class="btn-group" style="flex-wrap:nowrap">
+                  <button class="btn btn-ghost btn-sm" onclick="editarUsuarioModal('${u.id}')">✎ Editar</button>
+                  <button class="btn btn-sm ${u.ativo?'btn-danger':'btn-ghost'}"
+                    onclick="alternarUsuario('${u.id}',${!u.ativo})"
+                    ${!u.ativo && cheio ? 'disabled' : ''}>
+                    ${u.ativo?'⊘ Desativar':'✓ Ativar'}
+                  </button>
+                  <button class="btn btn-danger btn-sm" onclick="removerUsuario('${u.id}','${u.nome.replace(/'/g,"\'")}')">✕</button>
+                </div>
+              </td>
+            </tr>`;
+          }).join('')}
         </tbody>
       </table>`;
   } catch(e) {
