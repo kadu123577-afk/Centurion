@@ -210,6 +210,10 @@ import { carregarConfig, salvarConfig, limparCache } from './centurion-db.js';
 
 const LIMITE_USUARIOS = 5;
 
+// ── Utilitários — DEVE vir antes do guard ─────────────────────
+const g  = id => document.getElementById(id);
+const gv = id => g(id)?.value ?? '';
+
 // ── Guarda de sessão ──────────────────────────────────────────
 const { data: { session } } = await sb.auth.getSession();
 if (!session) { window.location.href = 'login.html'; }
@@ -224,16 +228,12 @@ else {
   sessao.usuario   = u;
   sessao.prefeitura = pref;
 
-  document.getElementById('topbar-pref').textContent = pref.nome;
-  document.getElementById('page-sub').textContent    = `${pref.nome} — ${u.nome}`;
+  g('topbar-pref').textContent = pref.nome;
+  g('page-sub').textContent    = `${pref.nome} — ${u.nome}`;
 
   await carregarConfiguracoes();
   await renderUsuarios();
 }
-
-// ── Utilitários ───────────────────────────────────────────────
-const g  = id => document.getElementById(id);
-const gv = id => g(id)?.value ?? '';
 
 function toast(msg, tipo='info', dur=3000) {
   const ct = g('toast-ct');
