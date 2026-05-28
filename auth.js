@@ -35,8 +35,8 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 // ── Conexão Supabase ──────────────────────────────────────────
-const SUPA_URL = 'https://vhgeibeudnshbrahsjui.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoZ2VpYmV1ZG5zaGJyYWhzanVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NTE5OTcsImV4cCI6MjA5NTEyNzk5N30.3EGjtjsNBT8Cc9JIIl6R9EphERIblxOpHjGyhFJeaPs';
+const SUPA_URL = 'https://nzaitjwauwjlgrhycxun.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56YWl0andhdXdqbGdyaHljeHVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MjgyMzAsImV4cCI6MjA5NTUwNDIzMH0.HVNU_k-siMkzdCxBv0O0_PmlyY0A2_EKNzsfkfglOhk';
 export const sb = createClient(SUPA_URL, SUPA_KEY);
 
 // ── Estado da sessão ──────────────────────────────────────────
