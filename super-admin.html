@@ -116,7 +116,7 @@ input::placeholder{color:var(--muted);}
   <div class="section-card">
     <div class="section-card-title" style="display:flex;align-items:center;justify-content:space-between;">
       <span>Prefeituras</span>
-      <button class="btn btn-primary btn-sm" onclick="abrirModalPrefeitura()">+ Nova Prefeitura</button>
+      <button class="btn btn-primary btn-sm" id="btn-nova-pref">+ Nova Prefeitura</button>
     </div>
     <div id="lista-prefeituras"><div class="loading">Carregando...</div></div>
   </div>
@@ -177,6 +177,7 @@ else {
   sessao.usuario  = u;
   document.getElementById('topbar-user').textContent = u.nome || u.email;
   await renderPrefeituras();
+  document.getElementById('btn-nova-pref').addEventListener('click', () => window.abrirModalPrefeitura());
 }
 
 // ── Utilitários ───────────────────────────────────────────────
