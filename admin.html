@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centurion — Painel Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#06090F; --s1:#0B1018; --s2:#0F1620; --s3:#152030;
+  --border:rgba(255,255,255,0.06); --border2:rgba(255,255,255,0.10);
+  --text:#EDF2F7; --text2:#8A9BAC; --muted:#4A5568;
+  --green:#41F36A; --green-l:rgba(65,243,106,0.10);
+  --teal:#14D9B5; --gold:#FFC857; --gold-l:rgba(255,200,87,0.10);
+  --red:#FF5C6A; --red-l:rgba(255,92,106,0.10);
+  --r:10px; --r-sm:6px;
+  --font-display:'Syne',sans-serif; --font-body:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased;}
+
+.topbar{position:sticky;top:0;z-index:100;background:var(--s1);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 24px;height:52px;gap:12px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#41F36A,#14D9B5);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:13px;color:#000;}
+.brand-name{font-family:var(--font-display);font-weight:700;font-size:14px;background:linear-gradient(90deg,var(--green),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.badge-admin{background:var(--gold-l);color:var(--gold);border:1px solid rgba(255,200,87,.2);border-radius:20px;font-size:10px;font-weight:700;padding:2px 8px;}
+.topbar-sep{flex:1;}
+.topbar-pref{font-size:12px;color:var(--text2);}
+.btn-topbar{background:transparent;border:1px solid var(--border2);color:var(--text2);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:var(--font-body);transition:all .15s;}
+.btn-topbar:hover{color:var(--text);border-color:rgba(255,255,255,.2);}
+.btn-topbar-green{border-color:rgba(65,243,106,.3);color:var(--green);}
+.btn-topbar-green:hover{background:var(--green-l);}
+
+.main{max-width:900px;margin:0 auto;padding:28px 24px;}
+.page-title{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:4px;}
+.page-sub{font-size:13px;color:var(--text2);margin-bottom:28px;}
+
+.section-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:20px;}
+.section-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+
+/* QUOTA BAR */
+.quota-wrap{margin-bottom:16px;}
+.quota-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:12px;}
+.quota-num{font-weight:700;color:var(--green);}
+.quota-num.cheio{color:var(--red);}
+.quota-bar{height:6px;background:var(--s3);border-radius:3px;overflow:hidden;}
+.quota-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:3px;transition:width .4s ease;}
+.quota-fill.cheio{background:var(--red);}
+
+/* TABELA */
+.tabela{width:100%;border-collapse:collapse;}
+.tabela th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.tabela td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+.tabela tr:last-child td{border-bottom:none;}
+.tabela tr:hover td{background:var(--s2);}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-on{background:var(--green-l);color:var(--green);}
+.badge-off{background:var(--red-l);color:var(--red);}
+
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r-sm);font-size:12px;font-weight:500;font-family:var(--font-body);cursor:pointer;border:none;transition:opacity .15s;white-space:nowrap;}
+.btn:hover{opacity:.82;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn-primary{background:var(--green);color:#000;font-weight:600;}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.btn-danger{background:var(--red-l);color:var(--red);border:1px solid rgba(255,92,106,.2);}
+.btn-sm{padding:4px 8px;font-size:11px;}
+.btn-group{display:flex;gap:6px;flex-wrap:wrap;}
+
+.form-field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.form-field label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.col-full{grid-column:1/-1;}
+input{width:100%;padding:8px 11px;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r-sm);color:var(--text);font-size:13px;font-family:var(--font-body);outline:none;transition:border-color .15s;}
+input:focus{border-color:var(--green);}
+input::placeholder{color:var(--muted);}
+input[readonly]{background:var(--s3);cursor:default;color:var(--text2);}
+.field-hint{font-size:11px;color:var(--muted);}
+
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-ov.on{display:flex;}
+.modal{background:var(--s1);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:460px;max-height:90vh;display:flex;flex-direction:column;}
+.modal-head{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h3{font-size:15px;font-weight:700;}
+.modal-body{padding:18px 22px;overflow-y:auto;}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;}
+.modal-close{background:var(--s2);border:none;color:var(--text2);width:26px;height:26px;border-radius:5px;cursor:pointer;font-size:13px;}
+
+#toast-ct{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
+.toast{min-width:240px;padding:11px 15px;border-radius:var(--r-sm);font-size:13px;background:var(--s1);border:1px solid var(--border2);box-shadow:0 4px 20px rgba(0,0,0,.5);animation:tIn .2s ease;display:flex;align-items:center;gap:8px;}
+.toast-success{border-left:3px solid var(--green);}
+.toast-error{border-left:3px solid var(--red);}
+.toast-info{border-left:3px solid var(--teal);}
+@keyframes tIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:none}}
+
+.loading{text-align:center;padding:30px;color:var(--muted);font-size:13px;}
+.empty{text-align:center;padding:24px;color:var(--muted);font-size:13px;}
+.erro-msg{color:var(--red);font-size:12px;margin-top:6px;display:none;}
+.erro-msg.on{display:block;}
+.alert-cheio{background:var(--red-l);border:1px solid rgba(255,92,106,.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:14px;display:none;}
+.alert-cheio.on{display:block;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-icon">C</div>
+    <div class="brand-name">CENTURION</div>
+  </div>
+  <span class="badge-admin">ADMIN</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-pref" id="topbar-pref"></span>
+  <button class="btn-topbar btn-topbar-green" onclick="irCenturion()">→ Acessar Centurion</button>
+  <button class="btn-topbar" style="margin-left:8px;" onclick="sair()">Sair</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="page-title">Painel do Administrador</div>
+  <div class="page-sub" id="page-sub">Gerencie os usuários e as configurações da sua prefeitura.</div>
+
+  <!-- CONFIGURAÇÕES DA PREFEITURA -->
+  <div class="section-card">
+    <div class="section-card-title">
+      <span>Configurações da Prefeitura</span>
+      <button class="btn btn-primary btn-sm" id="btn-salvar-cfg" onclick="salvarConfiguracoes()">Salvar</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Município <span style="color:var(--red)">*</span></label>
+        <input type="text" id="cfg-municipio" placeholder="Ex: Nova Crixás">
+      </div>
+      <div class="form-field">
+        <label>Nome da Prefeitura</label>
+        <input type="text" id="cfg-prefeitura" placeholder="Ex: Prefeitura Municipal de Nova Crixás">
+      </div>
+      <div class="form-field">
+        <label>CNPJ</label>
+        <input type="text" id="cfg-cnpj" placeholder="00.000.000/0001-00">
+      </div>
+      <div class="form-field col-full">
+        <label>Endereço Institucional</label>
+        <input type="text" id="cfg-endereco" placeholder="Rua, nº — Município/GO — CEP 00000-000">
+      </div>
+    </div>
+  </div>
+
+  <!-- USUÁRIOS -->
+  <div class="section-card">
+    <div class="section-card-title">
+      <span>Usuários da Prefeitura</span>
+      <button class="btn btn-primary btn-sm" id="btn-novo-usuario" onclick="abrirModalUsuario()">+ Novo Usuário</button>
+    </div>
+
+    <div class="quota-wrap" id="quota-wrap" style="display:none;">
+      <div class="quota-label">
+        <span style="color:var(--text2);">Usuários ativos</span>
+        <span class="quota-num" id="quota-num">0 / 5</span>
+      </div>
+      <div class="quota-bar"><div class="quota-fill" id="quota-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="alert-cheio" id="alert-cheio">
+      Limite de 5 usuários atingido. Desative um usuário para liberar uma vaga.
+    </div>
+
+    <div id="lista-usuarios"><div class="loading">Carregando...</div></div>
+  </div>
+</div>
+
+<div id="toast-ct"></div>
+
+<!-- MODAL: Criar/Editar Usuário -->
+<div class="modal-ov" id="modal-usuario">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-usuario-titulo">Novo Usuário</h3>
+      <button class="modal-close" onclick="fecharModal('modal-usuario')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-field">
+        <label>Nome completo</label>
+        <input type="text" id="inp-u-nome" placeholder="Nome do usuário">
+      </div>
+      <div class="form-field" id="field-email">
+        <label>E-mail</label>
+        <input type="email" id="inp-u-email" placeholder="usuario@prefeitura.gov.br">
+      </div>
+      <div class="form-field" id="field-senha">
+        <label>Senha inicial (mín. 6 caracteres)</label>
+        <input type="password" id="inp-u-senha" placeholder="••••••••">
+        <span class="field-hint">O usuário poderá trocar a senha depois.</span>
+      </div>
+      <span class="erro-msg" id="erro-usuario"></span>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="fecharModal('modal-usuario')">Cancelar</button>
+      <button class="btn btn-primary" id="btn-confirmar-usuario" onclick="confirmarUsuario()">Criar Usuário</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { sb, sessao, logout,
+  listarUsuarios, criarUsuario, editarUsuario, toggleUsuario, excluirUsuario
+} from './auth.js';
+import { carregarConfig, salvarConfig, limparCache } from './centurion-db.js';
+
+const LIMITE_USUARIOS = 5;
+
+// ── Guarda de sessão ──────────────────────────────────────────
+const { data: { session } } = await sb.auth.getSession();
+if (!session) { window.location.href = 'login.html'; }
+else {
+  const { data: u } = await sb.from('usuarios').select('*').eq('id', session.user.id).single();
+  if (!u || u.role !== 'admin') { window.location.href = 'login.html'; }
+
+  const { data: pref } = await sb.from('prefeituras').select('*').eq('id', u.prefeitura_id).single();
+  if (!pref || !pref.ativo) { await sb.auth.signOut(); window.location.href = 'login.html'; }
+
+  sessao.authUser  = session.user;
+  sessao.usuario   = u;
+  sessao.prefeitura = pref;
+
+  document.getElementById('topbar-pref').textContent = pref.nome;
+  document.getElementById('page-sub').textContent    = `${pref.nome} — ${u.nome}`;
+
+  await carregarConfiguracoes();
+  await renderUsuarios();
+}
+
+// ── Utilitários ───────────────────────────────────────────────
+const g  = id => document.getElementById(id);
+const gv = id => g(id)?.value ?? '';
+
+function toast(msg, tipo='info', dur=3000) {
+  const ct = g('toast-ct');
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + tipo;
+  el.innerHTML = `<span>${tipo==='success'?'✓':tipo==='error'?'✕':'ℹ'}</span><span>${msg}</span>`;
+  ct.appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(),300); }, dur);
+}
+window.fecharModal = id => g(id).classList.remove('on');
+
+// ── Configurações ─────────────────────────────────────────────
+async function carregarConfiguracoes() {
+  try {
+    const cfg = await carregarConfig();
+    if (cfg.municipio)       g('cfg-municipio').value  = cfg.municipio;
+    if (cfg.nome_prefeitura) g('cfg-prefeitura').value = cfg.nome_prefeitura;
+    if (cfg.cnpj)            g('cfg-cnpj').value       = cfg.cnpj;
+    if (cfg.endereco)        g('cfg-endereco').value   = cfg.endereco;
+  } catch(e) {
+    console.warn('Configurações ainda não preenchidas:', e.message);
+  }
+}
+
+window.salvarConfiguracoes = async () => {
+  const btn = g('btn-salvar-cfg');
+  btn.disabled = true;
+  btn.textContent = 'Salvando...';
+  try {
+    await salvarConfig({
+      municipio       : gv('cfg-municipio'),
+      nome_prefeitura : gv('cfg-prefeitura'),
+      cnpj            : gv('cfg-cnpj'),
+      endereco        : gv('cfg-endereco'),
+    });
+    toast('Configurações salvas!', 'success');
+  } catch(e) {
+    toast('Erro: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Salvar';
+  }
+};
+
+// ── Usuários ──────────────────────────────────────────────────
+let _usuarios = [];
+
+async function renderUsuarios() {
+  const container = g('lista-usuarios');
+  try {
+    _usuarios = await listarUsuarios();
+    const ativos = _usuarios.filter(u => u.ativo).length;
+    const cheio  = ativos >= LIMITE_USUARIOS;
+
+    // Quota bar
+    g('quota-wrap').style.display = 'block';
+    const qNum  = g('quota-num');
+    const qFill = g('quota-fill');
+    qNum.textContent = `${ativos} / ${LIMITE_USUARIOS}`;
+    qNum.className   = 'quota-num' + (cheio ? ' cheio' : '');
+    qFill.style.width = `${Math.min(100, (ativos/LIMITE_USUARIOS)*100)}%`;
+    qFill.className   = 'quota-fill' + (cheio ? ' cheio' : '');
+
+    // Alerta limite
+    g('alert-cheio').classList.toggle('on', cheio);
+    g('btn-novo-usuario').disabled = cheio;
+
+    if (!_usuarios.length) {
+      container.innerHTML = '<div class="empty">Nenhum usuário cadastrado. Clique em "+ Novo Usuário".</div>';
+      return;
+    }
+
+    container.innerHTML = `
+      <table class="tabela">
+        <thead><tr>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr></thead>
+        <tbody>
+          ${_usuarios.map(u => `<tr>
+            <td><strong>${u.nome}</strong></td>
+            <td style="color:var(--text2);">${u.email}</td>
+            <td><span class="badge ${u.ativo?'badge-on':'badge-off'}">${u.ativo?'Ativo':'Inativo'}</span></td>
+            <td>
+              <div class="btn-group">
+                <button class="btn btn-ghost btn-sm" onclick="editarUsuarioModal('${u.id}')">✎ Editar</button>
+                <button class="btn btn-sm ${u.ativo?'btn-danger':'btn-ghost'}"
+                  onclick="alternarUsuario('${u.id}',${!u.ativo})"
+                  ${!u.ativo && cheio ? 'disabled title="Limite atingido"' : ''}>
+                  ${u.ativo?'⊘ Desativar':'✓ Ativar'}
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="removerUsuario('${u.id}','${u.nome.replace(/'/g,"\\'")}')">✕</button>
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+  } catch(e) {
+    container.innerHTML = `<div class="empty" style="color:var(--red);">Erro: ${e.message}</div>`;
+  }
+}
+
+// ── Modal Usuário ─────────────────────────────────────────────
+let _editUserId = null;
+
+window.abrirModalUsuario = () => {
+  _editUserId = null;
+  g('modal-usuario-titulo').textContent = 'Novo Usuário';
+  g('btn-confirmar-usuario').textContent = 'Criar Usuário';
+  g('inp-u-nome').value = '';
+  g('inp-u-email').value = '';
+  g('inp-u-senha').value = '';
+  g('field-email').style.display = 'block';
+  g('field-senha').style.display = 'block';
+  g('erro-usuario').classList.remove('on');
+  g('modal-usuario').classList.add('on');
+  setTimeout(() => g('inp-u-nome').focus(), 100);
+};
+
+window.editarUsuarioModal = (id) => {
+  const u = _usuarios.find(x => x.id === id);
+  if (!u) return;
+  _editUserId = id;
+  g('modal-usuario-titulo').textContent = 'Editar Usuário';
+  g('btn-confirmar-usuario').textContent = 'Salvar';
+  g('inp-u-nome').value = u.nome;
+  g('inp-u-email').value = u.email;
+  g('inp-u-senha').value = '';
+  // Na edição não mostra email (não pode trocar) nem senha
+  g('field-email').style.display = 'none';
+  g('field-senha').style.display = 'none';
+  g('erro-usuario').classList.remove('on');
+  g('modal-usuario').classList.add('on');
+  setTimeout(() => g('inp-u-nome').focus(), 100);
+};
+
+window.confirmarUsuario = async () => {
+  const btn  = g('btn-confirmar-usuario');
+  const erro = g('erro-usuario');
+  erro.classList.remove('on');
+  btn.disabled = true;
+  btn.textContent = _editUserId ? 'Salvando...' : 'Criando...';
+
+  try {
+    if (_editUserId) {
+      await editarUsuario(_editUserId, { nome: gv('inp-u-nome') });
+      toast('Usuário atualizado!', 'success');
+    } else {
+      await criarUsuario({
+        nome:  gv('inp-u-nome'),
+        email: gv('inp-u-email'),
+        senha: gv('inp-u-senha'),
+      });
+      toast('Usuário criado com sucesso!', 'success');
+    }
+    fecharModal('modal-usuario');
+    await renderUsuarios();
+  } catch(e) {
+    erro.textContent = e.message;
+    erro.classList.add('on');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = _editUserId ? 'Salvar' : 'Criar Usuário';
+  }
+};
+
+window.alternarUsuario = async (id, novoStatus) => {
+  try {
+    await toggleUsuario(id, novoStatus);
+    toast(novoStatus ? 'Usuário ativado.' : 'Usuário desativado.', 'success');
+    await renderUsuarios();
+  } catch(e) {
+    toast('Erro: ' + e.message, 'error');
+  }
+};
+
+window.removerUsuario = async (id, nome) => {
+  if (!confirm(`Remover o usuário "${nome}"? Esta ação não pode ser desfeita.`)) return;
+  try {
+    await excluirUsuario(id);
+    toast('Usuário removido.', 'success');
+    await renderUsuarios();
+  } catch(e) {
+    toast('Erro: ' + e.message, 'error');
+  }
+};
+
+// ── Navegação ─────────────────────────────────────────────────
+window.irCenturion = () => { window.location.href = 'Centurion.html'; };
+
+window.sair = async () => {
+  limparCache();
+  await logout();
+  window.location.href = 'login.html';
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centurion — Acesso</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#06090F; --s1:#0B1018; --s2:#0F1620;
+  --border:rgba(255,255,255,0.08);
+  --text:#EDF2F7; --text2:#8A9BAC; --muted:#4A5568;
+  --green:#41F36A; --teal:#14D9B5; --red:#FF5C6A;
+  --font-display:'Syne',sans-serif; --font-body:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:var(--font-body);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+
+.card{background:var(--s1);border:1px solid var(--border);border-radius:16px;width:100%;max-width:400px;padding:40px 36px;}
+
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:36px;justify-content:center;}
+.logo-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,#41F36A,#14D9B5);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:17px;color:#000;}
+.logo-name{font-family:var(--font-display);font-weight:800;font-size:22px;background:linear-gradient(90deg,var(--green),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+h1{font-family:var(--font-display);font-size:20px;font-weight:700;margin-bottom:6px;}
+.sub{font-size:13px;color:var(--text2);margin-bottom:28px;}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;}
+input{width:100%;padding:10px 13px;background:var(--s2);border:1px solid rgba(255,255,255,0.10);border-radius:8px;color:var(--text);font-size:14px;font-family:var(--font-body);outline:none;transition:border-color .15s;}
+input:focus{border-color:var(--green);}
+input::placeholder{color:var(--muted);}
+
+.btn{width:100%;padding:11px;border-radius:8px;font-size:14px;font-weight:600;font-family:var(--font-body);cursor:pointer;border:none;transition:opacity .15s;margin-top:8px;}
+.btn:hover{opacity:.88;}
+.btn-primary{background:var(--green);color:#000;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+.erro{background:rgba(255,92,106,.10);border:1px solid rgba(255,92,106,.25);border-radius:8px;padding:10px 13px;font-size:13px;color:var(--red);margin-top:14px;display:none;}
+.erro.on{display:block;}
+
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.rodape{text-align:center;margin-top:28px;font-size:11px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="card">
+
+    <div class="logo">
+      <div class="logo-icon">C</div>
+      <div class="logo-name">CENTURION</div>
+    </div>
+
+    <h1>Bem-vindo de volta</h1>
+    <p class="sub">Acesse com seu e-mail e senha cadastrados.</p>
+
+    <div class="field">
+      <label>E-mail</label>
+      <input type="email" id="inp-email" placeholder="seu@email.com" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="inp-senha" placeholder="••••••••" autocomplete="current-password">
+    </div>
+
+    <button class="btn btn-primary" id="btn-entrar" onclick="entrar()">Entrar</button>
+
+    <div class="erro" id="erro-msg"></div>
+
+    <div class="rodape">Centurion &copy; 2026 — Gestão de Licitações Municipais</div>
+  </div>
+</div>
+
+<script type="module">
+import { login, onSuperAdminLogado, onAppLogado } from './auth.js';
+
+// Sobrescreve os callbacks do auth.js para redirecionar
+import * as Auth from './auth.js';
+
+Auth.onSuperAdminLogado = (sessao) => {
+  // Super Admin → painel de gestão (a implementar futuramente)
+  window.location.href = 'super-admin.html';
+};
+
+Auth.onAppLogado = (sessao) => {
+  // Admin 2 e usuários comuns → Centurion
+  window.location.href = 'Centurion.html';
+};
+
+// ─── Verifica se já tem sessão ativa ────────────────────────
+import { sb } from './auth.js';
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    // já logado → vai direto pro app
+    window.location.href = 'Centurion.html';
+  }
+})();
+
+// ─── Ação do botão Entrar ────────────────────────────────────
+window.entrar = async function() {
+  const email = document.getElementById('inp-email').value.trim();
+  const senha = document.getElementById('inp-senha').value;
+  const btn   = document.getElementById('btn-entrar');
+  const erro  = document.getElementById('erro-msg');
+
+  erro.classList.remove('on');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Entrando...';
+
+  try {
+    await login(email, senha);
+    // login() chama o callback correto → redireciona
+  } catch(e) {
+    erro.textContent = e.message;
+    erro.classList.add('on');
+    btn.disabled = false;
+    btn.innerHTML = 'Entrar';
+  }
+};
+
+// Enter no campo senha também submete
+document.getElementById('inp-senha').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') window.entrar();
+});
+document.getElementById('inp-email').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('inp-senha').focus();
+});
+</script>
+
+</body>
+</html>
