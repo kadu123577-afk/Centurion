@@ -213,6 +213,8 @@ const LIMITE_USUARIOS = 5;
 // ── Utilitários — DEVE vir antes do guard ─────────────────────
 const g  = id => document.getElementById(id);
 const gv = id => g(id)?.value ?? '';
+let _usuarios = [];
+let _editUserId = null;
 
 // ── Guarda de sessão ──────────────────────────────────────────
 const { data: { session } } = await sb.auth.getSession();
@@ -279,7 +281,6 @@ window.salvarConfiguracoes = async () => {
 };
 
 // ── Usuários ──────────────────────────────────────────────────
-let _usuarios = [];
 
 async function renderUsuarios() {
   const container = g('lista-usuarios');
@@ -339,7 +340,6 @@ async function renderUsuarios() {
 }
 
 // ── Modal Usuário ─────────────────────────────────────────────
-let _editUserId = null;
 
 window.abrirModalUsuario = () => {
   _editUserId = null;
