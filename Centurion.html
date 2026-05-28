@@ -20927,7 +20927,7 @@ input[readonly]{background:var(--s3);cursor:default;color:var(--text2);}
 import { sb, sessao, logout } from './auth.js';
 import {
   carregarDados, salvarDados, flushDados,
-  carregarConfig, salvarConfig,
+  carregarConfig as carregarConfigDB, salvarConfig as salvarConfigDB,
   limparCache, podeEditarConfig
 } from './centurion-db.js';
 
@@ -21019,7 +21019,7 @@ async function salvarConfig() {
   // Dados institucionais só o Admin 2 salva no Supabase
   if (podeEditarConfig()) {
     try {
-      await salvarConfig({
+      await salvarConfigDB({
         municipio       : gv('cfg-municipio'),
         nome_prefeitura : gv('cfg-prefeitura'),
         cnpj            : gv('cfg-cnpj'),
@@ -21035,7 +21035,7 @@ async function salvarConfig() {
 
 async function carregarConfig() {
   // Dados institucionais vêm do Supabase (configuracoes_prefeitura)
-  const cfg = await carregarConfig();
+  const cfg = await carregarConfigDB();
   if (cfg.municipio)       g('cfg-municipio').value  = cfg.municipio;
   if (cfg.nome_prefeitura) g('cfg-prefeitura').value = cfg.nome_prefeitura;
   if (cfg.cnpj)            g('cfg-cnpj').value       = cfg.cnpj;
@@ -23783,7 +23783,7 @@ const TIPO_LABELS = {
   dispensa:'Dispensa de Licitação', inexigibilidade:'Inexigibilidade',
 };
 
-async function sair() {
+window.sair = async function sair() {
   if (!confirm('Deseja sair do Centurion?')) return;
   await flushDados();
   limparCache();
@@ -23791,7 +23791,7 @@ async function sair() {
   window.location.href = 'login.html';
 }
 
-async function limparTudo() {
+window.limparTudo = async function limparTudo() {
   if (!confirm('Limpar todos os dados do processo atual? Esta ação não pode ser desfeita.')) return;
   _dadosLocais = {};
   await salvarDados({});
