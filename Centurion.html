@@ -23863,12 +23863,18 @@ async function incrementarContador(campo) {
   try {
     const userId = sessao.authUser?.id;
     if (!userId) return;
-    // Upsert garante que a linha existe, depois incrementa
-    await sb.from('contadores').upsert(
-      { user_id: userId, dfd: 0, etp: 0, tr: 0 },
-      { onConflict: 'user_id', ignoreDuplicates: true }
-    );
-    await sb.rpc('incrementar_contador', { p_user_id: userId, p_campo: campo });
+    // Busca valor atual
+    const { data: atual } = await sb
+      .from('contadores')
+      .select('dfd,etp,tr')
+      .eq('user_id', userId)
+      .maybeSingle();
+    // Monta novo valor
+    const base = atual || { dfd: 0, etp: 0, tr: 0 };
+    base[campo] = (base[campo] || 0) + 1;
+    base.user_id = userId;
+    // Upsert com novo valor
+    await sb.from('contadores').upsert(base, { onConflict: 'user_id' });
   } catch(e) { console.warn('Contador:', e.message); }
 }
 
