@@ -23839,6 +23839,43 @@ async function iniciarApp() {
 
   dfdPreview();
 }
+// ══════════════════════════════════════════════════════════════
+//  EXPOR FUNÇÕES PARA O ESCOPO GLOBAL (necessário em ES modules)
+// ══════════════════════════════════════════════════════════════
+window.irAba = irAba;
+window.salvarConfig = salvarConfig;
+window.salvarDFD = salvarDFD;
+window.salvarETP = salvarETP;
+window.salvarTR = salvarTR;
+window.salvarItem = salvarItem;
+window.dfdPreview = dfdPreview;
+window.etpPreview = etpPreview;
+window.trPreview = trPreview;
+window.etpToggle = etpToggle;
+window.etpWC = etpWC;
+window.fecharModal = fecharModal;
+window.abrirModalItem = abrirModalItem;
+window.abrirModalImportar = abrirModalImportar;
+window.editarItem = editarItem;
+window.removerItem = removerItem;
+window.previewImportar = previewImportar;
+window.executarImportar = executarImportar;
+window.importarComIA = importarComIA;
+window.setModoImport = setModoImport;
+window.gerarDOCX = gerarDOCX;
+window.gerarDOCX_ETP = gerarDOCX_ETP;
+window.gerarDOCX_TR = gerarDOCX_TR;
+window.gerarCampoDFD = gerarCampoDFD;
+window.gerarCampoTR = gerarCampoTR;
+window.gerarDFDCompleto = gerarDFDCompleto;
+window.gerarETPCompleto = gerarETPCompleto;
+window.gerarTRCompleto = gerarTRCompleto;
+window.gerarSecaoETP = gerarSecaoETP;
+window.adicionarRisco = adicionarRisco;
+window.removerRisco = removerRisco;
+window.atualizarNivel = atualizarNivel;
+window.atualizarVU = atualizarVU;
+
 </script>
 </body>
 </html>
