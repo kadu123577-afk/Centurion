@@ -21313,13 +21313,6 @@ function abrirModalItem(id=null) {
 
 function editarItem(id) { abrirModalItem(id); }
 
-function abrirModalImportar() {
-  g('importar-texto').value = '';
-  g('importar-preview-ct').style.display = 'none';
-  abrirModal('modal-importar');
-  setTimeout(() => g('importar-texto').focus(), 100);
-}
-
 function removerItem(id) {
   setDFDItens(getDFDItens().filter(x => x.id!==id));
   dfdPreview();
