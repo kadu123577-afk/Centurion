@@ -21596,7 +21596,7 @@ async function gerarDFDCompleto() {
   dfdPreview();
 }
 
-function salvarDFD() {
+async function salvarDFD() {
   const d = {
     numero:gv('dfd-numero'), unidade:gv('dfd-unidade'), setor:gv('dfd-setor'),
     responsavel:gv('dfd-responsavel'), matricula:gv('dfd-matricula'), cargo:gv('dfd-cargo'),
@@ -21607,7 +21607,7 @@ function salvarDFD() {
     itens: getDFDItens(),
   };
   salvar({ dfd: d });
-  incrementarContador('dfd');
+  await incrementarContador('dfd');
   toast('DFD salvo!', 'success');
   dfdPreview();
 }
@@ -22310,7 +22310,7 @@ async function gerarETPCompleto() {
 
 
 // ETP SALVAR
-function salvarETP() {
+async function salvarETP() {
   const dados = {};
   ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','16'].forEach(n => {
     const el = g('etp-sec-'+n);
@@ -22321,7 +22321,7 @@ function salvarETP() {
   dados.responsavel = gv('etp-responsavel');
   dados.riscos = getRiscos();
   salvar({ etp: dados });
-  incrementarContador('etp');
+  await incrementarContador('etp');
   toast('ETP salvo!', 'success');
 }
 
@@ -22590,7 +22590,7 @@ async function gerarTRCompleto() {
   toast('TR gerado com sucesso!', 'success', 4000);
 }
 
-function salvarTR() {
+async function salvarTR() {
   const dados = {
     modalidade:gv('tr-modalidade'), criterio:gv('tr-criterio'),
     prazo:gv('tr-prazo'), vigencia:gv('tr-vigencia'), garantia:gv('tr-garantia'),
@@ -22608,7 +22608,7 @@ function salvarTR() {
     itens: JSON.parse(gv('tr-itens-json')||'[]'),
   };
   salvar({ tr: dados });
-  incrementarContador('tr');
+  await incrementarContador('tr');
   toast('TR salvo!', 'success');
 }
 
